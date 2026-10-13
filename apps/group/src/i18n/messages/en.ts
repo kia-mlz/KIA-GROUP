@@ -194,15 +194,13 @@ export const en = {
       desc: 'An adaptive path through programming, web, AI and data — foundations to shipped projects.',
       cta: 'Enter the learning path →',
       sub: 'Two ways in: pick courses yourself, or take the assessment and let it build your path.',
+      // The first door opens the domains map at /courses; each door is icon +
+      // title only, with no description or CTA of its own.
       courses: {
-        title: 'All courses',
-        desc: 'Browse the full catalog and open each course introduction before buying.',
-        cta: 'Browse the catalog →',
+        title: 'Domains',
       },
       assessment: {
         title: 'Assessment test',
-        desc: 'Goal and skill assessment, the readiness test, then a roadmap built around you.',
-        cta: 'Start the assessment →',
       },
     },
     language: {
@@ -395,6 +393,18 @@ export const en = {
       error: 'Login failed. Please try again.',
       footer: 'New here?',
       createAccount: 'Create an account',
+      signIn: 'Sign in',
+      // The 2FA code step belongs to sign-in; these used to sit under
+      // `register` where nothing read them, so the login screen rendered raw
+      // key paths (caught by i18n-usage.test.ts).
+      twoFactorEyebrow: 'Two-step verification',
+      twoFactorTitle: 'Enter your verification code',
+      twoFactorSub: 'Your account is protected with two-factor authentication.',
+      twoFactorCodeLabel: '6-digit code from your authenticator app, or a recovery code',
+      twoFactorSubmit: 'Verify and sign in',
+      twoFactorError: 'Invalid or expired code. Please try again.',
+      twoFactorRecoveryHint:
+        'Lost your device? Use one of your recovery codes (xxxxx-xxxxx) instead.',
     },
     register: {
       eyebrow: 'Get started',
@@ -424,14 +434,6 @@ export const en = {
       footer: 'Already have an account?',
       signIn: 'Sign in',
       phoneSignup: 'Prefer phone signup? Continue with Education',
-      twoFactorEyebrow: 'Two-step verification',
-      twoFactorTitle: 'Enter your verification code',
-      twoFactorSub: 'Your account is protected with two-factor authentication.',
-      twoFactorCodeLabel: '6-digit code from your authenticator app, or a recovery code',
-      twoFactorSubmit: 'Verify and sign in',
-      twoFactorError: 'Invalid or expired code. Please try again.',
-      twoFactorRecoveryHint:
-        'Lost your device? Use one of your recovery codes (xxxxx-xxxxx) instead.',
     },
     twoFactor: {
       eyebrow: 'Security',
@@ -463,6 +465,9 @@ export const en = {
       codeRequired: 'Enter a code.',
       invalidCode: 'Invalid or expired code.',
       staffOnly: 'Two-factor is available to staff accounts only.',
+      disabled: 'Two-factor authentication is now disabled.',
+      disableConfirm: 'Disable two-factor authentication for {name}?',
+      staffTitle: 'Staff two-factor status',
     },
     forgotPassword: {
       eyebrow: 'Password help',
@@ -476,6 +481,7 @@ export const en = {
       sentBody:
         'If an account exists for that email, a reset link is on its way. It expires in 30 minutes and can be used once.',
       error: 'Something went wrong. Please try again.',
+      backToLogin: 'Back to sign in',
     },
     resetPassword: {
       eyebrow: 'Password help',
@@ -633,8 +639,6 @@ export const en = {
     loading: 'Loading your dashboard…',
     welcome: 'Welcome',
     welcomeNamed: 'Hi {name}',
-    welcomeBack: 'Hi {name}, welcome back',
-    fallbackName: 'Learner',
     empty: {
       sub: 'Complete the free assessment to unlock your personalized dashboard and roadmap.',
       startAssessment: {
@@ -647,9 +651,6 @@ export const en = {
         desc: 'Explore the catalog while you decide on a track',
         status: 'View courses →',
       },
-    },
-    hub: {
-      sub: 'Pick up where you left off.',
     },
     doors: {
       heading: 'Kia Group departments',
@@ -1309,9 +1310,6 @@ export const en = {
       title: 'Learning domains',
       sub: 'Pick a domain to see only its courses, or browse the whole catalog in one place.',
       domainSub: 'See the courses in this domain and open each introduction before buying.',
-      count: '{count} courses',
-      emptyDesc: 'No courses published yet',
-      enter: 'See courses',
       all: 'All courses',
       allCta: 'Browse all courses ({count})',
       back: 'All domains',
@@ -1608,6 +1606,7 @@ export const en = {
     sidebarCollapse: 'Collapse sidebar',
     navGroup: {
       general: 'General',
+      departments: 'Departments',
       content: 'Content',
       finance: 'Finance',
       support: 'Support',
@@ -1708,6 +1707,55 @@ export const en = {
       messages: 'Messages',
       competitions: 'Competitions',
       audit: 'Audit log',
+      departments: 'Manage departments',
+    },
+    /**
+     * Departments hub (Admin → Departments). The six names come from the one
+     * registry (`DEPARTMENTS` → `dashboard.doors.*Title`); these are the
+     * one-line "what lives here" descriptions, one per department.
+     */
+    departments: {
+      what: 'Kia Group is six departments. Each card shows what is managed there, how much is already recorded, and where to manage it.',
+      loading: 'Loading departments…',
+      loadError: 'Failed to load department data.',
+      partialError: 'Some department numbers could not be loaded; the rest of this page is up to date.',
+      publicLabel: 'Public page',
+      publicAria: 'Open the {name} public page',
+      noModule: 'No admin module yet',
+      noModuleHint: 'This department only has a public page — there is nothing to manage in the panel yet.',
+      noAccess: 'You do not have access to this department’s admin modules.',
+      metricsHidden: 'Numbers are hidden with your current access.',
+      metric: {
+        competitions: 'Competitions',
+        activeCompetitions: 'Active competitions',
+        registrations: 'Registrations',
+      },       onePlatform: 'Six teams, one platform',
+      accessAction: 'Manage access',
+      footerLine: 'Secure by design · Data source pending',
+      footerNote: 'Administration workspace',
+      academy: {
+        desc: 'Courses, lessons, exams and learner progress',
+      },
+      work: {
+        desc: 'Employers, freelancers and work projects',
+      },
+      material: {
+        desc: 'Resources, files and download categories',
+      },
+      events: {
+        desc: 'Events, bootcamps, challenges and competitions',
+      },
+      community: {
+        desc: 'Members and community content',
+      },
+      labs: {
+        desc: 'Innovation projects and technology experiments',
+      },
+    },
+    /** Per-department panel screens (/admin/academy, /admin/events, …). */
+    departmentPanel: {
+      modules: 'Management modules',
+      tools: 'Quick tools',
     },
     audit: {
       title: 'Audit log',
@@ -2136,6 +2184,28 @@ export const en = {
       searchPlaceholder: 'Name, email, role…',
       allRoles: 'All roles',
       allStatuses: 'All statuses',
+      empty: 'No users match the current view.',
+      deletedViewLabel: 'Deleted accounts',
+      deletedView: {
+        active: 'Active accounts',
+        deleted: 'Deleted only',
+        all: 'Active + deleted',
+      },
+      deletedBadge: 'Deleted',
+      softDelete: 'Delete',
+      softDeleteTitle: 'Delete this account',
+      softDeleteBody:
+        'Account “{name}” is soft-deleted: the row, its orders and its financial history stay, the personal data is cleared, and every session is signed out.',
+      softDeleteWarning: 'The account can be restored later from the deleted view.',
+      softDeleteReason: 'Reason (required)',
+      softDeleteReasonPlaceholder: 'Why is this account being deleted? Recorded in the audit trail.',
+      softDeleteReasonRequired: 'A reason is required for the audit trail.',
+      softDeleteConfirm: 'Delete the account',
+      softDeleteWorking: 'Deleting…',
+      softDeleteError: 'The account could not be deleted.',
+      restore: 'Restore',
+      restoring: 'Restoring…',
+      restoreError: 'The account could not be restored.',
       pageInfo: 'Page {page} of {total}',
       prev: 'Previous',
       next: 'Next',
@@ -2211,7 +2281,26 @@ export const en = {
         product: 'Product',
         amount: 'Amount',
         status: 'Status',
+        actions: 'Actions',
       },
+      refund: 'Refund',
+      refundTitle: 'Refund this payment',
+      refundBody:
+        'A refund credits the learner wallet. Leave the amount empty to refund the full payment.',
+      refundAmount: 'Amount ({unit})',
+      refundAmountPlaceholder: 'Leave empty for a full refund',
+      refundFullHint: 'Empty → the full payment is refunded.',
+      unitToman: 'Toman',
+      unitRial: 'Rial',
+      refundReason: 'Reason (required)',
+      refundReasonPlaceholder: 'Why is this being refunded? Recorded in the audit trail.',
+      refundReasonRequired: 'A reason is required for the audit trail.',
+      refundAmountInvalid: 'The amount must be between 1 and the payment total.',
+      refundConfirm: 'Record the refund',
+      refundWorking: 'Recording…',
+      refundCancel: 'Cancel',
+      refundSuccess: 'The refund was recorded and the wallet credited.',
+      refundError: 'The refund failed.',
     },
     courses: {
       title: 'Courses',
@@ -2698,10 +2787,13 @@ export const en = {
       superAdmin: 'Super admin',
     },
     payments: {
-      pending: 'PENDING',
-      completed: 'COMPLETED',
-      failed: 'FAILED',
-      refunded: 'REFUNDED',
+      pending: 'Pending',
+      processing: 'Processing',
+      completed: 'Completed',
+      failed: 'Failed',
+      cancelled: 'Cancelled',
+      refunded: 'Refunded',
+      partially_refunded: 'Partially refunded',
     },
   },
 } as const;

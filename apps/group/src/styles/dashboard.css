@@ -15,22 +15,6 @@
   padding: var(--space-6) var(--space-6) var(--space-14);
 }
 
-.dash-panel__header {
-  margin-bottom: var(--space-5);
-}
-
-.dash-panel__header h1 {
-  font-size: clamp(24px, 4vw, 32px);
-  font-weight: 800;
-  margin: 0 0 var(--space-2);
-  color: var(--text);
-}
-
-.dash-panel__header p {
-  margin: 0;
-  color: var(--text-dim);
-}
-
 .dash-grid {
   --dash-gap: 18px;
   --dash-cols: 3;

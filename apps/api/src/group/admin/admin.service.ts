@@ -632,8 +632,15 @@ export class AdminService {
     const limit = Math.min(100, Math.max(1, Math.floor(params.limit ?? 20)));
 
     const where: Prisma.UserWhereInput = {};
-    // DB-4: soft-deleted accounts are hidden from the admin list.
-    where.deletedAt = null;
+    // DB-4: soft-deleted accounts are hidden by default. The deleted/all views
+    // exist so a mistaken deletion can be found and reversed — without them the
+    // restore endpoint had no reachable target.
+    const deletedView = params.deleted ?? 'active';
+    if (deletedView === 'deleted') {
+      where.deletedAt = { not: null };
+    } else if (deletedView !== 'all') {
+      where.deletedAt = null;
+    }
     const search = params.search?.trim();
     if (search) {
       where.OR = [
@@ -661,6 +668,7 @@ export class AdminService {
           role: true,
           status: true,
           createdAt: true,
+          deletedAt: true,
           adminPanelAccess: true,
         },
         orderBy: { createdAt: 'desc' },
@@ -937,6 +945,7 @@ export class AdminService {
     role: string;
     status: string;
     createdAt: Date;
+    deletedAt?: Date | null;
     adminPanelAccess: unknown;
   }): AdminUser {
     return {
@@ -944,6 +953,7 @@ export class AdminService {
       name: user.name,
       email: user.email,
       phone: user.phone ?? null,
+      deleted: user.deletedAt != null,
       role: user.role as AdminUser['role'],
       status: (USER_STATUSES as readonly string[]).includes(user.status)
         ? (user.status as AdminUser['status'])

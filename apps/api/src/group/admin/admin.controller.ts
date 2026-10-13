@@ -210,6 +210,7 @@ export class AdminController {
     @Query('search') search?: string,
     @Query('role') role?: string,
     @Query('status') status?: string,
+    @Query('deleted') deleted?: string,
   ) {
     return this.adminService.listUsers({
       page: page ? Number(page) : undefined,
@@ -217,6 +218,11 @@ export class AdminController {
       search,
       role,
       status: (status ?? '') as AdminUserListParams['status'],
+      // Unknown values fall back to the default (active only) rather than
+      // widening the query to deleted accounts.
+      deleted: (['deleted', 'all'] as const).includes(deleted as 'deleted')
+        ? (deleted as AdminUserListParams['deleted'])
+        : 'active',
     });
   }
 

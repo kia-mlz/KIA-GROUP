@@ -235,6 +235,8 @@ describe('AdminService.listUsers', () => {
           role: 'LEARNER',
           status: 'ACTIVE',
           createdAt: '2026-01-01T00:00:00.000Z',
+          // DB-4: the list reports whether the row is soft-deleted.
+          deleted: false,
           adminPanelAccess: null,
         },
       ],
@@ -243,6 +245,65 @@ describe('AdminService.listUsers', () => {
       limit: 20,
       hasNext: false,
     });
+  });
+
+  /**
+   * DB-4 visibility. The default must keep hidden accounts hidden — widening it
+   * would expose deleted PII to every moderator — while the deleted/all views
+   * are what make a mistaken deletion reversible.
+   */
+  it('hides soft-deleted accounts by default and surfaces them on request', async () => {
+    function prismaFor() {
+      return {
+        user: {
+          count: jest.fn().mockResolvedValue(0),
+          findMany: jest.fn().mockResolvedValue([]),
+        },
+      };
+    }
+
+    const defaultPrisma = prismaFor();
+    await makeService(defaultPrisma).listUsers({});
+    expect(defaultPrisma.user.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({ where: expect.objectContaining({ deletedAt: null }) }),
+    );
+
+    const deletedPrisma = prismaFor();
+    await makeService(deletedPrisma).listUsers({ deleted: 'deleted' });
+    expect(deletedPrisma.user.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ deletedAt: { not: null } }),
+      }),
+    );
+
+    const allPrisma = prismaFor();
+    await makeService(allPrisma).listUsers({ deleted: 'all' });
+    const whereArg = allPrisma.user.findMany.mock.calls[0]?.[0]?.where as Record<string, unknown>;
+    expect(whereArg).not.toHaveProperty('deletedAt');
+  });
+
+  it('reports the deleted flag for a soft-deleted row', async () => {
+    const prisma = {
+      user: {
+        count: jest.fn().mockResolvedValue(1),
+        findMany: jest.fn().mockResolvedValue([
+          {
+            id: 'u3',
+            name: 'Gone',
+            email: null,
+            phone: null,
+            role: 'LEARNER',
+            status: 'ACTIVE',
+            createdAt: new Date('2026-01-01T00:00:00Z'),
+            deletedAt: new Date('2026-02-01T00:00:00Z'),
+            adminPanelAccess: null,
+          },
+        ]),
+      },
+    };
+
+    const result = await makeService(prisma).listUsers({ deleted: 'deleted' });
+    expect(result.items[0].deleted).toBe(true);
   });
 });
 

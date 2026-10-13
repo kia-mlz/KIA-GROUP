@@ -209,27 +209,6 @@
   flex: 1 1 auto;
 }
 
-.door-action {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-top: var(--space-2);
-  font-size: var(--fs-sm);
-  font-weight: 700;
-  color: var(--tile-fill);
-}
-
-.door:hover .door-action .nav-arrow {
-  transform: translateX(3px);
-}
-
-[dir='rtl'] .door:hover .door-action .nav-arrow {
-  transform: scaleX(-1) translateX(3px);
-}
-
-.door-action .nav-arrow {
-  transition: transform var(--dur-base) var(--ease-out);
-}
 
 /* --- journey rail -------------------------------------------------------- */
 .landing-journey {

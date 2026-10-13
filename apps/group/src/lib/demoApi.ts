@@ -2685,6 +2685,11 @@ export const demoApi = {
     }
     if (params.role) rows = rows.filter((u) => u.role === params.role);
     if (params.status) rows = rows.filter((u) => u.status === params.status);
+    // DB-4 view: active only by default, with the deleted / all views used to
+    // find and restore a soft-deleted account.
+    const deletedView = params.deleted ?? 'active';
+    if (deletedView === 'deleted') rows = rows.filter((u) => u.deleted);
+    else if (deletedView !== 'all') rows = rows.filter((u) => !u.deleted);
     const total = rows.length;
     const start = (page - 1) * limit;
     const items = rows.slice(start, start + limit);
@@ -2695,6 +2700,31 @@ export const demoApi = {
       limit,
       hasNext: start + limit < total,
     });
+  },
+
+  /** Demo mirror of DB-4: the row stays, it is only flagged as deleted. */
+  async adminSoftDeleteUser(id: string, reason: string): Promise<AdminUser> {
+    requireUser();
+    if (!reason?.trim()) throw new ApiError('Reason is required', 400);
+    const index = demoAdminUsers.findIndex((u) => u.id === id);
+    if (index < 0) throw new ApiError('User not found', 404);
+    if (demoAdminUsers[index].role === 'SUPER_ADMIN') {
+      throw new ApiError('Super admins cannot be deleted', 403);
+    }
+    demoAdminUsers[index] = { ...demoAdminUsers[index], deleted: true };
+    return delay({ ...demoAdminUsers[index] });
+  },
+
+  /** Demo mirror of DB-4 restore. */
+  async adminRestoreUser(id: string): Promise<AdminUser> {
+    requireUser();
+    const index = demoAdminUsers.findIndex((u) => u.id === id);
+    if (index < 0) throw new ApiError('User not found', 404);
+    if (!demoAdminUsers[index].deleted) {
+      throw new ApiError('User is not deleted', 400);
+    }
+    demoAdminUsers[index] = { ...demoAdminUsers[index], deleted: false };
+    return delay({ ...demoAdminUsers[index] });
   },
 
   async adminUpdateUserStatus(id: string, dto: AdminUpdateUserStatusDto): Promise<AdminUser> {
@@ -2824,6 +2854,48 @@ export const demoApi = {
         createdAt: DEMO_CREATED_AT,
       })),
     );
+  },
+
+  /**
+   * Demo mirror of the live refund state machine: only a COMPLETED payment may
+   * be refunded, the amount cannot exceed the total, and a partial refund lands
+   * in PARTIALLY_REFUNDED while a full one lands in REFUNDED.
+   */
+  async adminRefundPayment(
+    id: string,
+    dto: { amountCents?: number; reason: string },
+  ): Promise<AdminPayment> {
+    requireUser();
+    const state = readState();
+    const payment = state.payments.find((p) => p.id === id);
+    if (!payment) {
+      throw new ApiError(`Payment ${id} not found`, 404);
+    }
+    if (payment.status !== 'COMPLETED') {
+      throw new ApiError(`Payment ${id} is in state ${payment.status} — cannot refund`, 400);
+    }
+    if (!dto.reason?.trim()) {
+      throw new ApiError('An adjustment reason is required', 400);
+    }
+    const refundAmount = dto.amountCents ?? payment.amountCents;
+    if (refundAmount <= 0 || refundAmount > payment.amountCents) {
+      throw new ApiError('Refund amount cannot exceed the payment total', 400);
+    }
+    payment.status =
+      refundAmount < payment.amountCents ? 'PARTIALLY_REFUNDED' : 'REFUNDED';
+    writeState(state);
+    return delay({
+      id: payment.id,
+      userId: DEMO_LEARNER.id,
+      userName: DEMO_LEARNER.name,
+      userEmail: DEMO_LEARNER.email,
+      productType: payment.productType,
+      productRef: null,
+      amountCents: payment.amountCents,
+      currency: payment.currency,
+      status: payment.status,
+      createdAt: DEMO_CREATED_AT,
+    });
   },
 
   async adminUpdateUserRole(userId: string, role: UserRole): Promise<AdminUser> {

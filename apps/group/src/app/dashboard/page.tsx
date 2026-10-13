@@ -14,7 +14,6 @@ import { TestResultsCard } from '@/components/dashboard/TestResultsCard';
 import { TicketsCard } from '@/components/dashboard/TicketsCard';
 import { TodoList } from '@/components/dashboard/TodoList';
 import { ToastProvider } from '@/components/dashboard/ToastProvider';
-import { DepartmentSolarSystem } from '@/components/hub/DepartmentSolarSystem';
 import { useApp } from '@/context/AppProvider';
 import { useAuth } from '@/context/AuthProvider';
 import { useLanguage } from '@/context/LanguageProvider';
@@ -54,8 +53,6 @@ export default function DashboardPage() {
             </div>
           </header>
 
-          <DepartmentSolarSystem />
-
           <div className="bento">
             <Link href="/assessment" className="tile tile--half tile--feature">
               <span className="t-icon t-icon--brand" aria-hidden="true">
@@ -81,22 +78,10 @@ export default function DashboardPage() {
     );
   }
 
-  const firstName =
-    user?.firstName || user?.name?.split(' ')[0] || t('dashboard.fallbackName');
-
   return (
     <ToastProvider>
       <div className="page-content dash-panel">
         <div className="dash-panel__inner">
-          <header className="dash-panel__header">
-            <div>
-              <h1>{t('dashboard.welcomeBack', { name: firstName })}</h1>
-              <p>{t('dashboard.hub.sub')}</p>
-            </div>
-          </header>
-
-          <DepartmentSolarSystem />
-
           <div className="dash-grid">
             <FinancialCard />
             <BootcampCard />

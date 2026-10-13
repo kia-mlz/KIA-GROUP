@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Check, Loader2, Plus, X } from 'lucide-react';
+import { Check, Loader2, Plus, Trash2, Undo2, X } from 'lucide-react';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   createDefaultSiteSettings,
@@ -13,6 +13,7 @@ import {
   type UserRole,
 } from '@kia-group/shared';
 import { AdminAccessMatrix } from '@/components/admin/AdminAccessMatrix';
+import { useAdminAccess } from '@/components/admin/useAdminAccess';
 import { useAuth } from '@/context/AuthProvider';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api, ApiError } from '@/lib/api';
@@ -40,7 +41,11 @@ const defaultModeratorAccess = () =>
 export default function AdminUsersPage() {
   const { t, format } = useLanguage();
   const { user: me } = useAuth();
+  const { can } = useAdminAccess();
   const isSuper = me?.role === 'SUPER_ADMIN';
+  // Soft delete and restore are `users.manage` operations on the server; the
+  // buttons only exist for operators who hold it.
+  const canManageUsers = can('users', 'manage');
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [roles, setRoles] = useState<AdminRole[]>([]);
   const [draftRoles, setDraftRoles] = useState<Record<string, UserRole>>({});
@@ -53,6 +58,12 @@ export default function AdminUsersPage() {
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState<'' | AdminUserStatus>('');
+  const [deletedFilter, setDeletedFilter] = useState<'active' | 'deleted' | 'all'>('active');
+  const [deleteTarget, setDeleteTarget] = useState<AdminUser | null>(null);
+  const [deleteReason, setDeleteReason] = useState('');
+  const [deleteBusy, setDeleteBusy] = useState(false);
+  const [deleteDialogError, setDeleteDialogError] = useState('');
+  const [restoreBusyId, setRestoreBusyId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [hasNext, setHasNext] = useState(false);
@@ -77,6 +88,7 @@ export default function AdminUsersPage() {
             search: search.trim() || undefined,
             role: roleFilter || undefined,
             status: statusFilter || undefined,
+            deleted: deletedFilter === 'active' ? undefined : deletedFilter,
           }),
           api.adminListRoles().catch(() => [] as AdminRole[]),
         ]);
@@ -109,17 +121,58 @@ export default function AdminUsersPage() {
         setLoading(false);
       }
     },
-    [search, roleFilter, statusFilter, t],
+    [search, roleFilter, statusFilter, deletedFilter, t],
   );
 
   useEffect(() => {
     void load(1);
-  }, [roleFilter, statusFilter]);
+  }, [roleFilter, statusFilter, deletedFilter]);
 
   const totalPages = Math.max(1, Math.ceil(total / USERS_PAGE_SIZE));
 
   const canManageStatus = (user: AdminUser) =>
-    user.id !== me?.id && user.role !== 'SUPER_ADMIN';
+    user.id !== me?.id && user.role !== 'SUPER_ADMIN' && !user.deleted;
+
+  /** DB-4 soft delete — mandatory reason, audited server-side. */
+  const applySoftDelete = async () => {
+    const user = deleteTarget;
+    if (!user || deleteBusy) return;
+    if (!deleteReason.trim()) {
+      setDeleteDialogError(t('admin.users.softDeleteReasonRequired'));
+      return;
+    }
+    setDeleteBusy(true);
+    setDeleteDialogError('');
+    try {
+      const updated = await api.adminSoftDeleteUser(user.id, deleteReason.trim());
+      setUsers((prev) => prev.map((u) => (u.id === user.id ? updated : u)));
+      setDeleteTarget(null);
+      setDeleteReason('');
+      setFeedback((prev) => ({ ...prev, [user.id]: 'success' }));
+    } catch (err) {
+      setDeleteDialogError(
+        err instanceof ApiError ? err.message : t('admin.users.softDeleteError'),
+      );
+    } finally {
+      setDeleteBusy(false);
+    }
+  };
+
+  /** DB-4 reverse a soft delete — the account and its history come back. */
+  const applyRestore = async (user: AdminUser) => {
+    if (restoreBusyId) return;
+    setRestoreBusyId(user.id);
+    setError('');
+    try {
+      const updated = await api.adminRestoreUser(user.id);
+      setUsers((prev) => prev.map((u) => (u.id === user.id ? updated : u)));
+      setFeedback((prev) => ({ ...prev, [user.id]: 'success' }));
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : t('admin.users.restoreError'));
+    } finally {
+      setRestoreBusyId(null);
+    }
+  };
 
   const customRoleNames = useMemo(
     () =>
@@ -257,6 +310,20 @@ export default function AdminUsersPage() {
           />
         </label>
         <label className="form-field" style={{ flex: '0 1 180px', margin: 0 }}>
+          <span className="sr-only">{t('admin.users.deletedViewLabel')}</span>
+          <select
+            className="admin-select"
+            value={deletedFilter}
+            onChange={(e) =>
+              setDeletedFilter(e.target.value as 'active' | 'deleted' | 'all')
+            }
+          >
+            <option value="active">{t('admin.users.deletedView.active')}</option>
+            <option value="deleted">{t('admin.users.deletedView.deleted')}</option>
+            <option value="all">{t('admin.users.deletedView.all')}</option>
+          </select>
+        </label>
+        <label className="form-field" style={{ flex: '0 1 180px', margin: 0 }}>
           <span className="sr-only">{t('admin.users.col.status')}</span>
           <select
             className="admin-select"
@@ -304,12 +371,21 @@ export default function AdminUsersPage() {
             </tr>
           </thead>
           <tbody>
+            {/* The deleted view is legitimately empty until something is deleted;
+                say so instead of rendering a blank table. */}
+            {users.length === 0 ? (
+              <tr>
+                <td colSpan={6}>{t('admin.users.empty')}</td>
+              </tr>
+            ) : null}
             {users.map((user) => {
               const draft = draftRoles[user.id] ?? user.role;
               const dirty = draft !== user.role;
               const rowFeedback = feedback[user.id];
               const isModerator = user.role === 'ADMIN' || isStaffRole(user.role);
-              const showAccess = isSuper && isModerator && user.role !== 'SUPER_ADMIN';
+              const isDeleted = Boolean(user.deleted);
+              const showAccess =
+                isSuper && isModerator && user.role !== 'SUPER_ADMIN' && !isDeleted;
 
               return (
                 <Fragment key={user.id}>
@@ -327,9 +403,15 @@ export default function AdminUsersPage() {
                     </td>
                     <td>{format.date(user.createdAt)}</td>
                     <td>
-                      <span className={`admin-badge ${statusBadgeTone[user.status]}`}>
-                        {t(`admin.users.status.${user.status}`)}
-                      </span>
+                      {isDeleted ? (
+                        <span className="admin-badge danger">
+                          {t('admin.users.deletedBadge')}
+                        </span>
+                      ) : (
+                        <span className={`admin-badge ${statusBadgeTone[user.status]}`}>
+                          {t(`admin.users.status.${user.status}`)}
+                        </span>
+                      )}
                     </td>
                     <td>
                       <div className="admin-role-save-row">
@@ -338,7 +420,9 @@ export default function AdminUsersPage() {
                           <select
                             value={draft}
                             disabled={
-                              updatingId === user.id || (!isSuper && user.role === 'SUPER_ADMIN')
+                              updatingId === user.id ||
+                              isDeleted ||
+                              (!isSuper && user.role === 'SUPER_ADMIN')
                             }
                             onChange={(e) =>
                               setDraftRoles((prev) => ({
@@ -429,6 +513,42 @@ export default function AdminUsersPage() {
                               {t('admin.users.activate')}
                             </button>
                           ))}
+                        {/* DB-4: soft-deleted accounts stay listed here (deleted /
+                            all views) with the restore path that reverses them. */}
+                        {canManageUsers && user.id !== me?.id && user.role !== 'SUPER_ADMIN' && (
+                          isDeleted ? (
+                            <button
+                              type="button"
+                              className="btn-next admin-btn"
+                              disabled={restoreBusyId === user.id}
+                              onClick={() => void applyRestore(user)}
+                            >
+                              {restoreBusyId === user.id ? (
+                                <>
+                                  <Loader2 size={14} className="spin" />{' '}
+                                  {t('admin.users.restoring')}
+                                </>
+                              ) : (
+                                <>
+                                  <Undo2 size={14} /> {t('admin.users.restore')}
+                                </>
+                              )}
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              className="btn-next admin-btn"
+                              disabled={deleteBusy}
+                              onClick={() => {
+                                setDeleteTarget(user);
+                                setDeleteReason('');
+                                setDeleteDialogError('');
+                              }}
+                            >
+                              <Trash2 size={14} /> {t('admin.users.softDelete')}
+                            </button>
+                          )
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -562,6 +682,59 @@ export default function AdminUsersPage() {
                 </>
               );
             })()}
+          </div>
+        </div>
+      )}
+
+      {deleteTarget && (
+        <div
+          className="modal-overlay active"
+          role="presentation"
+          onClick={(e) => {
+            if (e.target === e.currentTarget && !deleteBusy) setDeleteTarget(null);
+          }}
+        >
+          <div className="modal" role="dialog" aria-modal="true">
+            <h4>{t('admin.users.softDeleteTitle')}</h4>
+            <p>{t('admin.users.softDeleteBody', { name: deleteTarget.name })}</p>
+            <p className="form-error">{t('admin.users.softDeleteWarning')}</p>
+            <label className="form-field" style={{ width: '100%', textAlign: 'start' }}>
+              <span>{t('admin.users.softDeleteReason')}</span>
+              <textarea
+                className="admin-input"
+                rows={3}
+                value={deleteReason}
+                disabled={deleteBusy}
+                placeholder={t('admin.users.softDeleteReasonPlaceholder')}
+                onChange={(e) => setDeleteReason(e.target.value)}
+              />
+            </label>
+            {deleteDialogError ? <p className="form-error">{deleteDialogError}</p> : null}
+            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+              <button
+                type="button"
+                className="cta-primary"
+                disabled={deleteBusy}
+                onClick={() => void applySoftDelete()}
+              >
+                {deleteBusy ? (
+                  <>
+                    <Loader2 size={14} className="spin" />{' '}
+                    {t('admin.users.softDeleteWorking')}
+                  </>
+                ) : (
+                  t('admin.users.softDeleteConfirm')
+                )}
+              </button>
+              <button
+                type="button"
+                className="btn-next admin-btn"
+                disabled={deleteBusy}
+                onClick={() => setDeleteTarget(null)}
+              >
+                {t('admin.users.statusCancel')}
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -32,7 +32,7 @@ export default function AdminNewCoursePage() {
         trackKey: trackKey || undefined,
         published,
       });
-      router.push(`/admin/courses/${course.slug}/edit`);
+      router.push(`/admin/academy/courses/${course.slug}/edit`);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : t('admin.courses.createError'));
     } finally {

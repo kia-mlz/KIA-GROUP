@@ -60,7 +60,7 @@ export default function AdminCoursesPage() {
           <h1>{t('admin.courses.title')}</h1>
           <p className="admin-sub">{t('admin.courses.sub')}</p>
         </div>
-        <Link href="/admin/courses/new" className="btn-next admin-btn">
+        <Link href="/admin/academy/courses/new" className="btn-next admin-btn">
           <Plus size={16} /> {t('admin.courses.new')}
         </Link>
       </div>
@@ -100,7 +100,7 @@ export default function AdminCoursesPage() {
                   ) : null}
                 </td>
                 <td className="admin-actions">
-                  <Link href={`/admin/courses/${course.slug}/edit`} className="admin-link">
+                  <Link href={`/admin/academy/courses/${course.slug}/edit`} className="admin-link">
                     {t('common.edit')}
                   </Link>
                   <button

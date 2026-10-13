@@ -1,8 +1,14 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
+import { Loader2, RotateCcw } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import type { AdminPayment } from '@kia-group/shared';
+import {
+  fromDisplayUnits,
+  normalizePaymentCurrency,
+  type AdminPayment,
+  type PaymentStatus,
+} from '@kia-group/shared';
+import { useAdminAccess } from '@/components/admin/useAdminAccess';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api, ApiError } from '@/lib/api';
 import {
@@ -13,7 +19,16 @@ import {
   type SortState,
 } from '@/components/admin/AdminPro';
 
-const PAYMENT_STATUSES = ['COMPLETED', 'PENDING', 'FAILED', 'REFUNDED'] as const;
+/** Every member of the shared `PaymentStatus` union — the filter must not drift. */
+const PAYMENT_STATUSES: readonly PaymentStatus[] = [
+  'PENDING',
+  'PROCESSING',
+  'COMPLETED',
+  'FAILED',
+  'CANCELLED',
+  'REFUNDED',
+  'PARTIALLY_REFUNDED',
+];
 
 type PaymentTone = 'ok' | 'warning' | 'danger' | 'info';
 
@@ -23,19 +38,33 @@ function paymentTone(status: string): PaymentTone {
     case 'COMPLETED':
       return 'ok';
     case 'PENDING':
+    case 'PROCESSING':
       return 'warning';
     case 'FAILED':
+    case 'CANCELLED':
       return 'danger';
     default:
       return 'info';
   }
 }
 
+type RefundTarget = {
+  payment: AdminPayment;
+  amount: string;
+  reason: string;
+  busy: boolean;
+  error: string;
+};
+
 export default function AdminPaymentsPage() {
   const { t, format } = useLanguage();
+  const { can } = useAdminAccess();
+  const canRefund = can('payments', 'manage');
   const [payments, setPayments] = useState<AdminPayment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
+  const [refund, setRefund] = useState<RefundTarget | null>(null);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [sort, setSort] = useState<SortState>(null);
@@ -89,6 +118,59 @@ export default function AdminPaymentsPage() {
     setSort(null);
   };
 
+  const openRefund = (payment: AdminPayment) => {
+    setError('');
+    setNotice('');
+    setRefund({ payment, amount: '', reason: '', busy: false, error: '' });
+  };
+
+  /**
+   * The admin enters the amount in the currency the table displays, so a
+   * Persian operator types تومان — never the stored ریال. `fromDisplayUnits`
+   * converts it back; the empty field means "refund the full amount".
+   */
+  const refundAmountCents = (target: RefundTarget): number | undefined => {
+    const digits = target.amount.replace(/[^\d]/g, '');
+    if (!digits) return undefined;
+    return fromDisplayUnits(
+      Number(digits),
+      normalizePaymentCurrency(target.payment.currency),
+    );
+  };
+
+  const submitRefund = async () => {
+    const target = refund;
+    if (!target || target.busy) return;
+    const amountCents = refundAmountCents(target);
+    if (!target.reason.trim()) {
+      setRefund({ ...target, error: t('admin.payments.refundReasonRequired') });
+      return;
+    }
+    if (amountCents !== undefined && (amountCents <= 0 || amountCents > target.payment.amountCents)) {
+      setRefund({ ...target, error: t('admin.payments.refundAmountInvalid') });
+      return;
+    }
+
+    setRefund({ ...target, busy: true, error: '' });
+    try {
+      const updated = await api.adminRefundPayment(
+        target.payment.id,
+        amountCents === undefined
+          ? { reason: target.reason.trim() }
+          : { amountCents, reason: target.reason.trim() },
+      );
+      setPayments((rows) => rows.map((row) => (row.id === updated.id ? updated : row)));
+      setRefund(null);
+      setNotice(t('admin.payments.refundSuccess'));
+    } catch (err) {
+      setRefund({
+        ...target,
+        busy: false,
+        error: err instanceof ApiError ? err.message : t('admin.payments.refundError'),
+      });
+    }
+  };
+
   if (loading) {
     return (
       <div className="admin-content auth-loading">
@@ -98,6 +180,7 @@ export default function AdminPaymentsPage() {
   }
 
   const hasFilters = Boolean(search || statusFilter || sort);
+  const columnCount = canRefund ? 6 : 5;
 
   return (
     <div className="admin-content">
@@ -106,6 +189,11 @@ export default function AdminPaymentsPage() {
       {error ? (
         <p className="form-error" role="alert">
           {error}
+        </p>
+      ) : null}
+      {notice ? (
+        <p className="form-success" role="status">
+          {notice}
         </p>
       ) : null}
 
@@ -174,12 +262,13 @@ export default function AdminPaymentsPage() {
                 sort={sort}
                 onSort={onSort}
               />
+              {canRefund ? <th scope="col">{t('admin.payments.col.actions')}</th> : null}
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={5}>
+                <td colSpan={columnCount}>
                   {payments.length === 0
                     ? t('admin.payments.empty')
                     : t('admin.pro.emptyFiltered')}
@@ -196,7 +285,9 @@ export default function AdminPaymentsPage() {
                   <td>
                     <code>{payment.productType}</code>
                   </td>
-                  <td className="apro-num">{format.currency(payment.amountCents)}</td>
+                  <td className="apro-num">
+                    {format.currency(payment.amountCents, payment.currency)}
+                  </td>
                   <td>
                     <AdminStatusBadge tone={paymentTone(payment.status)}>
                       {t(
@@ -204,6 +295,23 @@ export default function AdminPaymentsPage() {
                       )}
                     </AdminStatusBadge>
                   </td>
+                  {canRefund ? (
+                    <td>
+                      {/* Only a COMPLETED payment can move to a refunded state; the
+                          server enforces the same transition. */}
+                      {payment.status === 'COMPLETED' ? (
+                        <button
+                          type="button"
+                          className="admin-link-btn"
+                          onClick={() => openRefund(payment)}
+                        >
+                          <RotateCcw size={14} aria-hidden /> {t('admin.payments.refund')}
+                        </button>
+                      ) : (
+                        <span className="admin-cell-meta">—</span>
+                      )}
+                    </td>
+                  ) : null}
                 </tr>
               ))
             )}
@@ -215,6 +323,91 @@ export default function AdminPaymentsPage() {
         <p className="admin-meta" style={{ marginTop: '0.75rem' }}>
           {t('admin.pro.total')}: {format.currency(filteredTotal)}
         </p>
+      ) : null}
+
+      {refund ? (
+        <div
+          className="modal-overlay active"
+          role="presentation"
+          onClick={(e) => {
+            if (e.target === e.currentTarget && !refund.busy) setRefund(null);
+          }}
+        >
+          <div className="modal" role="dialog" aria-modal="true" aria-label={t('admin.payments.refundTitle')}>
+            <h4>{t('admin.payments.refundTitle')}</h4>
+            <p>{t('admin.payments.refundBody')}</p>
+            <p className="admin-cell-meta">
+              {refund.payment.userName} ·{' '}
+              {format.currency(refund.payment.amountCents, refund.payment.currency)}
+            </p>
+
+            <label className="form-field" style={{ width: '100%', textAlign: 'start' }}>
+              <span>
+                {t('admin.payments.refundAmount', {
+                  unit:
+                    normalizePaymentCurrency(refund.payment.currency) === 'irt'
+                      ? t('admin.payments.unitToman')
+                      : t('admin.payments.unitRial'),
+                })}
+              </span>
+              <input
+                className="admin-input"
+                inputMode="numeric"
+                value={refund.amount}
+                disabled={refund.busy}
+                placeholder={t('admin.payments.refundAmountPlaceholder')}
+                onChange={(e) => setRefund({ ...refund, amount: e.target.value })}
+              />
+              <span className="admin-cell-meta">
+                {refundAmountCents(refund) === undefined
+                  ? t('admin.payments.refundFullHint')
+                  : format.currency(
+                      refundAmountCents(refund)!,
+                      refund.payment.currency,
+                    )}
+              </span>
+            </label>
+
+            <label className="form-field" style={{ width: '100%', textAlign: 'start' }}>
+              <span>{t('admin.payments.refundReason')}</span>
+              <textarea
+                className="admin-input"
+                rows={3}
+                value={refund.reason}
+                disabled={refund.busy}
+                placeholder={t('admin.payments.refundReasonPlaceholder')}
+                onChange={(e) => setRefund({ ...refund, reason: e.target.value })}
+              />
+            </label>
+
+            {refund.error ? <p className="form-error">{refund.error}</p> : null}
+
+            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+              <button
+                type="button"
+                className="cta-primary"
+                disabled={refund.busy}
+                onClick={() => void submitRefund()}
+              >
+                {refund.busy ? (
+                  <>
+                    <Loader2 size={14} className="spin" /> {t('admin.payments.refundWorking')}
+                  </>
+                ) : (
+                  t('admin.payments.refundConfirm')
+                )}
+              </button>
+              <button
+                type="button"
+                className="btn-next admin-btn"
+                disabled={refund.busy}
+                onClick={() => setRefund(null)}
+              >
+                {t('admin.payments.refundCancel')}
+              </button>
+            </div>
+          </div>
+        </div>
       ) : null}
     </div>
   );

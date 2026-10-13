@@ -94,18 +94,12 @@ export function PublicCoursesPage() {
             {domains.map((domain, index) => {
               const label = domainLabel(domain.key);
               const Icon = DOMAIN_ICONS[domain.key] ?? BookOpen;
+              // Every domain door is icon + title only; the course list behind
+              // it carries the counts and the call to action.
               const tile = (
                 <>
                   <span className="door-icon" aria-hidden="true"><Icon size={20} /></span>
                   <h2 className="door-title">{label}</h2>
-                  <p className="door-desc">
-                    {domain.count > 0
-                      ? t('publicCourses.domains.count', { count: domain.count })
-                      : t('publicCourses.domains.emptyDesc')}
-                  </p>
-                  {domain.count > 0 ? (
-                    <span className="door-cta">{t('publicCourses.domains.enter')} →</span>
-                  ) : null}
                 </>
               );
               const tint = tintClass(accents[index]);

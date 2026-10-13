@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
   BarChart3,
   BookOpen,
+  Building2,
   ChevronDown,
   ChevronRight,
   Coins,
@@ -47,6 +48,12 @@ type NavLeaf = {
   label: string;
   exact?: boolean;
   key: AdminSection;
+  /**
+   * Visible to a staff account that may open *any* section, not one section in
+   * particular. The departments hub is the entry point to "where do I manage
+   * this?", so a moderator with any single section must still find it.
+   */
+  anySection?: boolean;
 };
 
 type NavItem =
@@ -68,6 +75,7 @@ type NavGroup = {
 
 const GROUP_OF: Record<string, string> = {
   dashboard: 'general',
+  departments: 'departments',
   users: 'general',
   courses: 'content',
   challenges: 'content',
@@ -80,7 +88,6 @@ const GROUP_OF: Record<string, string> = {
   audit: 'system',
   settings: 'system',
 };
-
 function pathActive(pathname: string, href: string, exact?: boolean) {
   return exact ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
 }
@@ -291,6 +298,16 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     [attention.messages],
   );
 
+  /**
+   * Any staff account that can open at least one section may open the
+   * departments hub — it is the shared answer to "where do I manage this?",
+   * and it shows only the modules that account is actually allowed to reach.
+   */
+  const canOpenDepartments = useMemo(
+    () => isSuper || (access ? Object.values(access).some((section) => section.view) : false),
+    [isSuper, access],
+  );
+
   const nav = useMemo((): NavItem[] => {
     const items: NavItem[] = [
       {
@@ -300,6 +317,14 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         icon: BarChart3,
         exact: true,
         key: 'stats',
+      },
+      {
+        id: 'departments',
+        href: '/admin/departments',
+        label: t('admin.nav.departments'),
+        icon: Building2,
+        key: 'stats',
+        anySection: true,
       },
       {
         id: 'users',
@@ -344,14 +369,14 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         children: [
           {
             id: 'courses-list',
-            href: '/admin/courses',
+            href: '/admin/academy/courses',
             label: t('admin.nav.coursesList'),
             exact: true,
             key: 'courses',
           },
           {
             id: 'courses-new',
-            href: '/admin/courses/new',
+            href: '/admin/academy/courses/new',
             label: t('admin.nav.coursesNew'),
             key: 'courses',
           },
@@ -359,14 +384,14 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       },
       {
         id: 'challenges',
-        href: '/admin/challenges',
+        href: '/admin/events/challenges',
         label: t('admin.nav.challenges'),
         icon: Trophy,
         key: 'challenges',
       },
       {
         id: 'tests',
-        href: '/admin/tests',
+        href: '/admin/academy/tests',
         label: t('admin.nav.tests'),
         icon: ClipboardList,
         key: 'tests',
@@ -387,7 +412,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       },
       {
         id: 'competitions',
-        href: '/admin/competitions',
+        href: '/admin/events/competitions',
         label: t('admin.nav.competitions'),
         icon: Flag,
         key: 'competitions',
@@ -474,10 +499,11 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           if (!children.length) return null;
           return { ...item, children };
         }
+        if (item.anySection) return canOpenDepartments ? item : null;
         return can(item.key) ? item : null;
       })
       .filter(Boolean) as NavItem[];
-  }, [t, can]);
+  }, [t, can, canOpenDepartments]);
 
   const flatLeaves = useMemo(() => {
     const leaves: NavLeaf[] = [];
@@ -495,7 +521,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       const groupId = GROUP_OF[item.id] ?? 'general';
       (groups[groupId] ??= []).push(item);
     }
-    const order = ['general', 'content', 'finance', 'support', 'system'];
+    // Departments sit directly under General: the brief's IA puts the six
+    // departments one step below the overview, not buried with content.
+    const order = ['general', 'departments', 'content', 'finance', 'support', 'system'];
     return order
       .filter((id) => groups[id]?.length)
       .map((id) => ({ id, labelKey: `admin.navGroup.${id}`, items: groups[id] }));
@@ -518,13 +546,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     const path = pathname || '/admin';
     const allowed =
       flatLeaves.some((item) => pathActive(path, item.href, item.exact)) ||
-      path.startsWith('/admin/courses/') ||
+      path.startsWith('/admin/academy/') ||
+      path.startsWith('/admin/events/') ||
       path.startsWith('/admin/users/') ||
       path.startsWith('/admin/finance') ||
       path.startsWith('/admin/analytics') ||
       path.startsWith('/admin/payments') ||
-      path.startsWith('/admin/challenges') ||
-      path.startsWith('/admin/tests') ||
       path.startsWith('/admin/contact') ||
       path.startsWith('/admin/settings');
     if (!allowed && path.startsWith('/admin')) {
@@ -541,7 +568,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         );
         const nestedHit =
           item.id === 'courses'
-            ? pathname.startsWith('/admin/courses/')
+            ? pathname.startsWith('/admin/academy/courses/')
             : item.id === 'users'
               ? pathname.startsWith('/admin/users/')
               : item.id === 'settings'

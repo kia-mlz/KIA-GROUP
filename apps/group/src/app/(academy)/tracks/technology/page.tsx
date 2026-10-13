@@ -7,7 +7,8 @@ import { useLanguage } from '@/context/LanguageProvider';
 
 /**
  * «تکنولوژی» sub-hub — the technology door splits into exactly two choices:
- * browse every course, or take the assessment that builds a learning path.
+ * browse the domains map, or take the assessment that builds a learning path.
+ * Each door is icon + title only — the copy lives on the page it opens.
  */
 export default function TechnologyTracksPage() {
   return (
@@ -36,8 +37,6 @@ function TechnologyGate() {
               <BookOpen size={20} />
             </span>
             <h2 className="door-title">{t('tracks.technology.courses.title')}</h2>
-            <p className="door-desc">{t('tracks.technology.courses.desc')}</p>
-            <span className="door-cta">{t('tracks.technology.courses.cta')}</span>
           </Link>
 
           <Link href="/assessment" className="door tint--mint">
@@ -45,8 +44,6 @@ function TechnologyGate() {
               <ClipboardCheck size={20} />
             </span>
             <h2 className="door-title">{t('tracks.technology.assessment.title')}</h2>
-            <p className="door-desc">{t('tracks.technology.assessment.desc')}</p>
-            <span className="door-cta">{t('tracks.technology.assessment.cta')}</span>
           </Link>
         </div>
       </div>

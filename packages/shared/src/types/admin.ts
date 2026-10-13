@@ -63,6 +63,8 @@ export interface AdminUser {
   /** Account status: ACTIVE by default; SUSPENDED/BANNED users cannot sign in. */
   status: AdminUserStatus;
   adminPanelAccess?: SiteAdminAccessSettings | null;
+  /** DB-4 soft delete: true when the account is deleted but still restorable. */
+  deleted?: boolean;
 }
 
 /** Learner/staff account status managed from the admin panel. */
@@ -89,6 +91,12 @@ export interface AdminUserListParams {
   search?: string;
   role?: string;
   status?: AdminUserStatus | '';
+  /**
+   * DB-4 soft-delete view. 'active' (default) hides deleted accounts — the
+   * behaviour the panel had before the filter existed — while 'deleted' and
+   * 'all' surface them so a mistaken deletion can be audited and reversed.
+   */
+  deleted?: 'active' | 'deleted' | 'all';
 }
 
 /* --- Audit log (Admin → Audit) ---------------------------------------------- */

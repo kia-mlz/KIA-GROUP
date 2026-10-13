@@ -99,7 +99,7 @@ export default function AdminEditCoursePage() {
       });
       hydrate(updated);
       setNotice('تغییرات دوره با موفقیت ذخیره شد.');
-      if (updated.slug !== courseSlug) router.replace(`/admin/courses/${updated.slug}/edit`);
+      if (updated.slug !== courseSlug) router.replace(`/admin/academy/courses/${updated.slug}/edit`);
     } catch (saveError) {
       setError(toMessage(saveError, 'ذخیرهٔ تغییرات دوره ناموفق بود.'));
     } finally {

@@ -186,7 +186,7 @@ export default function AdminStatsPage() {
       id: 'courses',
       label: t('admin.kpi.courses'),
       value: format.number(stats.courses),
-      href: '/admin/courses',
+      href: '/admin/academy/courses',
       icon: BookOpen,
       enabled: can('courses', 'view'),
       highlight: false,
@@ -222,7 +222,7 @@ export default function AdminStatsPage() {
       id: 'challenges',
       label: t('admin.kpi.activeChallenges'),
       value: format.number(stats.activeChallenges),
-      href: '/admin/challenges',
+      href: '/admin/events/challenges',
       icon: Trophy,
       enabled: can('challenges', 'view'),
       highlight: false,
@@ -438,7 +438,7 @@ export default function AdminStatsPage() {
             </Link>
           ) : null}
           {can('courses', 'manage') ? (
-            <Link href="/admin/courses/new" className="admin-quick-tile">
+            <Link href="/admin/academy/courses/new" className="admin-quick-tile">
               <BookOpen size={18} aria-hidden />
               {t('admin.quick.createCourse')}
             </Link>

@@ -1,0 +1,552 @@
+/* =============================================================================
+   Admin Pro theme layer — the admin panel re-skinned to the reference project
+   (pinned reference: /Users/kiamlz/Desktop/admin-pro).
+
+   What is reproduced here:
+   - Light "canvas" content area (#f5f5f2-style) with crisp hairline cards,
+     while the sidebar keeps the reference's dark charcoal (#202225).
+   - The brand gold (--group-gold from packages/brand) takes the reference's
+     --brand role: active nav pill, brand mark, hero block. No department hex
+     is hard-coded; department identity still flows through `--dept`.
+
+   This file must load AFTER admin.css so it re-skins the shared admin
+   primitives without duplicating layout logic. Pages keep their markup;
+   only the presentation changes here.
+   ========================================================================== */
+
+.admin-shell--redesigned {
+  /* Reference palette, expressed through the KIA GROUP primitive ramp:
+     canvas = warm off-white, surfaces = white cards, text = near-black. */
+  --admin-bg: #f5f5f2;
+  --admin-surface: #ffffff;
+  --admin-surface-2: #fafaf8;
+  --admin-accent: var(--group-gold, #ffc864);
+  --admin-accent-soft: #c87f0d;
+  --admin-accent-ink: #272115; /* ink stamped on gold fills (reference --brand-dark). */
+  --admin-value: #b7760c;
+  --admin-text: #1b1d1f;
+  --admin-muted: #686b6f;
+  --admin-faint: #93969a;
+  --admin-line: #e4e3de;
+  --admin-line-strong: #d4d3ce;
+  --admin-success: #16815f;
+  --admin-warning: #b7760c;
+  --admin-danger: #c42d40;
+  --admin-info: #3267c8;
+  --admin-radius: 1.25rem;
+  --admin-radius-sm: 0.625rem;
+  --admin-shadow: 0 1px 2px rgb(24 25 27 / 5%), 0 8px 24px rgb(24 25 27 / 4%);
+  --admin-shadow-lg: 0 24px 70px rgb(24 25 27 / 15%);
+  --admin-focus-ring: 0 0 0 3px color-mix(in srgb, var(--brand-500), transparent 65%);
+  --sidebar-width: 17rem;
+
+  color: var(--admin-text);
+  background: var(--admin-bg);
+  font-family: inherit;
+}
+
+/* ============================== Sidebar ==================================== */
+
+.admin-shell--redesigned .admin-sidebar {
+  width: var(--sidebar-width);
+  background: #202225;
+  border-inline-end: 0;
+  color: #fff;
+  backdrop-filter: none;
+  padding: 0;
+}
+
+.admin-shell--redesigned .admin-brand {
+  min-height: 5rem;
+  padding: 1rem;
+  margin: 0;
+  border: 0;
+  border-bottom: 1px solid rgb(255 255 255 / 8%);
+  color: #fff;
+}
+
+.admin-shell--redesigned .admin-brand-mark {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.35rem;
+  border: 0;
+  border-radius: 0.75rem;
+  background: var(--admin-accent);
+  color: var(--admin-accent-ink);
+}
+
+.admin-shell--redesigned .admin-brand strong {
+  color: #fff;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+}
+
+.admin-shell--redesigned .admin-brand small {
+  margin-top: 0.15rem;
+  color: #aeb0b3;
+  font-size: 0.7rem;
+}
+
+.admin-shell--redesigned .admin-nav-group-label {
+  padding: 0 0.75rem 0.45rem;
+  color: #808388;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+/* Nav rows: quiet grey, white on hover, gold pill when active — exactly the
+   reference's .nav-item / .nav-item.active treatment. */
+.admin-shell--redesigned .admin-nav-link,
+.admin-shell--redesigned .admin-nav-group-toggle {
+  min-height: 2.65rem;
+  padding: 0.55rem 0.75rem;
+  border: 0;
+  border-radius: 0.65rem;
+  background: transparent;
+  color: #bfc1c4;
+  font-size: 0.82rem;
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.admin-shell--redesigned .admin-nav-link:hover,
+.admin-shell--redesigned .admin-nav-group-toggle:hover {
+  border-color: transparent;
+  background: rgb(255 255 255 / 6%);
+  color: #fff;
+  transform: none;
+  filter: none;
+}
+
+.admin-shell--redesigned .admin-nav-link.active {
+  border-color: transparent;
+  background: var(--admin-accent);
+  color: var(--admin-accent-ink) !important;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+.admin-shell--redesigned .admin-nav-link.active svg {
+  color: var(--admin-accent-ink);
+}
+
+.admin-shell--redesigned .admin-nav-group.open > .admin-nav-group-toggle {
+  color: #fff;
+}
+
+.admin-shell--redesigned .admin-nav-badge {
+  background: var(--admin-accent);
+  color: var(--admin-accent-ink);
+}
+
+.admin-shell--redesigned .admin-nav-submenu {
+  border-inline-start: 0;
+}
+
+.admin-shell--redesigned .admin-nav-submenu .admin-nav-link {
+  color: #a3a6aa;
+}
+
+/* Footer block: collapse control + admin card, as in the reference. */
+.admin-shell--redesigned .admin-sidebar-profile {
+  margin: 0;
+  padding: 0.75rem;
+  border: 0;
+  border-top: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 0;
+  background: transparent;
+}
+
+.admin-shell--redesigned .admin-sidebar-profile .admin-brand-mark--profile {
+  border: 0;
+  border-radius: 50%;
+  background: #3c3f43;
+  color: var(--admin-accent);
+}
+
+.admin-shell--redesigned .admin-sidebar-profile strong {
+  color: #fff;
+  font-size: 0.75rem;
+}
+
+.admin-shell--redesigned .admin-sidebar-profile small {
+  color: #aeb0b3;
+}
+
+.admin-shell--redesigned .admin-collapse-button {
+  width: 100%;
+  min-height: 2.5rem;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #999ca0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+}
+
+.admin-shell--redesigned .admin-collapse-button:hover {
+  background: rgb(255 255 255 / 6%);
+  color: #fff;
+}
+
+.admin-shell--redesigned.sidebar-collapsed .admin-brand strong,
+.admin-shell--redesigned.sidebar-collapsed .admin-brand small,
+.admin-shell--redesigned.sidebar-collapsed .admin-nav-group-label,
+.admin-shell--redesigned.sidebar-collapsed .admin-nav-link span,
+.admin-shell--redesigned.sidebar-collapsed .admin-nav-group-toggle span,
+.admin-shell--redesigned.sidebar-collapsed .admin-nav-group-toggle .admin-nav-chevron,
+.admin-shell--redesigned.sidebar-collapsed .admin-nav-badge,
+.admin-shell--redesigned.sidebar-collapsed .admin-sidebar-profile .profile,
+.admin-shell--redesigned.sidebar-collapsed .admin-collapse-button {
+  display: none;
+}
+
+.admin-shell--redesigned.sidebar-collapsed .admin-brand,
+.admin-shell--redesigned.sidebar-collapsed .admin-nav-link,
+.admin-shell--redesigned.sidebar-collapsed .admin-nav-group-toggle,
+.admin-shell--redesigned.sidebar-collapsed .admin-sidebar-profile {
+  justify-content: center;
+}
+
+.admin-shell--redesigned .admin-sidebar-overlay {
+  background: rgb(20 21 22 / 45%);
+}
+
+/* ============================== Topbar ===================================== */
+
+.admin-shell--redesigned .admin-header {
+  min-height: 5rem;
+  height: 5rem;
+  padding: 0 2rem;
+  background: rgb(245 245 242 / 88%);
+  border-bottom: 1px solid var(--admin-line);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: none;
+}
+
+.admin-shell--redesigned .admin-breadcrumb {
+  color: var(--admin-faint);
+  font-size: 0.68rem;
+  font-weight: 400;
+}
+
+.admin-shell--redesigned .admin-breadcrumb a {
+  color: var(--admin-faint);
+  text-decoration: none;
+}
+
+.admin-shell--redesigned .admin-breadcrumb [aria-current='page'] {
+  color: var(--admin-muted);
+  font-weight: 700;
+}
+
+.admin-shell--redesigned .admin-header-title h1 {
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+  color: var(--admin-text);
+}
+
+.admin-shell--redesigned .admin-search-trigger {
+  width: min(29rem, 42vw);
+  min-height: 2.65rem;
+  border: 1px solid var(--admin-line);
+  background: var(--admin-surface);
+  color: var(--admin-muted);
+  box-shadow: 0 1px 2px rgb(20 21 22 / 3%);
+  justify-content: flex-start;
+}
+
+.admin-shell--redesigned .admin-search-trigger kbd {
+  min-height: 1.5rem;
+  margin-inline-start: auto;
+  border: 1px solid var(--admin-line);
+  border-radius: 0.35rem;
+  background: var(--admin-surface-2);
+  color: var(--admin-faint);
+  font-family: inherit;
+  font-size: 0.62rem;
+}
+
+.admin-shell--redesigned .admin-icon-button,
+.admin-shell--redesigned .admin-profile-button {
+  min-height: 2.65rem;
+  width: 2.65rem;
+  border: 1px solid var(--admin-line);
+  background: transparent;
+}
+
+.admin-shell--redesigned .admin-icon-button:hover,
+.admin-shell--redesigned .admin-profile-button:hover {
+  background: var(--admin-surface-2);
+  border-color: var(--admin-line-strong);
+  color: var(--admin-text);
+}
+
+.admin-shell--redesigned .admin-profile-button {
+  width: auto;
+  padding: 0 0.5rem;
+}
+
+.admin-shell--redesigned .admin-profile-avatar {
+  background: #3c3f43;
+  color: var(--admin-accent);
+  box-shadow: none;
+}
+
+/* ============================== Content ==================================== */
+
+.admin-shell--redesigned .admin-content {
+  max-width: 96rem;
+  padding: 1.5rem 2rem 2rem;
+}
+
+/* Cards: white sheets, hairline border, soft shadow, gentle lift on hover. */
+.admin-shell--redesigned .admin-card,
+.admin-shell--redesigned .admin-stat-card,
+.admin-shell--redesigned .admin-table-wrap {
+  border-color: var(--admin-line);
+  background: var(--admin-surface);
+  box-shadow: var(--admin-shadow);
+  color: var(--admin-text);
+}
+
+.admin-shell--redesigned .admin-card:hover {
+  border-color: #cdccc6;
+  box-shadow: var(--admin-shadow);
+}
+
+.admin-shell--redesigned .admin-stat-card:hover {
+  transform: translateY(-2px);
+  border-color: #cdccc6;
+}
+
+.admin-shell--redesigned .admin-stat-card.highlight {
+  border-color: color-mix(in srgb, var(--admin-accent) 55%, transparent);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--admin-accent) 16%, transparent), transparent 60%),
+    var(--admin-surface);
+}
+
+.admin-shell--redesigned .admin-table th {
+  background: var(--admin-surface-2);
+  border-bottom: 1px solid var(--admin-line);
+  color: var(--admin-muted);
+}
+
+.admin-shell--redesigned .admin-table tbody tr:hover td {
+  background: var(--admin-surface-2);
+}
+
+/* Dark-ink primary button with the reference's press lift. */
+.admin-shell--redesigned :is(.cta-primary, .btn-next, .admin-btn) {
+  min-height: 2.65rem;
+  border: 1px solid transparent;
+  border-radius: var(--admin-radius-sm);
+  background: var(--admin-text);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+.admin-shell--redesigned :is(.cta-primary, .btn-next, .admin-btn):hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: #34373a;
+  filter: none;
+}
+
+.admin-shell--redesigned .admin-quick-tile {
+  border-color: var(--admin-line);
+  background: var(--admin-surface);
+}
+
+.admin-shell--redesigned .admin-quick-tile:hover {
+  border-color: var(--admin-line-strong);
+  background: var(--admin-surface-2);
+  transform: translateY(-2px);
+}
+
+.admin-shell--redesigned .admin-badge.ok { color: var(--admin-success); }
+.admin-shell--redesigned .admin-badge.warning { color: var(--admin-warning); }
+.admin-shell--redesigned .admin-badge.danger { color: var(--admin-danger); }
+.admin-shell--redesigned .admin-badge.info { color: var(--admin-info); }
+
+/* Inputs: white fields on the warm canvas. */
+.admin-shell--redesigned :is(.admin-input, .admin-select, .admin-textarea, .form-field input, .form-field select, .form-field textarea) {
+  border-color: var(--admin-line);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  box-shadow: none;
+}
+
+.admin-shell--redesigned :is(.admin-input, .admin-select, .admin-textarea, .form-field input, .form-field select, .form-field textarea):focus {
+  border-color: var(--brand-400);
+  box-shadow: var(--admin-focus-ring);
+}
+
+/* Charts stay readable on white: indigo-to-deep bars. */
+.admin-shell--redesigned .admin-chart-bar {
+  background: linear-gradient(180deg, var(--brand-400), var(--brand-600));
+  box-shadow: 0 8px 18px rgba(79, 94, 204, 0.25);
+}
+
+/* ============================== Hero / intro =============================== */
+
+/* The reference's gold hero (.hero) — used as the dashboard intro block. */
+.admin-shell--redesigned .admin-dashboard-intro {
+  min-height: 16rem;
+  padding: 2.25rem;
+  border-radius: var(--admin-radius);
+  background: var(--admin-accent);
+  color: var(--admin-accent-ink);
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(15rem, 0.8fr);
+  align-items: end;
+  gap: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-shell--redesigned .admin-dashboard-intro::after {
+  content: '';
+  position: absolute;
+  width: 24rem;
+  height: 24rem;
+  inset-block-start: -14rem;
+  inset-inline-end: -7rem;
+  border: 1px solid rgb(39 33 21 / 14%);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 3rem rgb(255 255 255 / 8%),
+    0 0 0 6rem rgb(255 255 255 / 6%);
+}
+
+.admin-shell--redesigned .admin-dashboard-intro > div {
+  position: relative;
+  z-index: 1;
+}
+
+.admin-shell--redesigned .admin-dashboard-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--admin-accent-ink);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-shell--redesigned .admin-dashboard-intro h2 {
+  margin: 0.85rem 0 0.7rem;
+  max-width: 43rem;
+  font-size: clamp(1.9rem, 3vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: var(--admin-accent-ink);
+}
+
+.admin-shell--redesigned .admin-dashboard-intro p {
+  margin: 0;
+  max-width: 41rem;
+  color: color-mix(in srgb, var(--admin-accent-ink), transparent 20%);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.admin-shell--redesigned .admin-dashboard-intro-actions {
+  position: relative;
+  z-index: 1;
+  justify-content: flex-start;
+}
+
+.admin-shell--redesigned .admin-dashboard-date {
+  color: var(--admin-accent-ink);
+  font-weight: 700;
+}
+
+.admin-shell--redesigned .admin-dashboard-refresh {
+  border-color: rgb(39 33 21 / 20%);
+  background: rgb(255 255 255 / 30%);
+  color: var(--admin-accent-ink);
+}
+
+.admin-shell--redesigned .admin-dashboard-refresh:hover {
+  background: rgb(255 255 255 / 45%);
+  border-color: rgb(39 33 21 / 30%);
+}
+
+/* Page intro (Departments, etc.): white card, like `.page-intro` upstream in
+   admin.css but re-toned for the light canvas. */
+.admin-shell--redesigned .page-intro {
+  border-color: var(--admin-line);
+  background: var(--admin-surface);
+  box-shadow: var(--admin-shadow);
+}
+
+.admin-shell--redesigned .page-intro h1 {
+  color: var(--admin-text);
+}
+
+.admin-shell--redesigned .page-intro p {
+  color: var(--admin-muted);
+}
+
+.admin-shell--redesigned .section-kicker {
+  color: var(--admin-faint);
+}
+
+/* ============================== Footer ===================================== */
+
+.admin-shell--redesigned .app-shell .site-footer {
+  border-top: 1px solid var(--admin-line);
+  color: var(--admin-faint);
+  background: transparent;
+}
+
+/* ============================== Responsive ================================ */
+
+@media (max-width: 900px) {
+  .admin-shell--redesigned .admin-header {
+    height: 4.25rem;
+    min-height: 4.25rem;
+    padding: 0 1rem;
+    background: rgb(245 245 242 / 92%);
+  }
+
+  .admin-shell--redesigned .admin-content {
+    padding: 1rem;
+  }
+
+  .admin-shell--redesigned .admin-search-trigger {
+    width: auto;
+    flex: 1;
+  }
+
+  .admin-shell--redesigned .admin-search-label,
+  .admin-shell--redesigned .admin-search-trigger kbd {
+    display: none;
+  }
+
+  .admin-shell--redesigned .admin-dashboard-intro {
+    grid-template-columns: 1fr;
+    min-height: 20rem;
+    padding: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-shell--redesigned *,
+  .admin-shell--redesigned *::before,
+  .admin-shell--redesigned *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

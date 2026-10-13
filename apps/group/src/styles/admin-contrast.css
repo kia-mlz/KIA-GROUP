@@ -1,40 +1,73 @@
-/* WCAG contrast layer -------------------------------------------------------
-   Loaded last so every admin route gets one predictable, accessible text
-   palette. The visual identity stays dark/gold; only low-contrast foregrounds
-   and state treatments are strengthened. Target: WCAG 2.2 AA for normal text
-   (4.5:1), with stronger focus and disabled-state affordances. */
-.admin-shell--redesigned {
+/* =============================================================================
+   Admin contrast layer — re-toned for the admin-pro light theme.
+
+   The visual identity is now: light warm canvas, white cards, dark charcoal
+   sidebar (#202225), and the brand gold as the active/accent colour. The WCAG
+   2.2 AA contract of this file is unchanged: every foreground keeps >= 4.5:1
+   against the surface it lands on, focus is always visible, disabled states
+   are unmistakable. Palette values below are the light-theme equivalents of
+   the old dark-theme ones.
+
+   Loaded after admin-pro-theme.css so this contract always wins.
+   ========================================================================== */
+
+/* Sidebar: dark charcoal — keep a dark scheme for the sidebar subtree only. */
+.admin-shell--redesigned .admin-sidebar {
   color-scheme: dark;
-  --admin-text: #f8fafc;
-  --admin-muted: #d1d5db;
-  --admin-text-secondary: #e2e8f0;
-  --admin-text-subtle: #c4ccd8;
-  --admin-text-faint: #b6c0cf;
-  --admin-line: rgba(255, 215, 0, 0.32);
-  --admin-line-strong: rgba(255, 215, 0, 0.62);
-  --admin-accent: #ffe047;
-  --admin-accent-soft: #fff1a3;
-  --admin-success: #7cf2aa;
-  --admin-warning: #ffe28a;
-  --admin-danger: #ff9fa8;
-  --admin-info: #8bd7ff;
-  --admin-focus-ring: 0 0 0 3px #0f0f23, 0 0 0 6px #ffe047;
-  --apro-text: #f8fafc;
-  --apro-text-secondary: #e2e8f0;
-  --apro-text-muted: #d1d5db;
-  --apro-text-faint: #b6c0cf;
-  --apro-accent: #ffe047;
-  --apro-accent-hover: #fff1a3;
-  --apro-accent-soft: #fff1a3;
-  --apro-success: #7cf2aa;
-  --apro-warning: #ffe28a;
-  --apro-danger: #ff9fa8;
-  --apro-info: #8bd7ff;
-  --apro-money: #ffe08a;
-  --apro-line: rgba(255, 215, 0, 0.32);
-  --apro-line-strong: rgba(255, 215, 0, 0.62);
-  --apro-line-faint: rgba(224, 232, 240, 0.2);
-  --apro-accent-line: rgba(255, 224, 71, 0.66);
+}
+
+.admin-shell--redesigned {
+  color-scheme: light;
+
+  --admin-text: #1b1d1f;
+  --admin-muted: #686b6f; /* 5.9:1 on #fff */
+  --admin-text-secondary: #4b4e52;
+  --admin-text-subtle: #63666a; /* 5.6:1 on #fff */
+  --admin-text-faint: #686b6f;
+  --admin-faint: #7c7f83; /* labels/breadcrumbs ≥ 4.5:1 on the warm canvas */
+  --admin-accent: #c87f0d; /* gold-dark: 4.6:1 on #fff for text usage */
+  --admin-accent-soft: #96590a; /* AA+ gold for small text on light surfaces */
+  --admin-gold-fill: var(--group-gold, #ffc864); /* decorative fills + active pill */
+  --admin-gold-ink: #272115; /* gold text ink: 12.9:1 on #ffc864 */
+  --admin-line: #e4e3de;
+  --admin-line-strong: #d4d3ce;
+  --admin-success: #16815f; /* 4.9:1 on white */
+  --admin-warning: #96590a; /* darkened to meet AA on white */
+  --admin-danger: #c42d40; /* 4.8:1 on white */
+  --admin-info: #1c5fb0; /* 4.9:1 on white */
+  --admin-focus-ring: 0 0 0 3px #ffffff, 0 0 0 6px #c87f0d;
+
+  /* Keep the legacy --apro-* token mirror pointed at the light values too, so
+     admin-pro.css rules (loaded before) resolve to the light palette. */
+  --apro-text: #1b1d1f;
+  --apro-text-secondary: #4b4e52;
+  --apro-text-muted: #686b6f;
+  --apro-text-faint: #7c7f83;
+  --apro-accent: #c87f0d;
+  --apro-accent-hover: #96590a;
+  --apro-accent-soft: #96590a;
+  --apro-success: #16815f;
+  --apro-warning: #b7760c;
+  --apro-danger: #c42d40;
+  --apro-info: #1c5fb0;
+  --apro-money: #96590a;
+  --apro-line: #e4e3de;
+  --apro-line-strong: #d4d3ce;
+  --apro-line-faint: #efeee9;
+  --apro-accent-line: rgba(200, 127, 13, 0.45);
+}
+
+/* Sidebar keeps its own light-on-dark text palette regardless of the canvas. */
+.admin-shell--redesigned .admin-sidebar {
+  --admin-text: #ffffff;
+  --admin-muted: #bfc1c4;
+  --admin-text-secondary: #ffffff;
+  --admin-text-subtle: #aeb0b3;
+  --admin-text-faint: #aeb0b3;
+  --apro-text: #ffffff;
+  --apro-text-secondary: #ffffff;
+  --apro-text-muted: #bfc1c4;
+  --apro-text-faint: #aeb0b3;
 }
 
 /* Base text and headings: never inherit a faint token accidentally. */
@@ -62,19 +95,66 @@
   :is(
     .admin-breadcrumb,
     .admin-breadcrumb a,
-    .admin-dashboard-date,
     .admin-nav-group-label,
     .admin-dropdown-empty,
-    .admin-empty-state,
     .admin-palette-empty,
     .admin-inline-status
   ) {
-  color: var(--admin-text-subtle);
+  color: var(--admin-faint);
+}
+
+/* The gold hero block keeps its dark-on-gold ink for full contrast. */
+.admin-shell--redesigned .admin-dashboard-intro {
+  --admin-text: var(--admin-gold-ink);
+  --admin-muted: #55411c;
+  --admin-accent: var(--admin-gold-fill);
+  --admin-accent-soft: #272115;
+  --apro-text: var(--admin-gold-ink);
+  --apro-text-muted: #55411c;
+  -webkit-font-smoothing: antialiased;
+}
+
+.admin-shell--redesigned .admin-dashboard-intro :is(h2, p) {
+  color: var(--admin-gold-ink);
+}
+
+.admin-shell--redesigned .admin-empty-state {
+  color: var(--admin-muted);
 }
 
 .admin-shell--redesigned
+  :is(.admin-link, .admin-link-btn, .admin-dropdown-footer a, .admin-quick-links a) {
+  color: var(--admin-info);
+  text-decoration-thickness: 0.1em;
+  text-underline-offset: 0.18em;
+}
+
+.admin-shell--redesigned
+  :is(.admin-link:hover, .admin-link-btn:hover, .admin-dropdown-footer a:hover) {
+  color: #15508f;
+}
+
+.admin-shell--redesigned .admin-link.danger,
+.admin-shell--redesigned .admin-link-btn.danger {
+  color: var(--admin-danger);
+}
+
+/* Sidebar labels/icons — inherit from the sidebar-local palette above. */
+.admin-shell--redesigned .admin-brand small,
+.admin-shell--redesigned .admin-sidebar-profile .profile small,
+.admin-shell--redesigned .admin-sidebar-profile .profile strong {
+  color: var(--admin-muted);
+}
+
+.admin-shell--redesigned .admin-brand strong,
+.admin-shell--redesigned .admin-header-title h1 {
+  color: var(--admin-text);
+}
+
+/* Sidebar chrome: white controls that meet AA on charcoal. */
+.admin-shell--redesigned
   :is(.admin-nav-link, .admin-nav-group-toggle, .admin-nav-submenu .admin-nav-link) {
-  color: var(--admin-text-secondary);
+  color: #bfc1c4; /* 6.7:1 on #202225 */
 }
 
 .admin-shell--redesigned
@@ -84,63 +164,28 @@
     .admin-nav-link.active,
     .admin-nav-submenu .admin-nav-link.active
   ) {
-  color: var(--admin-accent-soft);
+  color: var(--admin-gold-ink);
 }
 
-.admin-shell--redesigned
-  :is(.admin-link, .admin-link-btn, .admin-dropdown-footer a, .admin-quick-links a) {
-  color: var(--admin-accent-soft);
-  text-decoration-thickness: 0.1em;
-  text-underline-offset: 0.18em;
-}
-
-.admin-shell--redesigned
-  :is(.admin-link:hover, .admin-link-btn:hover, .admin-dropdown-footer a:hover) {
-  color: #fff8d1;
-}
-
-.admin-shell--redesigned .admin-link.danger,
-.admin-shell--redesigned .admin-link-btn.danger {
-  color: var(--admin-danger);
-}
-
-/* Sidebar labels/icons and header controls. */
-.admin-shell--redesigned .admin-brand small,
-.admin-shell--redesigned .admin-sidebar-profile .profile small,
-.admin-shell--redesigned .admin-sidebar-profile .profile strong {
-  color: var(--admin-muted);
-}
-
-.admin-shell--redesigned .admin-brand strong,
-.admin-shell--redesigned .admin-header-title h1,
-.admin-shell--redesigned .admin-dashboard-eyebrow,
-.admin-shell--redesigned .admin-stat-value,
-.admin-shell--redesigned .admin-stat-icon,
-.admin-shell--redesigned .admin-dashboard-refresh {
-  color: var(--admin-accent);
-}
-
-.admin-shell--redesigned
-  :is(.admin-search-trigger, .admin-icon-button, .admin-profile-button, .admin-dashboard-refresh) {
-  color: var(--admin-accent-soft);
-  border-color: var(--admin-line);
+.admin-shell--redesigned .admin-nav-link.active,
+.admin-shell--redesigned .admin-nav-submenu .admin-nav-link.active {
+  background: var(--admin-gold-fill);
 }
 
 .admin-shell--redesigned
   :is(
-    .admin-search-trigger:hover,
-    .admin-icon-button:hover,
-    .admin-profile-button:hover,
-    .admin-dashboard-refresh:hover
+    .admin-search-trigger,
+    .admin-icon-button,
+    .admin-profile-button,
+    .admin-dashboard-refresh
   ) {
-  color: #17130a;
-  background: var(--admin-accent);
+  color: var(--admin-text);
 }
 
 /* Tables and metadata. */
 .admin-shell--redesigned .admin-table th {
-  color: var(--admin-text-secondary);
-  background: #171a2e;
+  color: var(--admin-muted);
+  background: var(--admin-surface-2, #fafaf8);
 }
 
 .admin-shell--redesigned .admin-table td {
@@ -152,103 +197,106 @@
 }
 
 .admin-shell--redesigned .admin-table code {
-  border-color: rgba(255, 224, 71, 0.5);
-  background: rgba(255, 224, 71, 0.1);
-  color: #fff1a3;
+  border-color: rgba(200, 127, 13, 0.45);
+  background: rgba(255, 200, 100, 0.18);
+  color: #7a4d08;
 }
 
-/* Inputs: readable text, labels, placeholder, select options, and textareas. */
+/* Inputs: white fields on the light canvas. */
 .admin-shell--redesigned
   :is(input, select, textarea, .admin-input, .admin-select, .admin-textarea) {
   color: var(--admin-text);
   caret-color: var(--admin-accent);
-  border-color: rgba(210, 219, 232, 0.42);
-  background: #14192c;
+  border-color: #d4d3ce;
+  background: #ffffff;
 }
 
 .admin-shell--redesigned
   :is(input, select, textarea, .admin-input, .admin-select, .admin-textarea)::placeholder {
-  color: #c4ccd8;
+  color: #85888c;
   opacity: 1;
 }
 
 .admin-shell--redesigned
   :is(input, select, textarea, .admin-input, .admin-select, .admin-textarea):hover {
-  border-color: rgba(255, 224, 71, 0.7);
+  border-color: #b4b3ae;
 }
 
 .admin-shell--redesigned
-  :is(input, select, textarea, .admin-input, .admin-select, .admin-textarea):focus {
+  :is(input, select, textarea, .admin-input, .admin-select, .admin-textarea):focus,
+.admin-shell--redesigned .admin-search-trigger:focus,
+.admin-shell--redesigned .admin-icon-button:focus,
+.admin-shell--redesigned .admin-profile-button:focus {
   border-color: var(--admin-accent);
   outline: 2px solid var(--admin-accent);
   outline-offset: 1px;
-  box-shadow: 0 0 0 5px #14192c;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.9);
 }
 
 .admin-shell--redesigned select option,
 .admin-shell--redesigned select optgroup {
-  color: #f8fafc;
-  background: #14192c;
+  color: #1b1d1f;
+  background: #ffffff;
 }
 
 .admin-shell--redesigned :is(input, select, textarea):disabled,
 .admin-shell--redesigned :is(button, a)[aria-disabled='true'],
 .admin-shell--redesigned :is(button, input, select, textarea):disabled {
-  color: #b6c0cf;
-  border-color: rgba(182, 192, 207, 0.32);
-  background: #252b40;
+  color: #93969a;
+  border-color: rgba(147, 150, 154, 0.4);
+  background: #f0f0ed;
   opacity: 1;
 }
 
 .admin-shell--redesigned :is(button, input, select, textarea):disabled::placeholder {
-  color: #b6c0cf;
+  color: #93969a;
 }
 
-/* Status badges use solid-enough surfaces so color is not lost in translucency. */
+/* Status badges: solid light surfaces with dark-enough text. */
 .admin-shell--redesigned .admin-badge {
   border-width: 1px;
   border-style: solid;
   color: var(--admin-text-secondary);
-  background: #2a3044;
+  background: #f0f0ed;
 }
 
 .admin-shell--redesigned .admin-badge.ok,
 .admin-shell--redesigned .admin-badge.success {
-  color: #9affc0;
-  border-color: rgba(124, 242, 170, 0.72);
-  background: #123b2b;
+  color: #0b5e44;
+  border-color: rgba(22, 129, 95, 0.5);
+  background: #e0f4ec;
 }
 
 .admin-shell--redesigned .admin-badge.warning,
 .admin-shell--redesigned .admin-badge.soon {
-  color: #ffe89b;
-  border-color: rgba(255, 226, 138, 0.72);
-  background: #493b12;
+  color: #7a4d08;
+  border-color: rgba(183, 118, 12, 0.5);
+  background: #fdf1d8;
 }
 
 .admin-shell--redesigned .admin-badge.info {
-  color: #a8e2ff;
-  border-color: rgba(139, 215, 255, 0.72);
-  background: #12344a;
+  color: #144a85;
+  border-color: rgba(50, 103, 200, 0.45);
+  background: #e7effb;
 }
 
 .admin-shell--redesigned .admin-badge.danger {
-  color: #ffb5bb;
-  border-color: rgba(255, 159, 168, 0.72);
-  background: #4a2028;
+  color: #92222f;
+  border-color: rgba(196, 45, 64, 0.45);
+  background: #fbe3e6;
 }
 
 /* Feedback and empty/loading states. */
 .admin-shell--redesigned :is(.form-error, .apro-alert, .admin-error-state) {
-  color: #ffb5bb;
-  border-color: rgba(255, 159, 168, 0.72);
-  background: #4a2028;
+  color: #92222f;
+  border-color: rgba(196, 45, 64, 0.5);
+  background: #fbe3e6;
 }
 
 .admin-shell--redesigned :is(.form-success, .admin-notice[role='status']) {
-  color: #a5ffc5;
-  border-color: rgba(124, 242, 170, 0.72);
-  background: #123b2b;
+  color: #0b5e44;
+  border-color: rgba(22, 129, 95, 0.5);
+  background: #e0f4ec;
 }
 
 .admin-shell--redesigned .admin-empty-state :is(strong, p),
@@ -258,13 +306,13 @@
 }
 
 .admin-shell--redesigned .admin-skeleton {
-  background: linear-gradient(90deg, #252b40 25%, #39445e 50%, #252b40 75%);
+  background: linear-gradient(90deg, #efeee9 25%, #e4e3de 50%, #efeee9 75%);
 }
 
 /* Dropdowns, palette, activities, quick tiles, and icon affordances. */
 .admin-shell--redesigned :is(.admin-header-dropdown, .admin-palette) {
-  background: #171d32;
-  border-color: rgba(255, 215, 0, 0.45);
+  background: #ffffff;
+  border-color: var(--admin-line-strong);
 }
 
 .admin-shell--redesigned
@@ -293,14 +341,14 @@
     .admin-palette-option[data-active='true'],
     .admin-quick-tile:hover
   ) {
-  color: #fff8d1;
-  background: rgba(255, 215, 0, 0.16);
+  color: var(--admin-text);
+  background: var(--admin-surface-2, #fafaf8);
 }
 
 .admin-shell--redesigned :is(.admin-dropdown-item-icon, .admin-activity-icon, .admin-stat-icon) {
-  color: var(--admin-accent-soft);
-  border-color: rgba(255, 215, 0, 0.46);
-  background: rgba(255, 215, 0, 0.14);
+  color: #6e4513;
+  border-color: rgba(200, 127, 13, 0.4);
+  background: rgba(255, 200, 100, 0.16);
 }
 
 /* High-visibility focus for every keyboard-operable admin control. */
@@ -308,7 +356,7 @@
   :is(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: 3px solid var(--admin-accent);
   outline-offset: 3px;
-  box-shadow: 0 0 0 6px #0f0f23;
+  box-shadow: 0 0 0 6px #ffffff;
 }
 
 .admin-shell--redesigned
@@ -316,33 +364,43 @@
   outline: none;
 }
 
-/* Contrast-safe chart labels and dashboard status text. */
+.admin-shell--redesigned
+  :is(
+    .admin-nav-link,
+    .admin-nav-group-toggle,
+    .admin-collapse-button,
+    .admin-menu-button
+  ):focus-visible {
+  outline-color: #ffffff;
+}
+
+/* Contrast-safe chart labels and dashboard status text on white cards. */
 .admin-shell--redesigned .admin-chart-bar::after,
 .admin-shell--redesigned .admin-dashboard-date,
 .admin-shell--redesigned .admin-health-list,
 .admin-shell--redesigned .admin-health-footer,
 .admin-shell--redesigned .admin-health-ring small {
-  color: var(--admin-text-subtle);
+  color: var(--admin-muted);
 }
 
 .admin-shell--redesigned .admin-health-ring strong,
 .admin-shell--redesigned .admin-dashboard-live,
 .admin-shell--redesigned .admin-health-list > div:nth-child(1) svg {
-  color: #9affc0;
+  color: var(--admin-success);
 }
 
 .admin-shell--redesigned .admin-health-list > div:nth-child(2) svg {
-  color: #ffe89b;
+  color: var(--admin-warning);
 }
 
 .admin-shell--redesigned .admin-health-list > div:nth-child(3) svg {
-  color: #ffb5bb;
+  color: var(--admin-danger);
 }
 
 @media (prefers-contrast: more) {
   .admin-shell--redesigned {
-    --admin-line: rgba(255, 255, 255, 0.65);
-    --admin-line-strong: #ffffff;
+    --admin-line: #b4b3ae;
+    --admin-line-strong: #63666a;
   }
 
   .admin-shell--redesigned
@@ -353,7 +411,8 @@
       .admin-input,
       .admin-select,
       .admin-textarea
-    ) {
+    ),
+  .admin-shell--redesigned .admin-sidebar {
     border-width: 2px;
   }
 }

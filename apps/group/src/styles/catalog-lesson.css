@@ -36,6 +36,12 @@
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
 }
 
+/* Domain doors are icon + title only, so they centre that pair inside the
+   shared card floor instead of leaving the space below it empty. */
+.catalog-grid--domains .door {
+  justify-content: center;
+}
+
 /* Domain pills above a course list — switch حوزه or jump to all courses
    without walking back to the catalog home. */
 .catalog-filters {
@@ -148,6 +154,34 @@
 
 .lesson-nav-item {
   margin-inline-end: 1rem;
+}
+
+/* Course detail ("پیش‌نمایش درس‌ها" panel) reuses the .lesson-nav classes but
+   lives outside the .kia-lesson-shell player, so a page-wide stacked variant
+   keeps the preview rows from squishing into one inline run. */
+.catalog-panel .lesson-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-block: var(--space-3);
+}
+.catalog-panel .lesson-nav-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-inline-end: 0;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+}
+.catalog-panel .lesson-nav-title {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+.catalog-panel .lesson-nav-meta {
+  font-size: var(--fs-micro);
+  color: var(--text-faint);
 }
 /* =============================================================================
    Lesson studio

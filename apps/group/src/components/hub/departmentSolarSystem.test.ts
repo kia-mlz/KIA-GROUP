@@ -94,9 +94,10 @@ describe('departments solar system', () => {
     expect(home).not.toMatch(/<HubDoors/);
     expect(dashboard).not.toMatch(/<HubDoors/);
 
-    // The dashboard renders it in both states (fresh and full panel).
-    const occurrences = dashboard.match(/<DepartmentSolarSystem \/>/g) ?? [];
-    expect(occurrences.length).toBe(2);
+    // The learner panel dropped the diagram: /dashboard now opens straight
+    // into its cards, and the ecosystem map lives on the post-auth landing
+    // (/home) alone.
+    expect(dashboard).not.toContain('<DepartmentSolarSystem');
   });
 
   it('retires the door grid: HubDoors is fully deleted, not orphaned', () => {

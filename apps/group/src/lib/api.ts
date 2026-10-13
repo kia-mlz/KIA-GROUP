@@ -862,8 +862,22 @@ const liveApi = {
     if (params.search) qs.set('search', params.search);
     if (params.role) qs.set('role', params.role);
     if (params.status) qs.set('status', params.status);
+    if (params.deleted) qs.set('deleted', params.deleted);
     const query = qs.toString();
     return request<AdminUserList>(`/admin/users${query ? `?${query}` : ''}`);
+  },
+
+  /** DB-4 soft delete — the reason is mandatory and lands in the audit trail. */
+  adminSoftDeleteUser(id: string, reason: string): Promise<AdminUser> {
+    return request<AdminUser>(`/admin/users/${id}`, {
+      method: 'DELETE',
+      body: JSON.stringify({ reason }),
+    });
+  },
+
+  /** DB-4 reverse a soft delete (audit-reversible). */
+  adminRestoreUser(id: string): Promise<AdminUser> {
+    return request<AdminUser>(`/admin/users/${id}/restore`, { method: 'POST' });
   },
 
   adminUpdateUserStatus(id: string, dto: AdminUpdateUserStatusDto): Promise<AdminUser> {
@@ -896,6 +910,22 @@ const liveApi = {
 
   adminListPayments(): Promise<AdminPayment[]> {
     return request<AdminPayment[]>('/admin/payments');
+  },
+
+  /**
+   * Admin-initiated refund. `amountCents` is optional — omitting it refunds the
+   * full payment — and `reason` is mandatory for the server-side audit trail.
+   * The backend owns the state machine (only COMPLETED may be refunded) and
+   * credits the learner's wallet in the same transaction.
+   */
+  adminRefundPayment(
+    id: string,
+    dto: { amountCents?: number; reason: string },
+  ): Promise<AdminPayment> {
+    return request<AdminPayment>(`/admin/payments/${id}/refund`, {
+      method: 'POST',
+      body: JSON.stringify(dto),
+    });
   },
 
   /* --- Support tickets -------------------------------------------------------- */

@@ -1,7 +1,7 @@
 # Implementation Status — Kia Academy
 
 > Persistent project memory (per master build contract §7). The repository is the source
-> of truth; this file tracks phase state, gates, and pending work. Updated 2026-09-26.
+> of truth; this file tracks phase state, gates, and pending work. Updated 2026-10-11.
 
 ## Context
 
@@ -1403,3 +1403,64 @@ FE-1 (sessionStorage — deliberate trade-off). Previously closed: EXAM-3
   use `scripts/smoke.sh` for runtime verification.
 - Known cosmetic quirk (pre-existing): API logs `running on http://localhost:0/api`
   in `pnpm dev` because `PORT` is unset in dev `.env`; prod/compose set it explicitly.
+
+## Admin panel — reachability and label gaps (2026-10-11)
+
+Audit method: the admin surface was diffed mechanically — every `/admin/…` path
+called from `apps/group/src/lib/api.ts` was matched against the routes the API's
+`@Controller`s declare, and the `@AdminAccess(section, level)` decorating each
+route was read from the handler itself (this controller writes the route first,
+the permission second — reading the other side reports the previous handler's
+permission, which is how the first version of the new test passed by accident).
+
+### ADM-4 — server capabilities the panel could not reach (implemented)
+
+- **`POST /admin/payments/:id/refund` had no UI.** Full/partial refund with the
+  `payments.manage` gate, the COMPLETED-only state machine, the wallet CREDIT in
+  the same transaction and the audit entry all existed server-side but were
+  unreachable. The payments table now has an actions column: a refund action on
+  COMPLETED rows only, a confirmation dialog (amount entered in the display
+  currency and converted with `fromDisplayUnits` — empty means full refund;
+  reason mandatory), inline validation, and the row swapped to the state the
+  server returns. `lib/demoApi.ts` mirrors the same state machine for demo mode.
+- **`DELETE /admin/users/:id` + `POST /admin/users/:id/restore` had no UI and no
+  reachable target.** `listUsers` hard-filtered `deletedAt = null`, so a
+  soft-deleted account was invisible and therefore unrecoverable from the panel.
+  `AdminUserListParams.deleted` (`active` default | `deleted` | `all`) now drives
+  the filter server-side, `AdminUser.deleted` reports the flag, and the users
+  page gained a deleted-view select, a delete action behind a reasoned dialog and
+  a restore action — both gated on `users.manage` (the API still enforces it).
+- Tests: `apps/api/src/group/admin/admin.service.spec.ts` +2 (default hides
+  deleted; `deleted` = `{ not: null }`, `all` omits the filter; `deleted` flag on
+  a soft-deleted row) and the new `apps/group/src/app/admin/adminActions.test.ts`
+  — 11 tests covering refund wiring, route permission, delete/restore wiring,
+  the deleted-view default and the ban on calling a client method that does not
+  exist.
+
+### ADM-5 — payment status labels leaked raw key paths (implemented)
+
+- `PaymentStatus` has 7 members, `domain.payments` had 4 labels, and three admin
+  pages render the status through a template key — so PROCESSING,
+  CANCELLED and PARTIALLY_REFUNDED (which the refund flow itself produces)
+  rendered as raw key paths. All 7 labels now exist in both locales, the English
+  labels are no longer raw enum tokens, and the payments filter lists every
+  member. The new test derives the member list from the shared type file, so
+  adding a status without a label fails the suite.
+
+**Verification (2026-10-11):** `apps/group` vitest 19 files / 169 tests pass;
+`apps/api` jest 11 suites / 126 tests pass; `tsc --noEmit` clean in both apps;
+ESLint clean on every touched file. Live check against the dev server with a
+super-admin session: the seven statuses render as Persian labels, the refund
+action appears on a COMPLETED row and `—` on the others, the dialog opens with
+the currency-correct unit (ریال here), and both client validations fire — missing
+reason («ثبت دلیل برای حسابرسی الزامی است.») and amount above the total («مبلغ
+باید بین ۱ و کل مبلغ پرداخت باشد.») — without calling the API. The deleted view
+sends `deleted=deleted` (200) and returns an empty list because nothing is
+soft-deleted in dev; switching back to «حساب‌های فعال» restores the 4 rows. The
+one payment temporarily flipped to COMPLETED for that check was returned to
+PENDING (table is back to 3 × PENDING).
+
+**Still open from this pass:** `GET /admin/exams` (academy package) has no
+consumer in the panel — wire it into the exams overview or delete it; the deleted
+view has no bulk-restore affordance; and the users page still renders a
+row-level success marker rather than a shared notification.

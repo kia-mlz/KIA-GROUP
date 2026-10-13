@@ -2777,3 +2777,320 @@ a.admin-stat-card:focus-visible .admin-stat-hint {
     animation-duration: 0.01ms !important;
   }
 }
+
+/* =============================================================================
+   Departments hub (Admin → Departments)
+
+   One card per department, each wearing its own brand token: `.dept--<slug>`
+   (packages/brand) sets `--dept` on the card, so the card's emblem and accent
+   are provably the same colour as the department's public page. No department
+   hex is written here — the brand package stays the only source of truth.
+   ========================================================================== */
+
+.admin-departments-intro {
+  max-width: 38rem;
+  margin: 0 0 1.25rem;
+}
+
+.admin-spacer {
+  width: var(--space-2);
+  height: var(--space-2);
+}
+
+/* Department hub cards — reference-style department tile worn by the
+   department's own brand token (`--dept` from packages/brand). The card keeps
+   the panel's standard hairline; identity lives on the icon + accent, the same
+   way the reference project does it. */
+.admin-department {
+  padding: 1.35rem;
+  border-radius: var(--radius-lg);
+  min-height: 17rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-department-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.department-icon,
+.admin-department-icon {
+  width: 2.65rem;
+  height: 2.65rem;
+  border-radius: 0.85rem;
+  background: color-mix(in srgb, var(--dept) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--dept) 55%, transparent);
+  display: grid;
+  place-items: center;
+  color: var(--dept);
+  flex: 0 0 auto;
+}
+
+.department-icon svg,
+.admin-department-icon svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.admin-department-head .control-badge {
+  margin-top: 0.12rem;
+}
+
+.admin-department-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.admin-department-copy h3 {
+  margin: 0.6rem 0 0.15rem;
+  font-size: var(--fs-body);
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+
+.admin-department-copy p {
+  margin: 0;
+  color: var(--admin-muted);
+  font-size: var(--fs-small);
+  line-height: 1.6;
+}
+
+.admin-department-tags {
+  margin-top: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.admin-department-tags span {
+  padding: 0.3rem 0.55rem;
+  border-radius: 0.35rem;
+  background: color-mix(in srgb, var(--dept) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--dept) 35%, transparent);
+  color: var(--dept);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+
+.admin-department-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(5.5rem, 100%), 1fr));
+  gap: 0;
+  margin-top: 1rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--admin-line);
+  border-radius: var(--radius-sm);
+  background: var(--admin-surface-2);
+}
+
+.admin-department-metrics dt {
+  font-size: var(--fs-micro);
+  color: var(--admin-muted);
+  line-height: 1.55;
+}
+
+.admin-department-metrics dd {
+  margin: 0.1rem 0 0;
+  color: var(--admin-text);
+  font-size: var(--fs-body);
+  font-weight: 700;
+}
+
+.admin-department-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+
+.admin-department-actions .admin-btn {
+  font-size: var(--fs-xs);
+  padding: 0.55rem 1rem;
+}
+
+.admin-department-footer {
+  margin-top: auto;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--admin-line);
+  margin-block-start: var(--space-3);
+}
+
+.admin-department-footer .admin-link {
+  font-size: var(--fs-xs);
+}
+
+/* Application shell matching the reference project: fixed sidebar + topbar +
+   footer layout into a .workspace column. The brand mark in the sidebar wears
+   the brand gold and the footer sits at the bottom of the content area. */
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+}
+
+.workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.content {
+  flex: 1;
+  padding: var(--space-6) var(--space-6) 0;
+  max-width: 100%;
+  width: 100%;
+  overflow-x: clip;
+}
+
+.app-shell .breadcrumbs {
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--admin-muted);
+  font-size: var(--fs-micro);
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.app-shell .breadcrumbs svg {
+  width: 0.75rem;
+}
+
+.app-shell .breadcrumbs strong {
+  color: var(--admin-accent-soft);
+  font-weight: 700;
+}
+
+.page-intro,
+.dashboard-card {
+  padding: 1.5rem 1.6rem;
+  border-radius: var(--radius-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  border: 1px solid var(--admin-line);
+  background: var(--admin-surface);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1.25rem;
+}
+
+.page-intro h1,
+.dashboard-card h1 {
+  margin: 0.4rem 0 0;
+  font-size: clamp(1.6rem, 2.4vw, 2.4rem);
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  color: var(--admin-text);
+}
+
+.page-intro p,
+.dashboard-card p {
+  margin: 0;
+  color: var(--admin-muted);
+  font-size: var(--fs-sm);
+  max-width: 36rem;
+  max-inline-size: 36rem;
+  line-height: 1.6;
+}
+
+.section-kicker {
+  display: block;
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--admin-muted);
+  margin-bottom: 0.3rem;
+}
+
+.page-intro .section-kicker {
+  margin-top: 0;
+}
+
+.page-intro .button,
+.dashboard-card .button {
+  flex: 0 0 auto;
+  margin-top: 0.5rem;
+}
+
+.admin-department-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Footer that sits at the bottom of the admin content column, matching the
+   reference project's placement (not a sticky page footer). */
+.app-shell .site-footer {
+  margin: 0;
+  padding: 1.1rem var(--space-6) 1.3rem;
+  border-top: 1px solid var(--admin-line);
+  display: flex;
+  justify-content: space-between;
+  color: var(--admin-muted);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.01em;
+}
+
+.app-shell .site-footer span {
+  line-height: 1.5;
+}
+
+/* Badge tone used on department cards. */
+.admin-department .control-badge {
+  margin-block-start: 0.1rem;
+}
+
+/* Reference-sidebar brand card reused across pages, only when it already lives
+   in the page's own layout — not in AdminLayout (which has its own sidebar shell). */
+.app-shell.sidebar-injected .sidebar-injected {
+  position: fixed;
+  top: 0;
+  inset-block: 0;
+  inset-inline-start: 0;
+  z-index: 10;
+  width: var(--sidebar-width);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #202225;
+  color: #fff;
+  box-shadow: var(--shadow-lg);
+}
+
+.app-shell.sidebar-injected .sidebar-injected + .workspace {
+  margin-inline-start: var(--sidebar-width);
+}
+
+/* Keep tokens used by reference-style components available for the rest of the
+   admin panel too, so nothing else regresses when the hub switches. */
+@media (max-width: 72rem) {
+  .admin-department-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 56rem) {
+  .admin-department-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell,
+  .admin-department,
+  .dashboard-card,
+  .page-intro {
+    animation: none;
+  }
+}
+
