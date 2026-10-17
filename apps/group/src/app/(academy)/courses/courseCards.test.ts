@@ -7,11 +7,13 @@ import { describe, expect, it } from 'vitest';
  * 2–3 line wall of text in a 4-card grid (measured 103.56px on two tiles and
  * 51.78px on two others at 1280px), which stretched the rows unevenly: 365.34px
  * against 313.56px. Both grids share the `.catalog-card` tile, so the tiles now
- * read icon → title → meta → CTA and every card is 249.78px.
+ * read icon → title → meta (→ actions) and every card is 249.78px.
  *
- * These tests pin the removal in *both* grids — the public catalog and the
- * dashboard's "my courses" — so a description cannot creep back into one of them
- * while the other stays clean.
+ * The two grids then drifted on purpose: the public catalog's «مشاهده معرفی»
+ * button was removed on feedback and the tile *is* the link there, while the
+ * dashboard's "my courses" tile keeps its own two actions (enter · new ticket).
+ * These tests pin both shapes and the description removal, so the copy cannot
+ * creep back into either grid.
  */
 
 const read = (rel: string) => readFileSync(path.join(__dirname, rel), 'utf8');
@@ -21,41 +23,63 @@ const publicPage = read('public-page.tsx');
 const myCourses = read('../../dashboard/my-courses/page.tsx');
 const catalogCss = read('../../../styles/catalog-lesson.css');
 
-/** The single `<article className="catalog-card">` each grid renders. */
-const cardOf = (src: string) => {
-  const start = src.indexOf('className={`catalog-card');
-  expect(start).toBeGreaterThan(-1);
-  const end = src.indexOf('</article>', start);
-  expect(end).toBeGreaterThan(start);
-  return src.slice(start, end);
-};
+/** The tile in full — opening tag (and therefore its element type) included. */
+function tileOf(src: string) {
+  const match = /<(\w+)[^>]*className=\{`catalog-card/.exec(src);
+  expect(match, 'no course tile found').not.toBeNull();
+  const tag = match![1];
+  const close = `</${tag}>`;
+  const end = src.indexOf(close, match!.index);
+  expect(end).toBeGreaterThan(match!.index);
+  return { tag, markup: src.slice(match!.index, end + close.length) };
+}
 
-const card = {
-  publicCatalog: cardOf(publicPage),
-  myCourses: cardOf(myCourses),
+const tile = {
+  publicCatalog: tileOf(publicPage),
+  myCourses: tileOf(myCourses),
 };
 
 describe('course card description', () => {
   it('renders no course description in either card grid', () => {
-    // Scoped to the card, not the file: a page-level intro may still use it
+    // Scoped to the tile, not the file: a page-level intro may still use it
     // (`CourseDetail` shows it under the title on purpose).
-    expect(card.publicCatalog).not.toContain('course.description');
-    expect(card.myCourses).not.toContain('course.description');
+    expect(tile.publicCatalog.markup).not.toContain('course.description');
+    expect(tile.myCourses.markup).not.toContain('course.description');
   });
 
-  it('keeps the card structure the tile CSS relies on', () => {
-    // icon → title → meta → actions. The meta row carries the hairline that
-    // separates the tile from its CTA, so it must not be dropped with the text.
-    for (const [name, markup] of Object.entries(card)) {
+  it('keeps the icon → title → meta order the tile CSS relies on', () => {
+    // The meta row carries the hairline that separates the tile from the rest,
+    // so it must not be dropped with the description text.
+    for (const [name, { markup }] of Object.entries(tile)) {
       const icon = markup.indexOf('<CourseTileIcon');
       const title = markup.indexOf('<h3>');
       const meta = markup.indexOf('className="catalog-meta"');
-      const actions = markup.indexOf('className="catalog-actions"');
       expect(icon, name).toBeGreaterThan(-1);
       expect(title, name).toBeGreaterThan(icon);
       expect(meta, name).toBeGreaterThan(title);
-      expect(actions, name).toBeGreaterThan(meta);
     }
+  });
+
+  it('makes the public tile itself the link, with no action row left', () => {
+    // The element carrying the tile class is a link, not an `<article>`: the
+    // same clickable-tile shape as the domain doors above it in this file,
+    // which is what keeps the catalog navigable now that the CTA is gone.
+    expect(tile.publicCatalog.tag).toBe('Link');
+    expect(tile.publicCatalog.markup).toContain('href={`/courses/${course.slug}`}');
+    expect(tile.publicCatalog.markup).not.toContain('catalog-actions');
+    expect(publicPage).not.toContain("t('publicCourses.viewIntro')");
+    // `.catalog-card` already carries `text-decoration: none; color: inherit`
+    // (base.css), which is what makes the anchor read as the tile it replaces.
+    const base = read('../../../styles/base.css');
+    expect(base).toMatch(/\.catalog-card \{[^}]*text-decoration: none;/);
+  });
+
+  it('keeps the dashboard tile an article with its actions and attachments', () => {
+    // The feedback was scoped to the public catalog; the panel tile answers a
+    // different question (resume the course, open a ticket, download files).
+    expect(tile.myCourses.tag).toBe('article');
+    expect(tile.myCourses.markup).toContain('className="catalog-actions"');
+    expect(tile.myCourses.markup).toContain('attachment-list');
   });
 
   it('keeps the `.catalog-card p` rule the attachments line still needs', () => {

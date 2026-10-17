@@ -50,17 +50,21 @@
     direction: rtl;
   }
 
+  /* Brand dead centre of the pill, on both axes. It is pinned to the bar's own
+     centre rather than laid into it: `justify-self`/`align-self: center` line
+     the *row box* up with the row, which the 56px min-height and the 40px
+     control token can leave a pixel off — and they cannot centre a logo whose
+     two neighbours (chip, burger) are different widths at all. `50%` +
+     `translate(-50%, -50%)` cancels the button's own size, so the mark's centre
+     lands on the bar's centre at any viewport width, on `position: absolute`
+     (the sticky bar is its containing block). Physical `left`/`top`, not
+     `inset-inline-start`: the `[dir='rtl']` rule below gives this button its own
+     `direction`, which would flip a logical inset to the other side. */
   .topbar .logo {
-    grid-column: 2;
-    grid-row: 1;
-    justify-self: center;
-    /* Brand centred in both axes on mobile: `top: 50%` + `translateY(-50%)`
-       is exact whatever the viewport height and whatever the other rows
-       total, and the bar is a fixed-height sticky pill so the button anchors
-       to the bar, not the page. */
-    position: relative;
+    position: absolute;
     top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
     min-width: 0;
     max-width: 100%;
     height: 40px;
@@ -69,6 +73,11 @@
     line-height: 1;
     display: inline-flex;
     align-items: center;
+    /* `flex-direction: column` from the base rule lays the lockup out down the
+       button, and a column container parks its content at the *start* — the mark
+       sat 7px above the button's middle even once the button itself was centred.
+       Centring the column is what puts the visible mark's centre on the bar's. */
+    justify-content: center;
   }
 
   [dir='rtl'] .topbar .logo {

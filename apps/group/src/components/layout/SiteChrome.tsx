@@ -6,17 +6,22 @@ import { usePathname } from 'next/navigation';
 import { PageBackButton } from '@/components/layout/PageBackButton';
 import { SiteAurora } from '@/components/layout/SiteAurora';
 import { TopBar } from '@/components/layout/TopBar';
-import { departmentForPathname } from '@/components/brand/departments';
 import { useAuth } from '@/context/AuthProvider';
 import { useEffect } from 'react';
 import { PAGE_BACK_FALLBACK, showsPageBack } from '@/lib/pageBack';
+import { showsTopBar } from '@/lib/topBar';
 
 /**
  * Site chrome only after registration. Admin uses its own full-bleed shell.
- * Logged-in panel uses a desktop sidebar — rendered only *inside* a department
- * route, where the rail wears that department's identity (UX-27). On /home and
- * every other non-department page the rail stays hidden: the hub is a bare,
- * full-width solar system, and entering a department is what reveals its rail.
+ *
+ * The `TopBar` is the site's header and rides on **every** page a registered
+ * learner can reach — `/home` alone is left bare, because its department hub
+ * paints the full screen.
+ *
+ * The route decides whether the chrome is there at all, not which shape it
+ * takes: the viewport does that. Inside `.panel-shell` the same `TopBar` is the
+ * rail beside the page on desktop (the inline-start edge — the right-hand side
+ * in Persian) and the one-row bar across the top from 900px down.
  */
 export function SiteChrome({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -24,11 +29,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
   const isAdminRoute = Boolean(pathname?.startsWith('/admin'));
   const registered = Boolean(user?.profileComplete || learnerState?.profileComplete);
   const showChrome = !loading && registered && !isAdminRoute;
-  // The rail belongs to the departments: it appears the moment the learner
-  // crosses into one of the six roots (or anything below them) and disappears
-  // again on /home, where the department hub paints the full screen.
-  const inDepartment = Boolean(departmentForPathname(pathname));
-  const showRail = showChrome && inDepartment;
+  const showTopBar = showChrome && showsTopBar(pathname);
   // Admin brings its own shell (with its own back slot); / and /home are roots.
   const showBack = !isAdminRoute && showsPageBack(pathname);
 
@@ -57,7 +58,9 @@ export function SiteChrome({ children }: { children: ReactNode }) {
   return (
     <>
       {!isAdminRoute ? <SiteAurora /> : null}
-      {showRail ? (
+      {/* One shell, both shapes: `.panel-shell` is the rail on desktop and adds
+          only a column above the mobile bar, which stays pinned across the top. */}
+      {showTopBar ? (
         <div className="panel-shell">
           <TopBar />
           <div className="panel-content">

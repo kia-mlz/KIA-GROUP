@@ -86,9 +86,10 @@ export function PublicCoursesPage() {
     return (
       <div className="page-content">
         <div className="container catalog-shell">
+          {/* The domain home wears the eyebrow alone. Its heading and intro line
+              were removed on feedback: the six domain doors already say what the
+              page is, and the copy only pushed them below the fold. */}
           <span className="eyebrow"><BookOpen size={14} className="inline-leading-icon" />{t('publicCourses.domains.eyebrow')}</span>
-          <h1>{t('publicCourses.domains.title')}</h1>
-          <p className="auth-sub">{t('publicCourses.domains.sub')}</p>
           {error ? <p className="form-error">{error}</p> : null}
           <div className="catalog-grid catalog-grid--domains">
             {domains.map((domain, index) => {
@@ -137,8 +138,9 @@ export function PublicCoursesPage() {
           <BookOpen size={14} className="inline-leading-icon" />
           {isAll ? t('publicCourses.eyebrow') : t('publicCourses.domains.eyebrow')}
         </span>
-        <h1>{isAll ? t('publicCourses.title') : domainLabel(track)}</h1>
-        <p className="auth-sub">{isAll ? t('publicCourses.sub') : t('publicCourses.domains.domainSub')}</p>
+        {/* No page heading or intro line here either (removed on feedback), for
+            one domain as much as for the all-courses list: the eyebrow names the
+            catalog and the filter pills name the current view. */}
         {error ? <p className="form-error">{error}</p> : null}
         <nav className="catalog-filters" aria-label={t('publicCourses.domains.title')}>
           <Link href="/courses" className="catalog-filter">{t('publicCourses.domains.back')}</Link>
@@ -162,9 +164,16 @@ export function PublicCoursesPage() {
               </Link>
             ))}
         </nav>
+        {/* The whole tile is the link (the same shape the domain doors and the
+            dashboard tiles use): the «مشاهده معرفی» button was removed on
+            feedback, so without this the card would open nothing. */}
         <div className="catalog-grid">
           {visibleCourses.map((course, index) => (
-            <article key={course.id} className={`catalog-card ${tintClass(accents[index])}`}>
+            <Link
+              key={course.id}
+              href={`/courses/${course.slug}`}
+              className={`catalog-card ${tintClass(accents[index])}`}
+            >
               <CourseTileIcon icon={course.icon} />
               <h3>
                 {course.title}
@@ -176,10 +185,7 @@ export function PublicCoursesPage() {
                 <span>{t('common.lessonsCount', { count: course.lessonCount })}</span>
                 <span>{course.enrolled ? t('courses.status.unlocked') : t('publicCourses.available')}</span>
               </div>
-              <div className="catalog-actions">
-                <Link href={`/courses/${course.slug}`} className="btn btn--primary">{t('publicCourses.viewIntro')}</Link>
-              </div>
-            </article>
+            </Link>
           ))}
         </div>
         {!error && visibleCourses.length === 0 ? (

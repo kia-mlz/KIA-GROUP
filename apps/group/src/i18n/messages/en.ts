@@ -1306,7 +1306,7 @@ export const en = {
     sessionsLocked: 'Sessions are not available yet',
     previewTitle: 'Preview lessons',
     domains: {
-      eyebrow: 'Course catalog',
+      eyebrow: 'Domain catalog',
       title: 'Learning domains',
       sub: 'Pick a domain to see only its courses, or browse the whole catalog in one place.',
       domainSub: 'See the courses in this domain and open each introduction before buying.',
