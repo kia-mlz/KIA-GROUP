@@ -1,5 +1,5 @@
-/* KIA GROUP brand tokens (seven official brand colours) — must come first. */
-@import '@kia-group/brand/brands.css';
+/* kia. brand tokens (seven official brand colours) — must come first. */
+@import '@kia./brand/brands.css';
 @import './base.css';
 @import './layout.css';
 @import './buttons.css';

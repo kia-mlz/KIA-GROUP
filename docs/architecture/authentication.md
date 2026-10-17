@@ -1,4 +1,4 @@
-# KIA GROUP — Authentication
+# kia. — Authentication
 
 One identity spans all seven brands. A user registers once (phone OTP) and is
 the same `User` row across Academy, Work, Material, Labs, Events and Community.
@@ -29,7 +29,7 @@ the same `User` row across Academy, Work, Material, Labs, Events and Community.
 - `apps/api/src/group/auth/` — the whole auth domain (controller, service,
   strategies, 2FA). It is a **group/platform** module: identity belongs to KIA
   GROUP, not to any department.
-- Role model: `@kia-group/permissions` (re-exported by `@kia-group/shared`).
+- Role model: `@kia./permissions` (re-exported by `@kia./shared`).
 - The web client: `apps/group/src/context/AuthProvider.tsx` and the `(auth)`
   route group.
 

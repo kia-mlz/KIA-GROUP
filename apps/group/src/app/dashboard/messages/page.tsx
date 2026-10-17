@@ -1,6 +1,6 @@
 'use client';
 
-import type { LearnerMessageDto } from '@kia-group/shared';
+import type { LearnerMessageDto } from '@kia./shared';
 import { Loader2, MessageSquare } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { DashboardGate, PanelPage } from '@/components/dashboard/DashboardShell';

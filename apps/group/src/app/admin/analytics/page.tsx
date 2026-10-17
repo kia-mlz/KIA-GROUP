@@ -2,7 +2,7 @@
 
 import { Loader2, Percent, UserPlus, Users, Wallet } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import type { AdminPayment, AdminStats } from '@kia-group/shared';
+import type { AdminPayment, AdminStats } from '@kia./shared';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api, ApiError } from '@/lib/api';
 

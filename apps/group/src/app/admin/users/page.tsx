@@ -11,13 +11,13 @@ import {
   type AdminUserStatus,
   type SiteAdminAccessSettings,
   type UserRole,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { AdminAccessMatrix } from '@/components/admin/AdminAccessMatrix';
 import { useAdminAccess } from '@/components/admin/useAdminAccess';
 import { useAuth } from '@/context/AuthProvider';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api, ApiError } from '@/lib/api';
-import type { AdminUser } from '@kia-group/shared';
+import type { AdminUser } from '@kia./shared';
 
 const USERS_PAGE_SIZE = 20;
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { PaymentProviderId, SitePaymentSettings } from '@kia-group/shared';
+import type { PaymentProviderId, SitePaymentSettings } from '@kia./shared';
 import { DevPaymentProvider } from './dev.provider';
 import { IdPayPaymentProvider } from './idpay.provider';
 import type { PaymentProvider } from './payment-provider';

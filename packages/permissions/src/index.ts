@@ -1,5 +1,5 @@
 /**
- * KIA GROUP permission model.
+ * kia. permission model.
  *
  * One identity across the ecosystem; platform roles gate the panel, the
  * per-moderator access matrix gates sections, and the department taxonomy is

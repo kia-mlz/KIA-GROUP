@@ -163,17 +163,17 @@ crontab -e
 
 هر push به `main` ایمیج‌های api و web را بیلد و منتشر می‌کند (workflow «Docker Publish»):
 
-- `ghcr.io/kian-malekzadeh/kia-group/api:main` (+ تگ `sha-<commit>` برای هر کامیت)
-- `ghcr.io/kian-malekzadeh/kia-group/web:main`
+- `ghcr.io/kian-malekzadeh/kia./api:main` (+ تگ `sha-<commit>` برای هر کامیت)
+- `ghcr.io/kian-malekzadeh/kia./web:main`
 
 روی سرور یک `docker-compose.override.yml` بسازید:
 
 ```yaml
 services:
   api:
-    image: ghcr.io/kian-malekzadeh/kia-group/api:main
+    image: ghcr.io/kian-malekzadeh/kia./api:main
   web:
-    image: ghcr.io/kian-malekzadeh/kia-group/web:main
+    image: ghcr.io/kian-malekzadeh/kia./web:main
 ```
 
 اگر ریپو/پکیج خصوصی است، یک بار لاگین: `docker login ghcr.io -u <user> -p <PAT با read:packages>`
@@ -184,7 +184,7 @@ docker compose --profile full pull api web
 docker compose --profile full up -d
 
 # Rollback: همان دو دستور با تگ قبلی، مثلاً:
-#   image: ghcr.io/kian-malekzadeh/kia-group/api:sha-<کامیت قبلی>
+#   image: ghcr.io/kian-malekzadeh/kia./api:sha-<کامیت قبلی>
 ```
 
 ### روش ب — Build روی سرور (بدون وابستگی به GHCR)

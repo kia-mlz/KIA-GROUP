@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TRACKS } from '@kia-group/shared';
+import { TRACKS } from '@kia./shared';
 import {
   courseDomains,
   coursesForTrack,

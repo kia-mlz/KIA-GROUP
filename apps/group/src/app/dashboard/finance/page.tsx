@@ -1,6 +1,6 @@
 'use client';
 
-import type { OrderResponse, PaymentResponse } from '@kia-group/shared';
+import type { OrderResponse, PaymentResponse } from '@kia./shared';
 import { CreditCard, FileText, Loader2, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { DashboardGate, PanelPage } from '@/components/dashboard/DashboardShell';

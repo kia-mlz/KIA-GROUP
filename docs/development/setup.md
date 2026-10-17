@@ -1,4 +1,4 @@
-# KIA GROUP — Development Setup
+# kia. — Development Setup
 
 ## Prerequisites
 
@@ -36,7 +36,7 @@ runs use `pnpm build:libs` first.
 | Lint everything | `pnpm lint` |
 | Typecheck everything | `pnpm typecheck` |
 | Unit tests | `pnpm test` (Vitest: shared/brand/permissions, group web · Jest: API) |
-| E2E | `pnpm test:e2e` (needs `pnpm --filter @kia-group/group exec playwright install chromium`) |
+| E2E | `pnpm test:e2e` (needs `pnpm --filter @kia./group exec playwright install chromium`) |
 | Production build | `pnpm build` |
 | New migration | `pnpm db:migrate` (dev) / `pnpm db:migrate:deploy` (non-interactive) |
 
@@ -44,11 +44,11 @@ runs use `pnpm build:libs` first.
 
 | Package | Path | Purpose |
 | --- | --- | --- |
-| `@kia-group/brand` | `packages/brand` | the seven brand tokens (TS + CSS) |
-| `@kia-group/permissions` | `packages/permissions` | roles, admin-access matrix, department taxonomy |
-| `@kia-group/shared` | `packages/shared` | API contracts, banks, grading, validators |
-| `@kia-group/group` | `apps/group` | Next.js web app (all departments) |
-| `@kia-group/api` | `apps/api` | NestJS modular monolith |
+| `@kia./brand` | `packages/brand` | the seven brand tokens (TS + CSS) |
+| `@kia./permissions` | `packages/permissions` | roles, admin-access matrix, department taxonomy |
+| `@kia./shared` | `packages/shared` | API contracts, banks, grading, validators |
+| `@kia./group` | `apps/group` | Next.js web app (all departments) |
+| `@kia./api` | `apps/api` | NestJS modular monolith |
 
 See [testing.md](./testing.md) for the test strategy and
 [contributing.md](./contributing.md) for conventions.

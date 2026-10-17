@@ -12,7 +12,7 @@ import {
   type ReadinessBank,
   type TestBankId,
   type TestBankPayload,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import {
   ArrowDown,
   ArrowUp,

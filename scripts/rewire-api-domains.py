@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """One-shot codemod: rewrite relative imports in apps/api/src after moving
-module folders into their KIA GROUP domains (group/academy/events).
+module folders into their kia. domains (group/academy/events).
 
 Semantics: file bodies still contain imports that were correct for the OLD
 layout (src/<module>/...). We know each file's OLD path from the move table,

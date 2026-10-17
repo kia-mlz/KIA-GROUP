@@ -1,4 +1,4 @@
-import { escapeHtml } from '@kia-group/shared';
+import { escapeHtml } from '@kia./shared';
 
 /**
  * Mini-Markdown → HTML for lesson content.

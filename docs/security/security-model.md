@@ -1,4 +1,4 @@
-# KIA GROUP — Security Model
+# kia. — Security Model
 
 The platform's security posture is documented in depth in
 [`docs/AUDIT.md`](../AUDIT.md) (finding-by-finding) and

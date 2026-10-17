@@ -8,9 +8,9 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import type { AuthUser, LearnerTodoDto } from '@kia-group/shared';
-import { CurrentUser } from '@kia-group/platform';
-import { JwtAuthGuard } from '@kia-group/platform';
+import type { AuthUser, LearnerTodoDto } from '@kia./shared';
+import { CurrentUser } from '@kia./platform';
+import { JwtAuthGuard } from '@kia./platform';
 import { CreateTodoDto, UpdateTodoDto } from './dto/todo.dto';
 import { TodosService } from './todos.service';
 

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { ChevronDown, LayoutGrid, LogOut, Menu, Moon, MoveHorizontal, Shield, Sun, Trophy, UserRound, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { isStaffRole } from '@kia-group/shared';
+import { isStaffRole } from '@kia./shared';
 import { BRAND_WORDMARK, BrandMark } from '@/components/brand/BrandMark';
 import { departmentForPathname } from '@/components/brand/departments';
 import { CartBadge } from '@/components/cart/CartBadge';
@@ -31,8 +31,8 @@ export function TopBar() {
   const router = useRouter();
   const pathname = usePathname();
   // Inside a department the rail wears that department's identity (UX-27):
-  // the Kia Group emblem in that department's colour, its name as the
-  // wordmark, and the parent KIA GROUP left underneath as the group it belongs
+  // the kia. emblem in that department's colour, its name as the
+  // wordmark, and the parent kia. left underneath as the group it belongs
   // to. Only the colour changes — the shape stays the brand's own mark, so the
   // rail and the department page header show the same logo.
   const dept = departmentForPathname(pathname);

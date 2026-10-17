@@ -10,7 +10,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@kia-group/shared': path.resolve(__dirname, '../../packages/shared/src/index.ts'),
+      '@kia./shared': path.resolve(__dirname, '../../packages/shared/src/index.ts'),
     },
   },
 });

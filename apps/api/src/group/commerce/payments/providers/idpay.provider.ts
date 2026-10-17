@@ -1,6 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
-import { toGatewayRials, type SitePaymentSettings } from '@kia-group/shared';
-import { isProductionEnv } from '@kia-group/platform';
+import { toGatewayRials, type SitePaymentSettings } from '@kia./shared';
+import { isProductionEnv } from '@kia./platform';
 import type {
   PaymentCreateInput,
   PaymentCreateResult,

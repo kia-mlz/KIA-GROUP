@@ -2,7 +2,7 @@ import {
   buildCourseCatalog,
   buildCourseDbEnOverlay,
   type CourseDbFile,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import courseDb from '../../../../db.json';
 
 /** Courses + lessons derived from monorepo-root `db.json` (with the English overlay). */

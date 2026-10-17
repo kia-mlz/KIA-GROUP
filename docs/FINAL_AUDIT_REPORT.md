@@ -1,4 +1,4 @@
-# KIA GROUP — Final Audit & Production-Readiness Report
+# kia. — Final Audit & Production-Readiness Report
 
 **Date:** 2026-10-06 · **Repo:** local `main` @ `1e8d2a1` (+ working-tree changes below)
 **Scope:** full-stack master audit (architecture, auth, authorization, database,
@@ -65,9 +65,9 @@ search, support, commerce), two department domains (`src/academy`,
 `src/events`), shared infrastructure (`src/common`: guards, rate-limit,
 **domain events**). Departments never import each other — they react to
 `src/common/events` (e.g. `group.payment.completed`, `events.registration.created`).
-Next.js app with route groups per department; `@kia-group/brand` pins the seven
-brand tokens (never hard-coded); `@kia-group/permissions` owns the admin matrix;
-`@kia-group/shared` owns contracts/prices (`PRODUCT_PRICES`, IRR cents).
+Next.js app with route groups per department; `@kia./brand` pins the seven
+brand tokens (never hard-coded); `@kia./permissions` owns the admin matrix;
+`@kia./shared` owns contracts/prices (`PRODUCT_PRICES`, IRR cents).
 
 **Decisions preserved:** payments stay in the platform (shared commerce), OTP is
 phone-first and non-optional, frontend permission checks are visibility-only
@@ -173,7 +173,7 @@ locally — gitleaks absent).
 
 ---
 
-## KIA GROUP PRODUCTION READINESS
+## kia. PRODUCTION READINESS
 
 ==============================
 

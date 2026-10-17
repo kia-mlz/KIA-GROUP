@@ -2,7 +2,7 @@
 
 ## Cursor Cloud specific instructions
 
-**کیا گروه (Kia Group)** — Persian-first platform with six departments: KIA Academy, KIA Work,
+**کیا. (kia.)** — Persian-first platform with six departments: KIA Academy, KIA Work,
 KIA Material, KIA Event, KIA Community, KIA Lab (tagline: آموزش · اشتغال · نوآوری · ارتباط · توسعه). Architecture notes: `docs/REBUILD_ARCHITECTURE.md`.
 
 Monorepo: Node `>=22.13`, pnpm `11.13.0` via Corepack. Standard commands live in root `package.json` and `README.md`.
@@ -21,11 +21,11 @@ domains, in one deployable app each:
     support/*, commerce/*, search
   - `src/config/`, `src/main.ts`, `prisma/` — bootstrap, env schema, schema +
     migrations + seed (client generates into `packages/platform/src/generated`)
-  - Department domains are **separate packages** under `kia-group/`:
-    `@kia-group/kia-academy` (courses, course-exams, learning-paths/
+  - Department domains are **separate packages** under `kia./`:
+    `@kia./kia-academy` (courses, course-exams, learning-paths/
     {roadmaps,assessments,readiness,test-banks}, students/{personality,progress})
-    and `@kia-group/kia-event` (competitions, challenges, bootcamps).
-  - `packages/platform` (`@kia-group/platform`) — the kernel every package
+    and `@kia./kia-event` (competitions, challenges, bootcamps).
+  - `packages/platform` (`@kia./platform`) — the kernel every package
     depends on: Prisma, guards, decorators, domain events, site-settings,
     media, email (exited `src/common` + trio from the old `src/` layout).
   - Departments never import each other (ESLint-banned): cross-department
@@ -44,7 +44,7 @@ CSS side — never hard-code a department hex.
 | Route | Purpose |
 | --- | --- |
 | `/` | Minimal Persian landing («ورود / ثبت‌نام» → `/education` + email sign-in → `/login`) — **no site header** for guests |
-| `/material` | Material Studio (ported, modular in `kia-group/kia-material/resources`) |
+| `/material` | Material Studio (ported, modular in `kia./kia-material/resources`) |
 | `/education` | Iranian phone OTP → profile → assessment gate (always phone-first; never auto-skips OTP) |
 | `/assessment` | First goal wizard (requires complete profile) → then free readiness test |
 | `/readiness` / `/readiness/test` | Free preparations (readiness) test — no purchase required |
@@ -88,18 +88,18 @@ Site `TopBar` / `Footer` render only after `profileComplete` (successful registr
 
 ### Commands
 
-Typical: `pnpm install`, `pnpm --filter @kia-group/shared build`, `pnpm db:migrate:deploy`, `pnpm db:seed`, `pnpm dev`.
+Typical: `pnpm install`, `pnpm --filter @kia./shared build`, `pnpm db:migrate:deploy`, `pnpm db:seed`, `pnpm dev`.
 
 Lint / typecheck / test / build: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`.
 
 ### Payments
 
-Default currency is **IRR**. Catalog prices live in `@kia-group/shared` `PRODUCT_PRICES`. Stripe remains optional; without it, checkout confirms in-dev as before. SMTP is also optional (emails log to console + `EmailLog`).
+Default currency is **IRR**. Catalog prices live in `@kia./shared` `PRODUCT_PRICES`. Stripe remains optional; without it, checkout confirms in-dev as before. SMTP is also optional (emails log to console + `EmailLog`).
 
 ### Non-obvious Cloud VM caveats
 
 - PostgreSQL is **not** started by the update script or `pnpm dev`. Docker is typically unavailable in Cloud Agent VMs — use a local Postgres 16 cluster: `sudo pg_ctlcluster 16 main start` (ignore `pnpm docker:db`). Role/DB `kia_academy`/`kia_academy` match `apps/api/.env.example`.
 - The `kia_academy` DB role needs `CREATEDB` because `pnpm db:migrate` (`prisma migrate dev`) creates a shadow database; without it you get Prisma `P3014`. Prefer `pnpm db:migrate:deploy` in non-interactive environments.
-- Build order: `packages/permissions` and `packages/brand` must be built before `packages/shared`, which must be built before `pnpm db:seed` / api build, or seed fails with `MODULE_NOT_FOUND` for `@kia-group/shared/dist`. `pnpm build` / `pnpm build:libs` handle this order.
+- Build order: `packages/permissions` and `packages/brand` must be built before `packages/shared`, which must be built before `pnpm db:seed` / api build, or seed fails with `MODULE_NOT_FOUND` for `@kia./shared/dist`. `pnpm build` / `pnpm build:libs` handle this order.
 - Env files are git-ignored — create from examples: `cp apps/api/.env.example apps/api/.env` and `cp apps/group/.env.example apps/group/.env.local`.
-- E2E (`pnpm test:e2e`) needs a one-time browser install: `pnpm --filter @kia-group/group exec playwright install chromium`.
+- E2E (`pnpm test:e2e`) needs a one-time browser install: `pnpm --filter @kia./group exec playwright install chromium`.

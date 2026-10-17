@@ -5,7 +5,7 @@ import {
   type AssessmentAnswers,
   type ExamSubmitResult,
   type MiniIpipAnswers,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ExamPlayer } from '@/components/exam/ExamPlayer';
@@ -24,7 +24,7 @@ import { AssessmentBankProvider, useAssessmentBank } from '@/context/AssessmentB
 import { useLanguage } from '@/context/LanguageProvider';
 import { localeText } from '@/lib/localeText';
 import { api, ApiError } from '@/lib/api';
-import type { ExamAttemptSession, ExamResponse } from '@kia-group/shared';
+import type { ExamAttemptSession, ExamResponse } from '@kia./shared';
 
 type FlowPhase = 'board' | 'personality' | 'wizard' | 'exam';
 

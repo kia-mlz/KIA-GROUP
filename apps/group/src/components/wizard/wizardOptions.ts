@@ -1,4 +1,4 @@
-import type { AssessmentAnswers, Goal, Interest, LearningStyle, SkillLevel } from '@kia-group/shared';
+import type { AssessmentAnswers, Goal, Interest, LearningStyle, SkillLevel } from '@kia./shared';
 
 export const SKILL_TOPIC_KEYS = [
   ['HTML/CSS', 'htmlCss'],

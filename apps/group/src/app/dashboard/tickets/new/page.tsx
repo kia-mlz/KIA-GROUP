@@ -1,12 +1,12 @@
 'use client';
 
-import type { CourseSummary } from '@kia-group/shared';
+import type { CourseSummary } from '@kia./shared';
 import {
   containsProgrammingCode,
   isAllowedTicketAttachment,
   MAX_TICKET_ATTACHMENT_BYTES,
   MAX_TICKET_ATTACHMENTS,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { Loader2, Ticket } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FormEvent, Suspense, useEffect, useState } from 'react';

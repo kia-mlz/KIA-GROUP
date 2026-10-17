@@ -351,7 +351,7 @@
   margin-top: 0;
 }
 
-/* KIA Community and KIA Lab — the two departments added with the Kia Group
+/* KIA Community and KIA Lab — the two departments added with the kia.
    rebrand. Both are one coming-soon tile wide, so the grid must not stretch it
    across the full two-column track the other department pages use. */
 .community-page__head,
@@ -412,10 +412,10 @@
 
 /* =============================================================================
    Department solar system — the departments hub (/home, dashboard top)
-   One Kia Group sun, six department planets on six orbit rings, each ring
+   One kia. sun, six department planets on six orbit rings, each ring
    swept by a comet pulse. Replaces the old door grid (UX-29/30).
 
-   Colour discipline: the sun is Kia Group — gold rim, gold wordmark, and
+   Colour discipline: the sun is kia. — gold rim, gold wordmark, and
    `var(--group-gold)` appears only on the sun. Every planet, ring and pulse
    derives from its own `var(--dept-<slug>)` token; this block writes no raw
    hex, so `packages/brand` stays the single source of truth.
@@ -464,7 +464,7 @@
 
 
 
-/* --- the Kia Group sun ------------------------------------------------------ */
+/* --- the kia. sun ------------------------------------------------------ */
 
 .solar__sun {
   position: absolute;

@@ -1,6 +1,6 @@
-// @kia-group/platform — KIA GROUP platform kernel (single entry point).
+// @kia./platform — kia. platform kernel (single entry point).
 //
-// apps/api (the shell) and every kia-group/* department package import
+// apps/api (the shell) and every kia./* department package import
 // shared infrastructure from here: Prisma, guards, decorators, domain
 // events, site settings, media, email — plus the generated Prisma client.
 

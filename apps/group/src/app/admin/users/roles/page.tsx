@@ -8,7 +8,7 @@ import {
   normalizeAdminAccess,
   type AdminRole,
   type SiteAdminAccessSettings,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { AdminAccessMatrix } from '@/components/admin/AdminAccessMatrix';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api, ApiError } from '@/lib/api';

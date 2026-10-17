@@ -21,10 +21,10 @@ import type {
   ProfileDetails,
   RequestOtpResponse,
   TwoFactorChallengeResponse,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import type { Request, Response } from 'express';
-import { CurrentUser } from '@kia-group/platform';
-import { JwtAuthGuard } from '@kia-group/platform';
+import { CurrentUser } from '@kia./platform';
+import { JwtAuthGuard } from '@kia./platform';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';

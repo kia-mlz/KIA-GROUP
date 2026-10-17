@@ -1,4 +1,4 @@
-# KIA GROUP — Testing Strategy
+# kia. — Testing Strategy
 
 ## Layers
 
@@ -27,8 +27,8 @@
 
 ```bash
 pnpm test          # everything (builds libs first)
-pnpm --filter @kia-group/api test          # API only
-pnpm --filter @kia-group/group test        # web only
+pnpm --filter @kia./api test          # API only
+pnpm --filter @kia./group test        # web only
 pnpm test:e2e      # Playwright (needs the stack running; see ci.yml for the recipe)
 ```
 

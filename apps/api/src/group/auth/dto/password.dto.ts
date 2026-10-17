@@ -3,7 +3,7 @@ import type {
   ChangePasswordDto as ChangePasswordDtoType,
   ForgotPasswordDto as ForgotPasswordDtoType,
   ResetPasswordDto as ResetPasswordDtoType,
-} from '@kia-group/shared';
+} from '@kia./shared';
 
 const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 

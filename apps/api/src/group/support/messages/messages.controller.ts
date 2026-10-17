@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
-import type { AuthUser, LearnerMessageDto } from '@kia-group/shared';
-import { AdminAccess } from '@kia-group/platform';
-import { CurrentUser } from '@kia-group/platform';
-import { Roles } from '@kia-group/platform';
-import { AdminAccessGuard } from '@kia-group/platform';
-import { JwtAuthGuard } from '@kia-group/platform';
-import { RolesGuard } from '@kia-group/platform';
+import type { AuthUser, LearnerMessageDto } from '@kia./shared';
+import { AdminAccess } from '@kia./platform';
+import { CurrentUser } from '@kia./platform';
+import { Roles } from '@kia./platform';
+import { AdminAccessGuard } from '@kia./platform';
+import { JwtAuthGuard } from '@kia./platform';
+import { RolesGuard } from '@kia./platform';
 import { CreateLearnerMessageDto } from './dto/message.dto';
 import { MessagesService } from './messages.service';
 

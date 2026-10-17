@@ -14,7 +14,7 @@ import {
 import '@/styles/globals.css';
 
 /**
- * Pelak FA — the KIA GROUP brand typeface (KIA-Color-Font identity) and the
+ * Pelak FA — the kia. brand typeface (KIA-Color-Font identity) and the
  * site-wide UI font for every page, from the landing hero to admin tables.
  */
 const pelak = localFont({

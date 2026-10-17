@@ -1,8 +1,8 @@
-# KIA GROUP — Cross-Department Integrations
+# kia. — Cross-Department Integrations
 
 Departments cooperate without importing each other. Three sanctioned channels:
 
-## 1. Shared contracts (`@kia-group/shared`)
+## 1. Shared contracts (`@kia./shared`)
 
 Types, banks, grading and validators used by both apps. Contracts are the
 stable vocabulary — a department may read another department's *contract*, but

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SiteSettingsModule } from '@kia-group/platform';
+import { SiteSettingsModule } from '@kia./platform';
 import { CartController } from './cart.controller';
 import { CartService } from './cart.service';
 

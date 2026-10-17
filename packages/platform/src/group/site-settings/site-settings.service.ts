@@ -5,7 +5,7 @@ import {
   type SiteSettings,
   type SiteTrackSettings,
   type UpdateSiteSettingsDto,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { PrismaService } from '../../prisma/prisma.service';
 import type { Prisma } from '../../generated/prisma/client';
 

@@ -174,7 +174,7 @@ describe('sidebar rail geometry', () => {
   it('optically centres the wordmark: ink on the parent centre, box untouched', () => {
     // `align-items: center` centres the *line box*, but the visible caps sat
     // ~2px high: `[dir='rtl'] .logo` renders Latin caps in pelak, whose font
-    // box reserves 9px of descent for Persian descenders ("KIA GROUP" draws
+    // box reserves 9px of descent for Persian descenders ("kia." draws
     // none). The offset is line-height-independent, so it needs a real nudge —
     // measured 2px puts the ink's bbox centre on the 39.44px button's centre.
     const rule = css.match(/\.panel-shell \.logo \.logo-text \{[^}]*\}/);

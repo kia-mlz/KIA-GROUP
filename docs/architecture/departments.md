@@ -1,16 +1,16 @@
-# KIA GROUP — Departments
+# kia. — Departments
 
 Six departments, one platform identity. The canonical vocabulary (slugs, roles,
-colours) lives in `@kia-group/brand` (colours) and `@kia-group/permissions`
+colours) lives in `@kia./brand` (colours) and `@kia./permissions`
 (role taxonomy).
 
 | Department | Colour | API domain | Web routes | Status |
 | --- | --- | --- | --- | --- |
-| **KIA Academy** | `#6464FF` | `kia-group/kia-academy/` | `/education`, `/assessment`, `/readiness`, `/roadmap`, `/tracks`, `/courses`, `/learn`, `/bootcamp` (alias `/academy`) | Live — the learner journey end-to-end |
+| **KIA Academy** | `#6464FF` | `kia./kia-academy/` | `/education`, `/assessment`, `/readiness`, `/roadmap`, `/tracks`, `/courses`, `/learn`, `/bootcamp` (alias `/academy`) | Live — the learner journey end-to-end |
 | **KIA Work** | `#6492FF` | — (future `apps/api/src/work/`) | `/freelance` (alias `/work`) | Route + hub presence; domain module TODO |
 | **KIA Material** | `#148165` | — | `/material` (Material Studio feature) | Live front-end studio (client-side); backend domain TODO |
 | **KIA Labs** | `#28C793` | — | `/labs` | Coming-soon page + hub |
-| **KIA Events** | `#E32B1B` | `kia-group/kia-event/` | `/events` | Live — competitions & challenges |
+| **KIA Events** | `#E32B1B` | `kia./kia-event/` | `/events` | Live — competitions & challenges |
 | **KIA Community** | `#FF7344` | — | `/community` | Coming-soon page + hub |
 
 ## Department isolation
@@ -19,7 +19,7 @@ colours) lives in `@kia-group/brand` (colours) and `@kia-group/permissions`
   (on the web) one route group. There is no shared "everything" folder.
 - Departments never import each other's services. Cross-department behaviour
   goes through:
-  1. **shared contracts** (`@kia-group/shared` types/banks/grading),
+  1. **shared contracts** (`@kia./shared` types/banks/grading),
   2. **the platform** (search, notifications, identity, commerce),
   3. **domain events** (`group.user.registered`, `group.payment.completed`,
      `events.registration.created`, `academy.course.completed` — see

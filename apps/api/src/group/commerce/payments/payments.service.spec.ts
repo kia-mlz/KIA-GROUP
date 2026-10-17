@@ -83,7 +83,7 @@ describe('PaymentsService', () => {
 
   const siteSettings = {
     get: jest.fn().mockResolvedValue({
-      general: { siteName: 'Kia Group' },
+      general: { siteName: 'kia.' },
       tracks: [],
       pricing: {
         readinessTestCents: 1900,

@@ -3,10 +3,10 @@ import { statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { BRAND_TOKENS } from '@kia-group/brand';
+import { BRAND_TOKENS } from '@kia./brand';
 
 /**
- * The departments hub renders as a solar system (Kia Group sun, six department
+ * The departments hub renders as a solar system (kia. sun, six department
  * planets on orbit rings) instead of the old bento door grid. These tests pin
  * the structure the approved mock specifies: every department is a planet that
  * links to its route, the geometry puts each planet centre on its own orbit,

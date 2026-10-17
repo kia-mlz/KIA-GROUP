@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { BookOpen, ChevronRight, ClipboardList, GraduationCap, Layers } from 'lucide-react';
-import type { AdminStats } from '@kia-group/shared';
+import type { AdminStats } from '@kia./shared';
 import { AdminErrorState, AdminLoading } from '@/components/admin/AdminStates';
 import { useAdminAccess } from '@/components/admin/useAdminAccess';
 import { useLanguage } from '@/context/LanguageProvider';

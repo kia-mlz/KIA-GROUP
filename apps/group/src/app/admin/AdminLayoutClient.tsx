@@ -30,7 +30,7 @@ import {
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import {
   type AdminAccessSection,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { BrandMark } from '@/components/brand/BrandMark';
 import { PageBackButton } from '@/components/layout/PageBackButton';
 import AdminCommandPalette, { type PaletteCommand } from '@/components/admin/AdminCommandPalette';

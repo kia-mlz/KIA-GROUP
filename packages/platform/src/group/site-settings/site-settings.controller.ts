@@ -4,7 +4,7 @@ import {
   type AuthUser,
   type SiteSettings,
   type UpdateSiteSettingsDto,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { AdminAccess } from '../../common/decorators/admin-access.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';

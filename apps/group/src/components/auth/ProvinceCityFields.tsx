@@ -3,7 +3,7 @@
 import {
   getCitiesForProvince,
   getIranProvinces,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { useMemo } from 'react';
 
 type ProvinceCityFieldsProps = {

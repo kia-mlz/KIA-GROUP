@@ -9,8 +9,8 @@ import { PasswordInput } from '@/components/auth/PasswordInput';
 import { useAuth } from '@/context/AuthProvider';
 import { useLanguage } from '@/context/LanguageProvider';
 import { resolvePostLoginPath } from '@/lib/postLoginPath';
-import { isStaffRole } from '@kia-group/shared';
-import type { TwoFactorChallengeResponse } from '@kia-group/shared';
+import { isStaffRole } from '@kia./shared';
+import type { TwoFactorChallengeResponse } from '@kia./shared';
 
 function LoginForm() {
   const router = useRouter();

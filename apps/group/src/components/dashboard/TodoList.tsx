@@ -1,6 +1,6 @@
 'use client';
 
-import type { LearnerTodoDto } from '@kia-group/shared';
+import type { LearnerTodoDto } from '@kia./shared';
 import { Check, Plus, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';

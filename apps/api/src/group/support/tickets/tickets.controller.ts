@@ -14,10 +14,10 @@ import type {
   AuthUser,
   SupportTicketDetail,
   SupportTicketSummary,
-} from '@kia-group/shared';
-import { MAX_TICKET_ATTACHMENT_BYTES, MAX_TICKET_ATTACHMENTS } from '@kia-group/shared';
-import { CurrentUser } from '@kia-group/platform';
-import { JwtAuthGuard } from '@kia-group/platform';
+} from '@kia./shared';
+import { MAX_TICKET_ATTACHMENT_BYTES, MAX_TICKET_ATTACHMENTS } from '@kia./shared';
+import { CurrentUser } from '@kia./platform';
+import { JwtAuthGuard } from '@kia./platform';
 import { CreateTicketDto, TicketReplyDto } from './dto/ticket.dto';
 import { TicketsService } from './tickets.service';
 

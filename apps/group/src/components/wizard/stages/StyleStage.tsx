@@ -1,6 +1,6 @@
 'use client';
 
-import type { AssessmentAnswers, LearningStyle } from '@kia-group/shared';
+import type { AssessmentAnswers, LearningStyle } from '@kia./shared';
 import { useAssessmentQuestion } from '@/context/AssessmentBankProvider';
 import { useLanguage } from '@/context/LanguageProvider';
 import { localeText } from '@/lib/localeText';

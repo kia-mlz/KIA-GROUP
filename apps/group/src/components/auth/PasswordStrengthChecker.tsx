@@ -4,7 +4,7 @@ import {
   evaluatePasswordRequirements,
   PASSWORD_REQUIREMENTS,
   type PasswordRequirement,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { Check, X } from 'lucide-react';
 
 type PasswordStrengthCheckerProps = {

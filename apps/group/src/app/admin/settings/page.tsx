@@ -11,11 +11,11 @@ import {
   normalizeSmsSettings,
   type SiteSettings,
   type SiteTrackSettings,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { useAuth } from '@/context/AuthProvider';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api, ApiError } from '@/lib/api';
-import type { AdminCourse } from '@kia-group/shared';
+import type { AdminCourse } from '@kia./shared';
 import { AdminAccessMatrix } from '@/components/admin/AdminAccessMatrix';
 
 type Section =

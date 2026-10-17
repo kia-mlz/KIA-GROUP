@@ -1,6 +1,6 @@
 'use client';
 
-import type { LearnerProgressSummary } from '@kia-group/shared';
+import type { LearnerProgressSummary } from '@kia./shared';
 import { LineChart, Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { DashboardGate, PanelPage } from '@/components/dashboard/DashboardShell';

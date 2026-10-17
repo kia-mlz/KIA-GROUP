@@ -1,5 +1,5 @@
 {
-  "name": "@kia-group/api",
+  "name": "@kia./api",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -16,10 +16,10 @@
     "prisma:seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@kia-group/kia-academy": "workspace:*",
-    "@kia-group/kia-event": "workspace:*",
-    "@kia-group/platform": "workspace:*",
-    "@kia-group/shared": "workspace:*",
+    "@kia./kia-academy": "workspace:*",
+    "@kia./kia-event": "workspace:*",
+    "@kia./platform": "workspace:*",
+    "@kia./shared": "workspace:*",
     "@nest-lab/throttler-storage-redis": "^1.2.0",
     "@nestjs/common": "^11.0.12",
     "@nestjs/config": "^4.0.2",

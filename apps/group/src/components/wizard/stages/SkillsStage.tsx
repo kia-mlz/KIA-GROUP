@@ -1,6 +1,6 @@
 'use client';
 
-import type { AssessmentAnswers, SkillLevel } from '@kia-group/shared';
+import type { AssessmentAnswers, SkillLevel } from '@kia./shared';
 import { useAssessmentQuestion } from '@/context/AssessmentBankProvider';
 import { useLanguage } from '@/context/LanguageProvider';
 import { skillLevelMessageKey } from '@/i18n/domain';

@@ -1,6 +1,6 @@
 'use client';
 
-import type { SupportTicketSummary } from '@kia-group/shared';
+import type { SupportTicketSummary } from '@kia./shared';
 import { Loader2, Plus, Ticket } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';

@@ -6,7 +6,7 @@ import { en, fa } from '@/i18n/messages';
 import { BRAND_WORDMARK } from '@/components/brand/BrandMark';
 
 /**
- * Kia Group rebrand (was Kia Academy).
+ * kia. rebrand (was Kia Academy).
  *
  * A rename is the one change with no failing test to point at it: every string
  * still compiles, every page still renders. So the invariants live here.
@@ -73,11 +73,11 @@ const hits = (needle: string) => {
   return found;
 };
 
-describe('Kia Group brand', () => {
+describe('kia. brand', () => {
   it('renames the wordmark in both scripts', () => {
-    expect(BRAND_WORDMARK).toBe('KIA GROUP');
-    expect(fa.common.brand).toBe('کیا گروه');
-    expect(en.common.brand).toBe('Kia Group');
+    expect(BRAND_WORDMARK).toBe('kia.');
+    expect(fa.common.brand).toBe('کیا.');
+    expect(en.common.brand).toBe('kia.');
   });
 
   it('carries the five-pillar tagline', () => {
@@ -98,7 +98,7 @@ describe('Kia Group brand', () => {
   });
 });
 
-describe('Kia Group departments', () => {
+describe('kia. departments', () => {
   const hub = readFileSync(
     path.join(WEB, 'src', 'components', 'hub', 'DepartmentSolarSystem.tsx'),
     'utf8',
@@ -150,8 +150,8 @@ describe('Kia Group departments', () => {
       enDoors.communityTitle,
       enDoors.labsTitle,
     ]).toEqual(['KIA Academy', 'KIA Work', 'KIA Material', 'KIA Event', 'KIA Community', 'KIA Lab']);
-    expect(faDoors.heading).toBe('دپارتمان‌های کیا گروه');
-    expect(enDoors.heading).toBe('Kia Group departments');
+    expect(faDoors.heading).toBe('دپارتمان‌های کیا.');
+    expect(enDoors.heading).toBe('kia. departments');
   });
 
   it('routes every planet title through the dictionary, never a literal', () => {
@@ -192,7 +192,7 @@ describe('brand tagline placement', () => {
   it('sits under the mark + wordmark, inside the brand button', () => {
     expect(topBar).toContain('<span className="logo-lockup">');
     // UX-27 gave this line a second job: outside a department it is the group's
-    // five pillars, inside one it names the parent («KIA GROUP»). Either way it
+    // five pillars, inside one it names the parent («kia.»). Either way it
     // is the same row under the lockup, and it stays a dictionary lookup.
     expect(topBar).toContain(
       "<span className=\"brand-tagline\">{dept ? BRAND_WORDMARK : t('common.tagline')}</span>",

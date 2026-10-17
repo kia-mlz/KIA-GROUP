@@ -1,5 +1,5 @@
-import type { PaymentCurrencyCode } from '@kia-group/shared';
-import { normalizePaymentCurrency, toDisplayUnits } from '@kia-group/shared';
+import type { PaymentCurrencyCode } from '@kia./shared';
+import { normalizePaymentCurrency, toDisplayUnits } from '@kia./shared';
 import type { Locale } from './locales';
 
 export interface Formatters {

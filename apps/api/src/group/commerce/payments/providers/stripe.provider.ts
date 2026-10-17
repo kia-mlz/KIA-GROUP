@@ -2,9 +2,9 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import {
   STRIPE_SUPPORTED_CURRENCIES,
   type SitePaymentSettings,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { StripeService } from '../../stripe/stripe.service';
-import { isProductionEnv } from '@kia-group/platform';
+import { isProductionEnv } from '@kia./platform';
 import type {
   PaymentCreateInput,
   PaymentCreateResult,

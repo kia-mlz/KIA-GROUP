@@ -97,7 +97,7 @@ import type {
   ProfileDetails,
   UpdateProfileDto,
   BootcampState,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { courseCatalog, primaryCourseSlug } from '@/lib/courseCatalog';
 import {
   buildRoadmapFromAnswers,
@@ -121,7 +121,7 @@ import {
   scoreMiniIpip,
   toPublicExamQuestions,
   SYSTEM_ROLES,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { ApiError } from '@/lib/apiError';
 import { clearTokens, setAccessToken } from '@/lib/auth';
 
@@ -141,7 +141,7 @@ const DEMO_LEARNER: AuthUser = {
 
 const DEMO_ADMIN: AuthUser = {
   id: 'demo-admin',
-  name: 'Kia Group Super Admin',
+  name: 'kia. Super Admin',
   email: 'admin@kia.academy',
   phone: null,
   role: 'SUPER_ADMIN',
@@ -332,7 +332,7 @@ let demoAdminMessages: AdminLearnerMessage[] = [
     userId: DEMO_LEARNER.id,
     userName: DEMO_LEARNER.name,
     userEmail: DEMO_LEARNER.email,
-    subject: 'Welcome to Kia Group',
+    subject: 'Welcome to kia.',
     body: 'We are glad to have you on board. Reach out any time you need help.',
     readAt: null,
     createdBy: DEMO_ADMIN.email,
@@ -701,7 +701,7 @@ function delay<T>(value: T, ms = 80): Promise<T> {
 function buildDemoCart(state: DemoPersistedState): CartResponse {
   const settings = readDemoSettings();
   const unitPrice = settings.pricing.courseCents;
-  const siteName = settings.general.siteName || 'Kia Group';
+  const siteName = settings.general.siteName || 'kia.';
   const trackMap = new Map(settings.tracks.map((t) => [t.key, t.name]));
   const items: CartItemResponse[] = [];
   for (const slug of state.cartCourseSlugs) {
@@ -1129,7 +1129,7 @@ export const demoApi = {
     return delay({ enabled: false });
   },
 
-  async adminListStaffTwoFactor(): Promise<import('@kia-group/shared').TwoFactorStaffRow[]> {
+  async adminListStaffTwoFactor(): Promise<import('@kia./shared').TwoFactorStaffRow[]> {
     return delay([
       {
         id: DEMO_ADMIN.id,
@@ -1295,7 +1295,7 @@ export const demoApi = {
     return delay(readState().payments);
   },
 
-  async getWallet(limit = 5): Promise<import('@kia-group/shared').WalletSummary> {
+  async getWallet(limit = 5): Promise<import('@kia./shared').WalletSummary> {
     requireUser();
     const payments = readState().payments
       .filter((p) => p.status === 'COMPLETED' || p.status === 'REFUNDED')

@@ -1,3 +1,3 @@
-import type { TwoFactorChallengeResponse } from '@kia-group/shared';
+import type { TwoFactorChallengeResponse } from '@kia./shared';
 
 export type { TwoFactorChallengeResponse };

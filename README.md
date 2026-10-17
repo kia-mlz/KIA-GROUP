@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="apps/group/public/brand/logo.svg" alt="Kia Group — کیا گروه" width="140" />
+<img src="apps/group/public/brand/logo.svg" alt="kia. — کیا." width="140" />
 
-# Kia Group · کیا گروه
+# kia. · کیا.
 
 **Learn · Work · Create · Connect · Grow **
 
@@ -23,7 +23,7 @@
 
 ---
 
-Kia Group is a production-grade platform for Iranian talent, built around six
+kia. is a production-grade platform for Iranian talent, built around six
 departments: KIA Academy (learning), KIA Work (freelancing and hiring), KIA Material
 (design assets), KIA Event (contests, bootcamps, webinars), KIA Community (people)
 and KIA Lab (research and product).
@@ -78,13 +78,13 @@ Results (/readiness/results) ─► Roadmap (/roadmap) ──► Checkout ──
 | Frontend | Next.js 16 (App Router), React 19, TypeScript, lucide-react, local Persian brand font (Pelak FA) |
 | Backend | NestJS 11, Passport JWT, class-validator, @nestjs/throttler, helmet |
 | Database | PostgreSQL 16 + Prisma ORM 7 (43 models · 13 enums · 19 migrations) |
-| Shared | `@kia-group/shared` — types, banks, grading, entitlements, validators (built first) |
+| Shared | `@kia./shared` — types, banks, grading, entitlements, validators (built first) |
 | Quality | ESLint flat config, Prettier, Vitest (shared) + Jest (api), Playwright e2e |
 | Infra | Docker multi-stage images, GitHub Actions CI, GH Pages static export (demo mode) |
 
 ## 📐 Architecture
 
-KIA GROUP is a **modular monolith in a pnpm monorepo**: the parent platform owns
+kia. is a **modular monolith in a pnpm monorepo**: the parent platform owns
 identity, navigation, permissions, search, commerce and settings; the six
 departments are independent business domains that share the platform instead of
 each other.
@@ -103,28 +103,28 @@ KIA-GROUP-APP/
 │       └── prisma/
 │           ├── schema.prisma       # 43 models → generates client into platform
 │           └── migrations/         # init_baseline + hardening migrations
-├── kia-group/                 # ★ THE SIX DEPARTMENTS — each a separate package
-│   ├── kia-academy/     # @kia-group/kia-academy — courses · course-exams ·
+├── kia./                 # ★ THE SIX DEPARTMENTS — each a separate package
+│   ├── kia-academy/     # @kia./kia-academy — courses · course-exams ·
 │   │   │                #   learning-paths (roadmaps·assessments·readiness·test-banks)
 │   │   │                #   students (personality·progress); lessons/teachers/
 │   │   │                #   certificates = README scaffolds
-│   ├── kia-event/       # @kia-group/kia-event — competitions · challenges · bootcamps;
+│   ├── kia-event/       # @kia./kia-event — competitions · challenges · bootcamps;
 │   │   │                #   events/webinars/workshops = README scaffolds
-│   ├── kia-work/        # @kia-group/kia-work — jobs · freelancing · projects ·
+│   ├── kia-work/        # @kia./kia-work — jobs · freelancing · projects ·
 │   │   │                #   employers · talents · contracts (folder scaffold)
-│   ├── kia-material/    # @kia-group/kia-material — Material Studio (resources/) +
+│   ├── kia-material/    # @kia./kia-material — Material Studio (resources/) +
 │   │   │                #   templates/assets/tools/materials scaffolds
-│   ├── kia-lab/         # @kia-group/kia-lab — research · innovation · products ·
+│   ├── kia-lab/         # @kia./kia-lab — research · innovation · products ·
 │   │   │                #   experiments · publications (folder scaffold)
-│   └── kia-community/   # @kia-group/kia-community — members · discussions · groups ·
+│   └── kia-community/   # @kia./kia-community — members · discussions · groups ·
 │                        #   mentorship · networking (folder scaffold)
 ├── packages/
-│   ├── brand/          # @kia-group/brand — the seven brand tokens (TS + CSS)
-│   ├── permissions/    # @kia-group/permissions — roles · admin matrix · dept taxonomy
-│   ├── platform/       # @kia-group/platform — KERNEL: Prisma client · guards ·
+│   ├── brand/          # @kia./brand — the seven brand tokens (TS + CSS)
+│   ├── permissions/    # @kia./permissions — roles · admin matrix · dept taxonomy
+│   ├── platform/       # @kia./platform — KERNEL: Prisma client · guards ·
 │   │   │               #   decorators · domain events · site-settings · media · email
 │   │   └── src/generated/prisma/   # prisma generate output (git-ignored)
-│   └── shared/         # @kia-group/shared — contracts, banks, grading, validators
+│   └── shared/         # @kia./shared — contracts, banks, grading, validators
 ├── docker/             # entrypoint scripts (wait-for-db, migrate, seed)
 ├── docs/               # architecture · security · database · development
 └── scripts/            # utility tooling
@@ -134,13 +134,13 @@ KIA-GROUP-APP/
 
 | Brand | Colour | Token | Department code |
 | --- | --- | --- | --- |
-| KIA GROUP | `#FFC864` | `--group-gold` (reserved) | platform |
-| KIA Academy | `#6464FF` | `--dept-academy` | `kia-group/kia-academy/` · `app/(academy)` |
-| KIA Work | `#6492FF` | `--dept-work` | `kia-group/kia-work/` (scaffold) · `app/(work)` → `/freelance` |
-| KIA Material | `#148165` | `--dept-material` | `kia-group/kia-material/` (Material Studio) · `app/(material)` |
-| KIA Lab | `#28C793` | `--dept-labs` | `kia-group/kia-lab/` (scaffold) · `app/(labs)` |
-| KIA Event | `#E32B1B` | `--dept-events` | `kia-group/kia-event/` · `app/(events)` |
-| KIA Community | `#FF7344` | `--dept-community` | `kia-group/kia-community/` (scaffold) · `app/(community)` |
+| kia. | `#FFC864` | `--group-gold` (reserved) | platform |
+| KIA Academy | `#6464FF` | `--dept-academy` | `kia./kia-academy/` · `app/(academy)` |
+| KIA Work | `#6492FF` | `--dept-work` | `kia./kia-work/` (scaffold) · `app/(work)` → `/freelance` |
+| KIA Material | `#148165` | `--dept-material` | `kia./kia-material/` (Material Studio) · `app/(material)` |
+| KIA Lab | `#28C793` | `--dept-labs` | `kia./kia-lab/` (scaffold) · `app/(labs)` |
+| KIA Event | `#E32B1B` | `--dept-events` | `kia./kia-event/` · `app/(events)` |
+| KIA Community | `#FF7344` | `--dept-community` | `kia./kia-community/` (scaffold) · `app/(community)` |
 
 Colours are defined **once** in [`packages/brand`](packages/brand) and pinned by
 tests on both sides (TypeScript tokens *and* the stylesheet that consumes them).
@@ -148,9 +148,9 @@ On-fill ink is chosen by measured contrast, never by hand.
 
 ### Department isolation
 
-- Each department lives in its own workspace package under `kia-group/` (like a
-  standalone project): it may depend on `@kia-group/platform` (kernel) and
-  `@kia-group/shared`, **never on another department** — enforced by ESLint
+- Each department lives in its own workspace package under `kia./` (like a
+  standalone project): it may depend on `@kia./platform` (kernel) and
+  `@kia./shared`, **never on another department** — enforced by ESLint
   (`no-restricted-imports` in the shared flat config). `apps/api` is the
   connection point that composes the packages in `app.module.ts`.
 - Cross-department behaviour goes through shared contracts, the platform
@@ -193,7 +193,7 @@ cp apps/api/.env.example apps/api/.env          # set DATABASE_URL + JWT secrets
 cp apps/group/.env.example apps/group/.env.local    # leave NEXT_PUBLIC_DEMO_MODE unset for real API
 
 pnpm docker:db                        # or run your own Postgres 16
-pnpm --filter @kia-group/shared build
+pnpm --filter @kia./shared build
 pnpm db:migrate                       # applies all 19 migrations (baseline + hardening)
 pnpm db:seed                          # catalog + banks + starter users
 
@@ -205,7 +205,7 @@ pnpm dev                              # web :3000 · api :3001 · health /api/he
 > generated at deploy time and rotated; see [`SECURITY.md`](SECURITY.md).
 
 > Playwright one-time setup for e2e:
-> `pnpm --filter @kia-group/group exec playwright install chromium`
+> `pnpm --filter @kia./group exec playwright install chromium`
 
 ### Run modes
 
@@ -272,7 +272,7 @@ Report vulnerabilities responsibly per [`SECURITY.md`](SECURITY.md) — please u
 
 - **DashPloy (primary demo):** the live demo is published as a static site at
   <https://kia-academy.dashploy.app> (free static tier, `NEXT_PUBLIC_DEMO_MODE=true`,
-  no backend). To redeploy, build with `GITHUB_PAGES=true NEXT_BASE_PATH= NEXT_PUBLIC_DEMO_MODE=true pnpm --filter @kia-group/group build`,
+  no backend). To redeploy, build with `GITHUB_PAGES=true NEXT_BASE_PATH= NEXT_PUBLIC_DEMO_MODE=true pnpm --filter @kia./group build`,
   then push `apps/group/out` via the DashPloy API (`POST /api/v1/deploy`, see
   <https://dashploy.com/llms.txt>).
 - **GitHub Pages (mirror):** the `Deploy GitHub Pages` workflow builds the demo app on every push to `main` (`NEXT_PUBLIC_DEMO_MODE=true`, basePath `/KIA-GROUP/`, taken from the repository name via `PAGES_REPO_NAME`) and deploys it automatically — live at <https://kian-malekzadeh.github.io/KIA-GROUP/>. Local preview: `pnpm build:pages` → serve `apps/group/out`.

@@ -8,7 +8,7 @@ import { RequireAuth } from '@/components/auth/RequireAuth';
 import { api, ApiError } from '@/lib/api';
 import { useAuth } from '@/context/AuthProvider';
 import { useLanguage } from '@/context/LanguageProvider';
-import type { PaymentResponse } from '@kia-group/shared';
+import type { PaymentResponse } from '@kia./shared';
 
 function GatewayContent() {
   const router = useRouter();

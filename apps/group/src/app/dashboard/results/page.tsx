@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReadinessTestSummary } from '@kia-group/shared';
+import type { ReadinessTestSummary } from '@kia./shared';
 import { ArrowRight, ClipboardCheck, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';

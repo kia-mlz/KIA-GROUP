@@ -4,7 +4,7 @@ import {
   createDefaultSiteSettings,
   mergeSiteSettings,
   type SiteSettings,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 

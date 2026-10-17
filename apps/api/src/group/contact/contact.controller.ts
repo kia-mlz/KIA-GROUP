@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
-import type { ContactFormResponse } from '@kia-group/shared';
+import type { ContactFormResponse } from '@kia./shared';
 import { ContactService } from './contact.service';
 import { ContactFormDto } from './dto/contact-form.dto';
 

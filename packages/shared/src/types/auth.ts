@@ -1,11 +1,11 @@
 import type { SiteAdminAccessSettings } from './site-settings';
-import type { UserRole } from '@kia-group/permissions';
+import type { UserRole } from '@kia./permissions';
 
-// The role model lives in `@kia-group/permissions` (one home for the
+// The role model lives in `@kia./permissions` (one home for the
 // permission model); re-exported here so every existing consumer keeps
 // working unchanged.
-export { SYSTEM_ROLES, isStaffRole, isSuperAdmin } from '@kia-group/permissions';
-export type { SystemRole, UserRole } from '@kia-group/permissions';
+export { SYSTEM_ROLES, isStaffRole, isSuperAdmin } from '@kia./permissions';
+export type { SystemRole, UserRole } from '@kia./permissions';
 
 export interface AuthUser {
   id: string;

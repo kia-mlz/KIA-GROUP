@@ -7,7 +7,7 @@ import {
   normalizePaymentCurrency,
   type AdminPayment,
   type PaymentStatus,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { useAdminAccess } from '@/components/admin/useAdminAccess';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api, ApiError } from '@/lib/api';

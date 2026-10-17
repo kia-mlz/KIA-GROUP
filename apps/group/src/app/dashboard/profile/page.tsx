@@ -1,6 +1,6 @@
 'use client';
 
-import type { ProfileDetails } from '@kia-group/shared';
+import type { ProfileDetails } from '@kia./shared';
 import { Loader2, LockKeyhole, UserRound } from 'lucide-react';
 import { FormEvent, useEffect, useState } from 'react';
 import { ProvinceCityFields } from '@/components/auth/ProvinceCityFields';

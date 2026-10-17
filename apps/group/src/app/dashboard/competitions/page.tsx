@@ -1,6 +1,6 @@
 'use client';
 
-import type { CompetitionSummary } from '@kia-group/shared';
+import type { CompetitionSummary } from '@kia./shared';
 import { Flag, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';

@@ -7,7 +7,7 @@ import type {
   AdminCompetition,
   AdminCourse,
   AdminStats,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { AdminErrorState, AdminLoading } from '@/components/admin/AdminStates';
 import { useAdminAccess } from '@/components/admin/useAdminAccess';
 import { BrandMark } from '@/components/brand/BrandMark';

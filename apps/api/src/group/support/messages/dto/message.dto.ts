@@ -1,5 +1,5 @@
 import { IsString, Length, Validate, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
-import { containsProgrammingCode } from '@kia-group/shared';
+import { containsProgrammingCode } from '@kia./shared';
 
 @ValidatorConstraint({ name: 'NoProgrammingCodeMessage', async: false })
 class NoProgrammingCodeMessageConstraint implements ValidatorConstraintInterface {

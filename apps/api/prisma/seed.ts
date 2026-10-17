@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '@kia-group/platform';
+import { PrismaClient } from '@kia./platform';
 import * as bcrypt from 'bcrypt';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -15,7 +15,7 @@ import {
   defaultExamBanks,
   genericExamQuestions,
   type CourseDbFile,
-} from '@kia-group/shared';
+} from '@kia./shared';
 
 const prisma = new PrismaClient({
   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL ?? '' }),
@@ -45,13 +45,13 @@ async function main() {
   const admin = await prisma.user.upsert({
     where: { email: 'admin@kia.academy' },
     update: {
-      name: 'Kia Group Super Admin',
+      name: 'kia. Super Admin',
       passwordHash,
       role: 'SUPER_ADMIN',
       profileComplete: true,
     },
     create: {
-      name: 'Kia Group Super Admin',
+      name: 'kia. Super Admin',
       email: 'admin@kia.academy',
       passwordHash,
       role: 'SUPER_ADMIN',

@@ -7,7 +7,7 @@ import {
   type ExamSubmitResult,
   type LearnerTestReport,
   type LearnerTestReportReadiness,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { RequireAuth } from '@/components/auth/RequireAuth';
 import { FullTestReport } from '@/components/test/FullTestReport';
 import { useApp } from '@/context/AppProvider';

@@ -1,6 +1,6 @@
 'use client';
 
-import type { SupportTicketSummary } from '@kia-group/shared';
+import type { SupportTicketSummary } from '@kia./shared';
 import { Headphones } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

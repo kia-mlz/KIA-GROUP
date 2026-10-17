@@ -7,10 +7,10 @@ import { useLanguage } from '@/context/LanguageProvider';
 import { BrandMark } from '@/components/brand/BrandMark';
 
 /**
- * The Kia Group departments as a solar system — the hub UI for `/home` and the
+ * The kia. departments as a solar system — the hub UI for `/home` and the
  * top of the dashboard (it replaces the old door grid, UX-29/30).
  *
- * KIA GROUP is the sun (the brand mark on gold); each department is a planet
+ * kia. is the sun (the brand mark on gold); each department is a planet
  * on its own orbit ring, swept by a comet pulse. The planets keep the exact
  * routes and translation keys the door grid used (via the `DEPARTMENTS`
  * registry), so navigation, i18n and the rail all behave exactly as before —
@@ -21,7 +21,7 @@ import { BrandMark } from '@/components/brand/BrandMark';
  * last (orbit 6), so planet sizes ascend with the orbit index alongside the
  * ring diameters.
  *
- * Colour discipline (unchanged): the sun is Kia Group itself — gold rim, gold
+ * Colour discipline (unchanged): the sun is kia. itself — gold rim, gold
  * mark, `var(--group-gold)` only on the sun. Every planet, ring and pulse
  * derives from its own `var(--dept-<slug>)` token through the `dept--<slug>`
  * class, so the brand package stays the single source of truth and a recolour
@@ -158,7 +158,7 @@ export function DepartmentSolarSystem({
       <p className="solar__sub">{t('dashboard.doors.orbitsSub')}</p>
 
       <div className="solar__stage">
-        {/* The sun — Kia Group itself, rendered as the brand mark on gold. */}
+        {/* The sun — kia. itself, rendered as the brand mark on gold. */}
         <div className="solar__sun" aria-hidden="true">
           <BrandMark className="solar__sun-mark" />
         </div>

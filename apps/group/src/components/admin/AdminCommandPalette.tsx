@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { Search, User } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { AdminUser } from '@kia-group/shared';
+import type { AdminUser } from '@kia./shared';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api } from '@/lib/api';
 

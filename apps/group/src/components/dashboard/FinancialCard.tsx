@@ -1,6 +1,6 @@
 'use client';
 
-import type { WalletSummary } from '@kia-group/shared';
+import type { WalletSummary } from '@kia./shared';
 import { CreditCard, TrendingDown, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
@@ -60,7 +60,7 @@ export function FinancialCard() {
           <div className="dash-bank-card">
             <div className="dash-bank-card__glow" aria-hidden="true" />
             <div className="dash-bank-card__top">
-              <span>Kia Group</span>
+              <span>kia.</span>
               <span>{t('dashboard.financial.cardLabel')}</span>
             </div>
             <div className="dash-bank-card__balance mono ltr-isolate">

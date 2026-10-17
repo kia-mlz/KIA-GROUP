@@ -1,4 +1,4 @@
-import type { AdminAccessSection } from '@kia-group/shared';
+import type { AdminAccessSection } from '@kia./shared';
 import type { DepartmentSlug } from '@/components/brand/departments';
 
 /**

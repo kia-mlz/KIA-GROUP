@@ -6,7 +6,7 @@ import { SearchController } from './search.controller';
 import { SearchService } from './search.service';
 
 /**
- * KIA GROUP global search module (platform layer). Department modules stay
+ * kia. global search module (platform layer). Department modules stay
  * out of this file: providers live in the platform because they only read
  * through Prisma — the dependency direction remains departments → platform.
  */

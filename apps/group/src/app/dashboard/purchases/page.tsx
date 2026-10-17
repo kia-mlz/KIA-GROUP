@@ -1,6 +1,6 @@
 'use client';
 
-import type { CourseSummary } from '@kia-group/shared';
+import type { CourseSummary } from '@kia./shared';
 import { ShoppingBag, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';

@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { Strategy } from 'passport-jwt';
-import type { AuthUser } from '@kia-group/shared';
+import type { AuthUser } from '@kia./shared';
 import { AuthService } from './auth.service';
 
 interface RefreshJwtPayload {

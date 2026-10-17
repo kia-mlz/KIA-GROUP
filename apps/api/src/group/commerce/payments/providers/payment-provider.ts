@@ -1,4 +1,4 @@
-import type { PaymentProviderId, SitePaymentSettings } from '@kia-group/shared';
+import type { PaymentProviderId, SitePaymentSettings } from '@kia./shared';
 
 export interface PaymentCreateInput {
   paymentId: string;

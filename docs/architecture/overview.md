@@ -1,12 +1,12 @@
-# KIA GROUP — Architecture Overview
+# kia. — Architecture Overview
 
-KIA GROUP is a **modular monolith in a pnpm monorepo**: one deployable web app,
+kia. is a **modular monolith in a pnpm monorepo**: one deployable web app,
 one API, one database — but internally organised as the parent platform plus six
 independent department domains. Departments share the platform instead of each
 other (spec §5, §34, §35).
 
 ```text
-                         KIA GROUP (platform)
+                         kia. (platform)
                              │
        ┌─────────┬───────────┼───────────┬─────────┐
     Academy     Work      Material     Labs      Events
@@ -22,9 +22,9 @@ apps/
   group/     Next.js 16 web app — the whole ecosystem, shell + all departments
   api/       NestJS 11 API — modular monolith with domain folders
 packages/
-  brand/         @kia-group/brand — the seven brand tokens (single source of truth)
-  permissions/   @kia-group/permissions — roles, admin access matrix, department taxonomy
-  shared/        @kia-group/shared — API contracts, banks, grading, validators
+  brand/         @kia./brand — the seven brand tokens (single source of truth)
+  permissions/   @kia./permissions — roles, admin access matrix, department taxonomy
+  shared/        @kia./shared — API contracts, banks, grading, validators
 docs/            architecture · security · database · development
 scripts/         tooling (codemods, catalog generation)
 ```
@@ -33,7 +33,7 @@ scripts/         tooling (codemods, catalog generation)
 
 | Folder | Domain | Contents |
 | --- | --- | --- |
-| `group/` | **KIA GROUP platform** | `auth` (OTP + email + 2FA), `admin`, `site-settings`, `media`, `email`, `sms`, `contact`, `health`, `support/` (tickets · messages · todos), `commerce/` (cart · payments · stripe), `search` |
+| `group/` | **kia. platform** | `auth` (OTP + email + 2FA), `admin`, `site-settings`, `media`, `email`, `sms`, `contact`, `health`, `support/` (tickets · messages · todos), `commerce/` (cart · payments · stripe), `search` |
 | `academy/` | **KIA Academy** | `courses`, `course-exams`, `assessments`, `personality`, `readiness`, `roadmaps`, `test-banks`, `bootcamp`, `progress` |
 | `events/` | **KIA Events** | `competitions`, `challenges` |
 | `common/` | cross-domain platform infra | guards, rate limiting, **domain events**, utils |

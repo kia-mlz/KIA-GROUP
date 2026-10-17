@@ -468,7 +468,7 @@
   width: auto;
   aspect-ratio: 497.37 / 512;
   flex: 0 0 auto;
-  /* Kia Group's own emblem: the reserved parent gold. */
+  /* kia.'s own emblem: the reserved parent gold. */
   color: var(--group-gold);
   overflow: visible;
 }
@@ -500,7 +500,7 @@
 }
 
 /* --- per-department rail (UX-27) ------------------------------------------ */
-/* Inside a department the rail keeps Kia Group's own emblem and repaints it in
+/* Inside a department the rail keeps kia.'s own emblem and repaints it in
    that department's colour — the same mark the department page header shows, so
    the rail and the page are the same logo. Qualified by `.logo--dept` because
    `.logo-mark` above it claims the reserved gold at equal specificity. */
@@ -509,7 +509,7 @@
 }
 
 /* The parent's name, kept under the department's — in the reserved parent gold,
-   so a department rail still reads as part of Kia Group. */
+   so a department rail still reads as part of kia.. */
 .logo--dept .brand-tagline {
   color: var(--group-gold);
 }

@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type { ReadinessResult } from '@kia-group/shared';
-import { escapeHtml } from '@kia-group/shared';
+import type { ReadinessResult } from '@kia./shared';
+import { escapeHtml } from '@kia./shared';
 import * as nodemailer from 'nodemailer';
 import type { Transporter } from 'nodemailer';
 import { PrismaService } from '../../prisma/prisma.service';
@@ -48,12 +48,12 @@ export class EmailService {
   }
 
   async sendWelcome(user: EmailUser): Promise<void> {
-    const subject = 'Welcome to Kia Group';
+    const subject = 'Welcome to kia.';
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; color: #1a1a1a;">
-        <h1 style="color: #2563eb;">Welcome to Kia Group, ${escapeHtml(user.name)}!</h1>
+        <h1 style="color: #2563eb;">Welcome to kia., ${escapeHtml(user.name)}!</h1>
         <p>Your account is ready. Explore courses, take the readiness assessment, and start building your career path.</p>
-        <p style="margin-top: 24px;">— The Kia Group Team</p>
+        <p style="margin-top: 24px;">— The kia. Team</p>
       </div>
     `;
 
@@ -65,7 +65,7 @@ export class EmailService {
     const amount = isIRR
       ? payment.amountCents.toLocaleString('en-US')
       : (payment.amountCents / 100).toFixed(2);
-    const subject = 'Your Kia Group payment receipt';
+    const subject = 'Your kia. payment receipt';
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; color: #1a1a1a;">
         <h1 style="color: #2563eb;">Payment confirmed</h1>
@@ -76,7 +76,7 @@ export class EmailService {
           <tr><td style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Amount</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">${amount.toUpperCase()} ${payment.currency.toUpperCase()}</td></tr>
           <tr><td style="padding: 8px 0;"><strong>Payment ID</strong></td><td style="padding: 8px 0;">${escapeHtml(payment.id)}</td></tr>
         </table>
-        <p style="margin-top: 24px;">— The Kia Group Team</p>
+        <p style="margin-top: 24px;">— The kia. Team</p>
       </div>
     `;
 
@@ -149,7 +149,7 @@ export class EmailService {
     resetUrl: string,
     expiresMinutes: number,
   ): Promise<'sent' | 'skipped' | 'failed'> {
-    const subject = 'بازیابی رمز عبور کیا گروه | Kia Group password reset';
+    const subject = 'بازیابی رمز عبور کیا. | kia. password reset';
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; color: #1a1a1a;" dir="rtl">
         <h1 style="color: #2563eb;">بازیابی رمز عبور</h1>
@@ -169,7 +169,7 @@ export class EmailService {
   }
 
   async sendReadinessResults(user: EmailUser, result: ReadinessResult): Promise<void> {
-    const subject = 'Your Kia Group readiness results';
+    const subject = 'Your kia. readiness results';
     const verdictTitle = escapeHtml(result.verdict.title);
     const verdictMessage = escapeHtml(result.verdict.message);
     const html = `
@@ -181,7 +181,7 @@ export class EmailService {
           <h2 style="margin: 0 0 8px; font-size: 18px;">${verdictTitle}</h2>
           <p style="margin: 0;">${verdictMessage}</p>
         </div>
-        <p style="margin-top: 24px;">— The Kia Group Team</p>
+        <p style="margin-top: 24px;">— The kia. Team</p>
       </div>
     `;
 

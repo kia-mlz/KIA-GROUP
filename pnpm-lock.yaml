@@ -47,16 +47,16 @@ importers:
 
   apps/api:
     dependencies:
-      '@kia-group/kia-academy':
+      '@kia./kia-academy':
         specifier: workspace:*
-        version: link:../../kia-group/kia-academy
-      '@kia-group/kia-event':
+        version: link:../../kia./kia-academy
+      '@kia./kia-event':
         specifier: workspace:*
-        version: link:../../kia-group/kia-event
-      '@kia-group/platform':
+        version: link:../../kia./kia-event
+      '@kia./platform':
         specifier: workspace:*
         version: link:../../packages/platform
-      '@kia-group/shared':
+      '@kia./shared':
         specifier: workspace:*
         version: link:../../packages/shared
       '@nest-lab/throttler-storage-redis':
@@ -198,16 +198,16 @@ importers:
 
   apps/group:
     dependencies:
-      '@kia-group/brand':
+      '@kia./brand':
         specifier: workspace:*
         version: link:../../packages/brand
-      '@kia-group/kia-material':
+      '@kia./kia-material':
         specifier: workspace:*
-        version: link:../../kia-group/kia-material
-      '@kia-group/permissions':
+        version: link:../../kia./kia-material
+      '@kia./permissions':
         specifier: workspace:*
         version: link:../../packages/permissions
-      '@kia-group/shared':
+      '@kia./shared':
         specifier: workspace:*
         version: link:../../packages/shared
       lucide-react:
@@ -242,12 +242,12 @@ importers:
         specifier: ^4.1.10
         version: 4.1.11(@types/node@26.6.3)(vite@8.2.2(@types/node@26.6.3)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.50.0)(tsx@4.23.13)(yaml@2.9.1))
 
-  kia-group/kia-academy:
+  kia./kia-academy:
     dependencies:
-      '@kia-group/platform':
+      '@kia./platform':
         specifier: workspace:*
         version: link:../../packages/platform
-      '@kia-group/shared':
+      '@kia./shared':
         specifier: workspace:*
         version: link:../../packages/shared
       '@nestjs/common':
@@ -276,14 +276,14 @@ importers:
         specifier: ^5.8.3
         version: 5.9.3
 
-  kia-group/kia-community: {}
+  kia./kia-community: {}
 
-  kia-group/kia-event:
+  kia./kia-event:
     dependencies:
-      '@kia-group/platform':
+      '@kia./platform':
         specifier: workspace:*
         version: link:../../packages/platform
-      '@kia-group/shared':
+      '@kia./shared':
         specifier: workspace:*
         version: link:../../packages/shared
       '@nestjs/common':
@@ -309,11 +309,11 @@ importers:
         specifier: ^5.8.3
         version: 5.9.3
 
-  kia-group/kia-lab: {}
+  kia./kia-lab: {}
 
-  kia-group/kia-material:
+  kia./kia-material:
     dependencies:
-      '@kia-group/shared':
+      '@kia./shared':
         specifier: workspace:*
         version: link:../../packages/shared
     devDependencies:
@@ -324,7 +324,7 @@ importers:
         specifier: ^5.8.3
         version: 5.9.3
 
-  kia-group/kia-work: {}
+  kia./kia-work: {}
 
   packages/brand:
     devDependencies:
@@ -346,7 +346,7 @@ importers:
 
   packages/platform:
     dependencies:
-      '@kia-group/shared':
+      '@kia./shared':
         specifier: workspace:*
         version: link:../shared
       '@nest-lab/throttler-storage-redis':
@@ -422,7 +422,7 @@ importers:
 
   packages/shared:
     dependencies:
-      '@kia-group/permissions':
+      '@kia./permissions':
         specifier: workspace:*
         version: link:../permissions
     devDependencies:

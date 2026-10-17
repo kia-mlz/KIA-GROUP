@@ -5,7 +5,7 @@ import {
   isAllowedTicketAttachment,
   MAX_TICKET_ATTACHMENT_BYTES,
   MAX_TICKET_ATTACHMENTS,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { Paperclip, X } from 'lucide-react';
 import { useRef } from 'react';
 

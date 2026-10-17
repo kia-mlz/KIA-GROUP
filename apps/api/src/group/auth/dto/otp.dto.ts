@@ -11,7 +11,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { isValidIranCity, isValidIranProvince } from '@kia-group/shared';
+import { isValidIranCity, isValidIranProvince } from '@kia./shared';
 
 @ValidatorConstraint({ name: 'IranProvinceCityProfile', async: false })
 class IranProvinceCityProfileConstraint implements ValidatorConstraintInterface {

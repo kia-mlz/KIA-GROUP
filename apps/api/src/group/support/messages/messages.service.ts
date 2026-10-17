@@ -2,9 +2,9 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import type {
   CreateLearnerMessageDto,
   LearnerMessageDto,
-} from '@kia-group/shared';
-import { containsProgrammingCode } from '@kia-group/shared';
-import { PrismaService } from '@kia-group/platform';
+} from '@kia./shared';
+import { containsProgrammingCode } from '@kia./shared';
+import { PrismaService } from '@kia./platform';
 
 @Injectable()
 export class MessagesService {

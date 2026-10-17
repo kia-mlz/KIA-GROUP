@@ -1,6 +1,6 @@
 'use client';
 
-import type { ProfileDetails } from '@kia-group/shared';
+import type { ProfileDetails } from '@kia./shared';
 import { Camera, CheckCircle2, Save, User } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ProvinceCityFields } from '@/components/auth/ProvinceCityFields';

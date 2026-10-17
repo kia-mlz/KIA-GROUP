@@ -1,6 +1,6 @@
 'use client';
 
-import type { LearnerMessageDto } from '@kia-group/shared';
+import type { LearnerMessageDto } from '@kia./shared';
 import { MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';

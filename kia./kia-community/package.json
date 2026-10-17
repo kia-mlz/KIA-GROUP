@@ -1,0 +1,6 @@
+{
+  "name": "@kia./kia-community",
+  "version": "1.0.0",
+  "private": true,
+  "description": "kia. department package — جامعه (Members · Discussions · Groups · Mentorship · Networking) (folder scaffold; code lands here as the department grows)"
+}

@@ -278,9 +278,9 @@ def build():
         ["Package", "Path", "Role"],
         [
             ["kia-academy (root)", "/", "Scripts, shared lint/format deps, engines"],
-            ["@kia-group/group", "apps/group", "Next.js frontend (port 3000)"],
-            ["@kia-group/api", "apps/api", "NestJS API (port 3001, prefix /api)"],
-            ["@kia-group/shared", "packages/shared", "Shared domain types & algorithms"],
+            ["@kia./group", "apps/group", "Next.js frontend (port 3000)"],
+            ["@kia./api", "apps/api", "NestJS API (port 3001, prefix /api)"],
+            ["@kia./shared", "packages/shared", "Shared domain types & algorithms"],
         ],
     )
     add_heading(doc, "3.3 Key directories", 2)
@@ -289,7 +289,7 @@ def build():
         [
             "apps/group/src/app — Next.js routes (pages)",
             "apps/group/src/components — shared UI (layout, exam, wizard, admin pieces)",
-            "kia-group/kia-material/resources — Material Studio (data/utils/panels/controller)",
+            "kia./kia-material/resources — Material Studio (data/utils/panels/controller)",
             "apps/group/src/styles — base.css tokens, admin.css, feature CSS",
             "apps/group/src/i18n — fa (default RTL), en, de, es message catalogs",
             "apps/api/src — Nest modules (auth, assessments, readiness, payments, admin, …)",
@@ -302,8 +302,8 @@ def build():
     add_heading(doc, "3.4 Build order", 2)
     add_p(
         doc,
-        "Always build @kia-group/shared before api seed/build or you hit MODULE_NOT_FOUND for "
-        "@kia-group/shared/dist. Root `pnpm build` runs shared → api → web.",
+        "Always build @kia./shared before api seed/build or you hit MODULE_NOT_FOUND for "
+        "@kia./shared/dist. Root `pnpm build` runs shared → api → web.",
     )
 
     # ── 4. Languages ───────────────────────────────────────────────────────
@@ -345,7 +345,7 @@ def build():
             "No Turbo/Nx — root scripts orchestrate builds",
         ],
     )
-    add_heading(doc, "5.2 Frontend libraries (@kia-group/group)", 2)
+    add_heading(doc, "5.2 Frontend libraries (@kia./group)", 2)
     add_table(
         doc,
         ["Library", "Purpose"],
@@ -353,13 +353,13 @@ def build():
             ["next", "App Router, routing, rewrite proxy, static export / standalone"],
             ["react / react-dom", "UI runtime"],
             ["lucide-react", "Icon set across learner + admin UI"],
-            ["@kia-group/shared", "Domain types, exam grading helpers, tracks, prices"],
+            ["@kia./shared", "Domain types, exam grading helpers, tracks, prices"],
             ["@playwright/test (dev)", "End-to-end browser tests"],
             ["vitest (dev)", "Unit tests for web"],
             ["typescript (dev)", "Typechecking"],
         ],
     )
-    add_heading(doc, "5.3 Backend libraries (@kia-group/api)", 2)
+    add_heading(doc, "5.3 Backend libraries (@kia./api)", 2)
     add_table(
         doc,
         ["Library", "Purpose"],
@@ -385,7 +385,7 @@ def build():
     add_heading(doc, "5.4 Shared package", 2)
     add_p(
         doc,
-        "@kia-group/shared is pure TypeScript (no runtime deps). It owns exam question bank, grading, "
+        "@kia./shared is pure TypeScript (no runtime deps). It owns exam question bank, grading, "
         "outcome mutation, track catalog, PRODUCT_PRICES / MODULE_PRICES, auth helpers (phone normalize, "
         "unsafe text checks), entitlements key helpers, and site-settings types. Tested with Vitest.",
     )
@@ -415,7 +415,7 @@ def build():
         doc,
         "The repo does not ship .vscode/extensions.json, Cursor skills, or husky/pre-commit hooks. "
         "Recommended locally: Node 22+, pnpm via Corepack, PostgreSQL 16 client tools, "
-        "Playwright Chromium for e2e (`pnpm --filter @kia-group/group exec playwright install chromium`).",
+        "Playwright Chromium for e2e (`pnpm --filter @kia./group exec playwright install chromium`).",
     )
 
     # ── 6. Roles ───────────────────────────────────────────────────────────
@@ -574,7 +574,7 @@ def build():
         [
             "Font catalog search + size slider; font cards (select/copy)",
             "Contrast text/bg pickers; Suggest Text Color (readable auto-pick)",
-            "State persistence via kia-group/kia-material/resources/lib/storage.ts (localStorage)",
+            "State persistence via kia./kia-material/resources/lib/storage.ts (localStorage)",
         ],
     )
 
@@ -1165,7 +1165,7 @@ def build():
         doc,
         [
             "Currency: amounts stored as IRR integers; Persian UI shows تومان (typically ÷10)",
-            "Catalog: PRODUCT_PRICES and MODULE_PRICES in @kia-group/shared",
+            "Catalog: PRODUCT_PRICES and MODULE_PRICES in @kia./shared",
             "Providers: dev | zarinpal | idpay | stripe (SitePaymentSettings)",
             "Checkout is a review step; confirm redirects to configured provider UX",
             "Stripe webhook supported when provider=stripe",
@@ -1204,7 +1204,7 @@ def build():
         doc,
         [
             "pnpm install",
-            "pnpm --filter @kia-group/shared build",
+            "pnpm --filter @kia./shared build",
             "pnpm db:migrate:deploy",
             "pnpm db:seed",
             "pnpm dev  — web :3000 + api :3001",
@@ -1253,7 +1253,7 @@ def build():
         ["Term", "Meaning"],
         [
             ["Kia Academy / کیا آکادمی", "Product name for the Persian-first rebuild"],
-            ["@kia-group/*", "Monorepo package scope"],
+            ["@kia./*", "Monorepo package scope"],
             ["Material Studio", "Public design toolkit at /material"],
             ["Education path", "OTP → profile → assessment → exam → roadmap → pay → learn"],
             ["Readiness / preparations test", "Free timed exam after assessment"],
@@ -1274,7 +1274,7 @@ def build():
             "Prisma schema: apps/api/prisma/schema.prisma",
             "Shared domain: packages/shared/src/",
             "Web routes: apps/group/src/app/",
-            "Material feature: kia-group/kia-material/resources/",
+            "Material feature: kia./kia-material/resources/",
             "Design tokens: apps/group/src/styles/base.css",
             "Cloud agent notes: AGENTS.md",
             "README: setup, Pages, business model overview",

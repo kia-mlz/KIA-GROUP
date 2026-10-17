@@ -1,6 +1,6 @@
 'use client';
 
-import type { SiteAdminAccessSettings } from '@kia-group/shared';
+import type { SiteAdminAccessSettings } from '@kia./shared';
 import { useLanguage } from '@/context/LanguageProvider';
 
 export function AdminAccessMatrix({

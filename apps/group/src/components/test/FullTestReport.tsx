@@ -7,7 +7,7 @@ import {
   type LearnerTestReport,
   type LearnerTestReportReadiness,
   type PersonalityResult,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { RadarChart } from '@/components/readiness/RadarChart';
 import { SKILL_TOPIC_KEYS } from '@/components/wizard/wizardOptions';
 import { useLanguage } from '@/context/LanguageProvider';

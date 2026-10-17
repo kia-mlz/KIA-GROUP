@@ -1,10 +1,10 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '@kia-group/platform';
-import { CurrentUser } from '@kia-group/platform';
+import { JwtAuthGuard } from '@kia./platform';
+import { CurrentUser } from '@kia./platform';
 import { SearchService } from './search.service';
 
 /**
- * KIA GROUP global search endpoint (spec §37).
+ * kia. global search endpoint (spec §37).
  *
  * Authenticated so private drafts and user-scoped data can never leak through
  * search, and so per-user abuse is throttleable. Hits are always tagged with

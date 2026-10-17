@@ -1,0 +1,19 @@
+{
+  "name": "@kia./kia-material",
+  "version": "1.0.0",
+  "private": true,
+  "description": "KIA Material — Material Studio department package (source-shipped: apps/group transpiles it via transpilePackages).",
+  "main": "./resources/index.ts",
+  "types": "./resources/index.ts",
+  "scripts": {
+    "lint": "eslint . --config ../../eslint.config.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@kia./shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.4",
+    "typescript": "^5.8.3"
+  }
+}

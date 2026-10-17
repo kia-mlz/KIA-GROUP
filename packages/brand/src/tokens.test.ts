@@ -15,7 +15,7 @@ import { DARK_INK, contrastRatio, luminance, readableInk } from './contrast';
  * departments, and measured ink choice — the same invariants the group app's
  * stylesheet suite checks on the CSS side.
  */
-describe('KIA GROUP brand tokens', () => {
+describe('kia. brand tokens', () => {
   it('pins the seven published brand colours verbatim', () => {
     expect(GROUP_COLOR).toBe('#FFC864');
     expect(Object.fromEntries(BRAND_TOKENS.map((t) => [t.slug, t.color]))).toEqual({
@@ -28,7 +28,7 @@ describe('KIA GROUP brand tokens', () => {
     });
   });
 
-  it('reserves the parent gold for Kia Group alone', () => {
+  it('reserves the parent gold for kia. alone', () => {
     for (const token of BRAND_TOKENS) {
       expect(token.color.toLowerCase(), token.slug).not.toBe(GROUP_COLOR.toLowerCase());
     }

@@ -1,7 +1,7 @@
 /**
- * Admin-panel access model (KIA GROUP platform layer).
+ * Admin-panel access model (kia. platform layer).
  *
- * Moved verbatim from `@kia-group/shared` (types/site-settings.ts) so the
+ * Moved verbatim from `@kia./shared` (types/site-settings.ts) so the
  * authorization model has one home. `shared` re-exports for backwards
  * compatibility.
  *

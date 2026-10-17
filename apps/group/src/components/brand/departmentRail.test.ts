@@ -9,7 +9,7 @@ import { DEPARTMENTS, departmentForPathname } from '@/components/brand/departmen
  * The rail, personalised per department (UX-27).
  *
  * Opening KIA Lab puts that department's mark, colour and name in the rail
- * instead of the parent group's, with «KIA GROUP» left underneath. Three things
+ * instead of the parent group's, with «kia.» left underneath. Three things
  * could quietly break that, so they are pinned here:
  *
  * 1. The registry is the only place a department is written down. It is checked
@@ -26,7 +26,7 @@ const WEB_SRC = path.join(HERE, '..', '..');
 const read = (...parts: string[]) =>
   readFileSync(path.join(WEB_SRC, ...parts), 'utf8');
 
-/** The seven brand tokens now live in @kia-group/brand (imported before base.css). */
+/** The seven brand tokens now live in @kia./brand (imported before base.css). */
 const brandsCss = readFileSync(
   path.join(WEB_SRC, '..', '..', '..', 'packages', 'brand', 'css', 'brands.css'),
   'utf8',
@@ -127,7 +127,7 @@ describe('department rail in TopBar', () => {
   });
 
   it('swaps the name and the supporting line, and recolours the emblem', () => {
-    // One emblem element either way: the rail keeps Kia Group's own mark and
+    // One emblem element either way: the rail keeps kia.'s own mark and
     // only the colour changes, so the shape never shifts between departments.
     expect(topBar.match(/<BrandMark /g)).toHaveLength(1);
     expect(topBar).toContain('<BrandMark className="logo-mark" size={26} title="" />');

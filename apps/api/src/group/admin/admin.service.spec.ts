@@ -1,5 +1,5 @@
 import { BadRequestException, ConflictException, ForbiddenException, NotFoundException } from '@nestjs/common';
-import type { AuthUser } from '@kia-group/shared';
+import type { AuthUser } from '@kia./shared';
 import { AdminService } from './admin.service';
 
 const actor: AuthUser = {

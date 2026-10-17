@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CartModule } from '../cart/cart.module';
-import { EmailModule } from '@kia-group/platform';
-import { SiteSettingsModule } from '@kia-group/platform';
+import { EmailModule } from '@kia./platform';
+import { SiteSettingsModule } from '@kia./platform';
 import { StripeModule } from '../stripe/stripe.module';
 import { PaymentProviderRegistry } from './providers/payment-provider.registry';
 import { StripePaymentProvider } from './providers/stripe.provider';

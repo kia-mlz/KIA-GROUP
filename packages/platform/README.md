@@ -1,4 +1,4 @@
-# @kia-group/platform — هستهٔ مشترک کیا گروه
+# @kia./platform — هستهٔ مشترک کیا.
 
 **Platform kernel** — لایهٔ زیرساختی که همهٔ دپارتمان‌ها (و پوستهٔ `apps/api`) به آن وابسته‌اند.
 
@@ -23,8 +23,8 @@
 ## دستورات
 
 ```bash
-pnpm --filter @kia-group/platform build      # tsc → dist/
-pnpm --filter @kia-group/platform typecheck
-pnpm --filter @kia-group/platform test       # jest (۳ spec)
-pnpm --filter @kia-group/platform lint
+pnpm --filter @kia./platform build      # tsc → dist/
+pnpm --filter @kia./platform typecheck
+pnpm --filter @kia./platform test       # jest (۳ spec)
+pnpm --filter @kia./platform lint
 ```

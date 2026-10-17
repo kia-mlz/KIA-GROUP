@@ -1,8 +1,8 @@
 {
-  "name": "@kia-group/brand",
+  "name": "@kia./brand",
   "version": "1.0.0",
   "private": true,
-  "description": "KIA GROUP design tokens — one colour per brand, shared by every department",
+  "description": "kia. design tokens — one colour per brand, shared by every department",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {

@@ -1,9 +1,9 @@
 import { BadRequestException, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { createDefaultSiteSettings, type SiteSettings } from '@kia-group/shared';
+import { createDefaultSiteSettings, type SiteSettings } from '@kia./shared';
 import { SmsService } from './sms.service';
 import type { SmsProviderRegistry } from './providers/sms-provider.registry';
-import type { SiteSettingsService } from '@kia-group/platform';
+import type { SiteSettingsService } from '@kia./platform';
 
 describe('SmsService', () => {
   let settings: SiteSettings;

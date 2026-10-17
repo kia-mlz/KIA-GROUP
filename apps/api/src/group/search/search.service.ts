@@ -8,7 +8,7 @@ import type { SearchHit, SearchableProvider } from './search.types';
 export const MAX_HITS_PER_PROVIDER = 10;
 
 /**
- * KIA GROUP global search (spec §37).
+ * kia. global search (spec §37).
  *
  * Departments register `SearchableProvider`s; the platform fans a query out to
  * every provider in parallel and tags each hit with its source department.

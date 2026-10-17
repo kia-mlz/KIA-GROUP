@@ -19,12 +19,12 @@ import type {
   InvoiceResponse,
   OrderResponse,
   PaymentResponse,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { IsOptional, IsString } from 'class-validator';
 import { Throttle } from '@nestjs/throttler';
-import { CurrentUser } from '@kia-group/platform';
-import { JwtAuthGuard } from '@kia-group/platform';
-import { OptionalJwtAuthGuard } from '@kia-group/platform';
+import { CurrentUser } from '@kia./platform';
+import { JwtAuthGuard } from '@kia./platform';
+import { OptionalJwtAuthGuard } from '@kia./platform';
 import { CheckoutBodyDto } from './dto/checkout.dto';
 import { PaymentsService } from './payments.service';
 
@@ -163,7 +163,7 @@ export class PaymentsController {
   getWallet(
     @CurrentUser() user: AuthUser,
     @Query('limit') limit?: string,
-  ): Promise<import('@kia-group/shared').WalletSummary> {
+  ): Promise<import('@kia./shared').WalletSummary> {
     const parsed = limit ? Number.parseInt(limit, 10) : 5;
     return this.paymentsService.getWalletSummary(
       user.id,
@@ -176,7 +176,7 @@ export class PaymentsController {
   getTransactions(
     @CurrentUser() user: AuthUser,
     @Query('limit') limit?: string,
-  ): Promise<import('@kia-group/shared').WalletTransactionDto[]> {
+  ): Promise<import('@kia./shared').WalletTransactionDto[]> {
     const parsed = limit ? Number.parseInt(limit, 10) : 5;
     return this.paymentsService.getWalletTransactions(
       user.id,

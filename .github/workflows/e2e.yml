@@ -81,7 +81,7 @@ jobs:
         run: pnpm db:seed
 
       - name: Install Playwright browsers
-        run: pnpm --filter @kia-group/group exec playwright install --with-deps chromium
+        run: pnpm --filter @kia./group exec playwright install --with-deps chromium
 
       - name: Build production apps
         run: pnpm build

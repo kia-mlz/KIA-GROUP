@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
-import type { AuthResponse, AuthUser } from '@kia-group/shared';
-import { CurrentUser } from '@kia-group/platform';
-import { JwtAuthGuard } from '@kia-group/platform';
+import type { AuthResponse, AuthUser } from '@kia./shared';
+import { CurrentUser } from '@kia./platform';
+import { JwtAuthGuard } from '@kia./platform';
 import { AuthService } from '../auth.service';
 import { TwoFactorService } from './two-factor.service';
 import { TwoFactorCodeDto, TwoFactorChallengeDto } from './dto/two-factor.dto';

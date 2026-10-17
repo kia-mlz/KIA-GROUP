@@ -9,9 +9,9 @@ import type { CourseDbEnLesson, CourseDbEnOverlay, CourseDbPlayground } from './
  */
 export const EN_COURSE_DESCRIPTIONS: Record<number, string> = {
   1: `HTML is the first step into the world of web design.
-By learning HTML at Kia Group, you can easily build your own website and enjoy the process of creating it.`,
+By learning HTML at kia., you can easily build your own website and enjoy the process of creating it.`,
   2: `CSS is the standard language for styling and beautifying web pages.
-By learning CSS at Kia Group, you will give your website a professional look and full control over colors, layout, and typography.`,
+By learning CSS at kia., you will give your website a professional look and full control over colors, layout, and typography.`,
   3: `JavaScript is the programming language of the web. Learning it lets you add behavior and interactivity to your pages and build complete web applications.`,
 };
 

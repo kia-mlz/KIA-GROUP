@@ -2,7 +2,7 @@
 
 import { ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
 import { Fragment, useCallback, useEffect, useState } from 'react';
-import type { AdminAuditLog } from '@kia-group/shared';
+import type { AdminAuditLog } from '@kia./shared';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api, ApiError } from '@/lib/api';
 

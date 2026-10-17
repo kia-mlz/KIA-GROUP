@@ -26,16 +26,16 @@
       "@/*": [
         "./src/*"
       ],
-      "@kia-group/shared": [
+      "@kia./shared": [
         "../../packages/shared/src/index.ts"
       ],
-      "@kia-group/brand": [
+      "@kia./brand": [
         "../../packages/brand/src/index.ts"
       ],
-      "@kia-group/brand/*": [
+      "@kia./brand/*": [
         "../../packages/brand/*"
       ],
-      "@kia-group/permissions": [
+      "@kia./permissions": [
         "../../packages/permissions/src/index.ts"
       ]
     }

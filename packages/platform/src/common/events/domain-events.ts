@@ -1,5 +1,5 @@
 /**
- * KIA GROUP domain events (in-process bus).
+ * kia. domain events (in-process bus).
  *
  * Departments communicate through events instead of importing each other's
  * services. The bus is intentionally simple: a typed publish/subscribe registry

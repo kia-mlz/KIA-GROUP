@@ -1,6 +1,6 @@
 'use client';
 
-import type { AdminTicketStatus, AdminTicketSummary } from '@kia-group/shared';
+import type { AdminTicketStatus, AdminTicketSummary } from '@kia./shared';
 import { Loader2, Ticket } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';

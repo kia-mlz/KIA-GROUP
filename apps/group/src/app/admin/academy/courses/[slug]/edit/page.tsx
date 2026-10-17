@@ -3,7 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { Loader2, Pencil, Plus, Save, Trash2, Upload } from 'lucide-react';
 import { type ChangeEvent, type FormEvent, useCallback, useEffect, useState } from 'react';
-import type { AdminCourse, AdminLesson } from '@kia-group/shared';
+import type { AdminCourse, AdminLesson } from '@kia./shared';
 import { AdminErrorState, AdminSkeleton } from '@/components/admin/AdminStates';
 import { api, ApiError } from '@/lib/api';
 import { useLanguage } from '@/context/LanguageProvider';

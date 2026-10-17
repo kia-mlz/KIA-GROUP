@@ -1,5 +1,5 @@
 {
-  "name": "@kia-group/group",
+  "name": "@kia./group",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -13,10 +13,10 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@kia-group/brand": "workspace:*",
-    "@kia-group/kia-material": "workspace:*",
-    "@kia-group/permissions": "workspace:*",
-    "@kia-group/shared": "workspace:*",
+    "@kia./brand": "workspace:*",
+    "@kia./kia-material": "workspace:*",
+    "@kia./permissions": "workspace:*",
+    "@kia./shared": "workspace:*",
     "lucide-react": "^1.38.0",
     "next": "^16.3.6",
     "react": "^19.3.0",

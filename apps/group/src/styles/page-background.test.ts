@@ -107,8 +107,8 @@ function lastCompound(selector: string): string {
 
 describe('page background', () => {
   // The Material Studio package ships site CSS too — it used to live under
-  // src/features/material and is now kia-group/kia-material/resources.
-  const MATERIAL = path.resolve(SRC, '../../../kia-group/kia-material/resources');
+  // src/features/material and is now kia./kia-material/resources.
+  const MATERIAL = path.resolve(SRC, '../../../kia./kia-material/resources');
   const sheets = [...walk(SRC, ['.css']), ...walk(MATERIAL, ['.css'])];
   const rules = sheets.flatMap((file) =>
     cssRules(readFileSync(file, 'utf8')).map((rule) => ({

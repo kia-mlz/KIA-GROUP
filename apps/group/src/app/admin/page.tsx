@@ -22,7 +22,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { AdminAuditLog, AdminPayment, AdminStats } from '@kia-group/shared';
+import type { AdminAuditLog, AdminPayment, AdminStats } from '@kia./shared';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api, ApiError } from '@/lib/api';
 import { AdminErrorState, AdminSkeleton } from '@/components/admin/AdminStates';

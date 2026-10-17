@@ -10,9 +10,9 @@ import type {
   SupportTicketSummary,
   TicketAttachmentDto,
   TicketReplyDto,
-} from '@kia-group/shared';
-import { containsProgrammingCode } from '@kia-group/shared';
-import { PrismaService } from '@kia-group/platform';
+} from '@kia./shared';
+import { containsProgrammingCode } from '@kia./shared';
+import { PrismaService } from '@kia./platform';
 import { TicketAttachmentStorageService } from './ticket-attachment-storage.service';
 
 @Injectable()

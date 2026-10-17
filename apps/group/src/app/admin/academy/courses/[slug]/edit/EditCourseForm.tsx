@@ -5,7 +5,7 @@ import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { Loader2, Trash2, Upload } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api, ApiError } from '@/lib/api';
-import type { AdminCourse, AdminLesson } from '@kia-group/shared';
+import type { AdminCourse, AdminLesson } from '@kia./shared';
 import { mediaUrl } from '@/lib/mediaUrl';
 import AdminCourseExams from './AdminCourseExams';
 

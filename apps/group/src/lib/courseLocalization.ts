@@ -1,4 +1,4 @@
-import type { CourseSummary, LessonSummary } from '@kia-group/shared';
+import type { CourseSummary, LessonSummary } from '@kia./shared';
 import type { Locale } from '@/i18n/locales';
 
 /**

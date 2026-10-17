@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import type { ContactFormDto, ContactFormResponse } from '@kia-group/shared';
-import { containsUnsafeText, isValidEmail, sanitizeProfileText } from '@kia-group/shared';
-import { EmailService } from '@kia-group/platform';
-import { PrismaService } from '@kia-group/platform';
-import { SiteSettingsService } from '@kia-group/platform';
+import type { ContactFormDto, ContactFormResponse } from '@kia./shared';
+import { containsUnsafeText, isValidEmail, sanitizeProfileText } from '@kia./shared';
+import { EmailService } from '@kia./platform';
+import { PrismaService } from '@kia./platform';
+import { SiteSettingsService } from '@kia./platform';
 
 /** Strip control chars but keep newlines/tabs; cap length. */
 function sanitizeMultiline(value: string, maxLength: number): string {

@@ -1,6 +1,6 @@
-# KIA GROUP — Threat Model
+# kia. — Threat Model
 
-Scope: the KIA GROUP modular monolith (web + API + PostgreSQL) as deployed for
+Scope: the kia. modular monolith (web + API + PostgreSQL) as deployed for
 self-hosting. Assets: user identity data, OTP/email secrets, payment records,
 exam content, admin credentials, media.
 

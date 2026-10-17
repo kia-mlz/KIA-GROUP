@@ -1,4 +1,4 @@
-import type { SiteSmsSettings, SmsProviderId } from '@kia-group/shared';
+import type { SiteSmsSettings, SmsProviderId } from '@kia./shared';
 
 export interface SmsOtpSendInput {
   /** Normalized Iranian phone `09xxxxxxxxx`. */

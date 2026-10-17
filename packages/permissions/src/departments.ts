@@ -1,5 +1,5 @@
 /**
- * Department taxonomy for the KIA GROUP authorization model.
+ * Department taxonomy for the kia. authorization model.
  *
  * The platform has one identity per user and six departments. This module is
  * the canonical vocabulary for department-scoped roles (so every department —

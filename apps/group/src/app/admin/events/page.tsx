@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { ChevronRight, Flag, Trophy, Users } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
-import type { AdminChallenge, AdminCompetition } from '@kia-group/shared';
+import type { AdminChallenge, AdminCompetition } from '@kia./shared';
 import { AdminErrorState, AdminLoading } from '@/components/admin/AdminStates';
 import { useAdminAccess } from '@/components/admin/useAdminAccess';
 import { useLanguage } from '@/context/LanguageProvider';

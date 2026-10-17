@@ -2,12 +2,12 @@ import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
 // ---------------------------------------------------------------------------
-// Department isolation (kia-group/*): each department is a standalone
+// Department isolation (kia./*): each department is a standalone
 // "project". A department may depend on the platform kernel
-// (@kia-group/platform) and the shared contracts (@kia-group/shared, brand,
+// (@kia./platform) and the shared contracts (@kia./shared, brand,
 // permissions) — but NEVER on another department, and never on the app
-// shells (@kia-group/api / @kia-group/group). Cross-department communication
-// goes through the platform (domain-events bus) or @kia-group/shared.
+// shells (@kia./api / @kia./group). Cross-department communication
+// goes through the platform (domain-events bus) or @kia./shared.
 const DEPARTMENTS = [
   'kia-academy',
   'kia-work',
@@ -19,26 +19,26 @@ const DEPARTMENTS = [
 
 const isolationMessage = (dept, other) =>
   `Cross-department import blocked: ${dept} must not depend on ${other}. ` +
-  'Departments are isolated — use @kia-group/platform (domain events) or @kia-group/shared contracts.';
+  'Departments are isolated — use @kia./platform (domain events) or @kia./shared contracts.';
 
 const departmentIsolation = [
   ...DEPARTMENTS.map((dept) => ({
-    files: [`kia-group/${dept}/**/*.{ts,tsx,mjs,js}`],
+    files: [`kia./${dept}/**/*.{ts,tsx,mjs,js}`],
     rules: {
       'no-restricted-imports': [
         'error',
         {
           paths: [
             ...DEPARTMENTS.filter((d) => d !== dept).map((d) => ({
-              name: `@kia-group/${d}`,
+              name: `@kia./${d}`,
               message: isolationMessage(dept, d),
             })),
-            { name: '@kia-group/api', message: isolationMessage(dept, '@kia-group/api (the API shell)') },
-            { name: '@kia-group/group', message: isolationMessage(dept, '@kia-group/group (the web shell)') },
+            { name: '@kia./api', message: isolationMessage(dept, '@kia./api (the API shell)') },
+            { name: '@kia./group', message: isolationMessage(dept, '@kia./group (the web shell)') },
           ],
           patterns: [
             ...DEPARTMENTS.filter((d) => d !== dept).map((d) => ({
-              group: [`@kia-group/${d}`, `@kia-group/${d}/*`],
+              group: [`@kia./${d}`, `@kia./${d}/*`],
               message: isolationMessage(dept, d),
             })),
             {
@@ -60,11 +60,11 @@ const departmentIsolation = [
         {
           paths: [
             ...DEPARTMENTS.map((d) => ({
-              name: `@kia-group/${d}`,
+              name: `@kia./${d}`,
               message: `The platform kernel must stay dependency-free: remove the import of ${d}.`,
             })),
-            { name: '@kia-group/api', message: 'The platform kernel must never import the API shell.' },
-            { name: '@kia-group/group', message: 'The platform kernel must never import the web shell.' },
+            { name: '@kia./api', message: 'The platform kernel must never import the API shell.' },
+            { name: '@kia./group', message: 'The platform kernel must never import the web shell.' },
           ],
         },
       ],

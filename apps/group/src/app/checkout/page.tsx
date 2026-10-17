@@ -1,6 +1,6 @@
 'use client';
 
-import type { CartResponse } from '@kia-group/shared';
+import type { CartResponse } from '@kia./shared';
 import { Check, CreditCard, Loader2, ShoppingCart } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useMemo, useState } from 'react';

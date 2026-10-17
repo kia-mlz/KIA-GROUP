@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Bell, Mail, Ticket } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { AdminLearnerMessage, AdminTicketSummary } from '@kia-group/shared';
+import type { AdminLearnerMessage, AdminTicketSummary } from '@kia./shared';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api } from '@/lib/api';
 

@@ -15,7 +15,7 @@ import {
   mergeSiteSettings,
   normalizePaymentSettings,
   type PaymentCurrencyCode,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { readLocaleCookie, writeLocaleCookie } from '@/i18n/cookie';
 import { createFormatters, type Formatters } from '@/i18n/formatters';
 import {

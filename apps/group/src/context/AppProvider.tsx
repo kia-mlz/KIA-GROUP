@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
-import type { AssessmentAnswers, ExamSubmitResult, ReadinessResult } from '@kia-group/shared';
+import type { AssessmentAnswers, ExamSubmitResult, ReadinessResult } from '@kia./shared';
 import {
   defaultAnswers,
   defaultCourses,

@@ -8,7 +8,7 @@ generator client {
 }
 
 // =============================================================================
-// KIA GROUP database — domain ownership map
+// kia. database — domain ownership map
 // =============================================================================
 // One database, one identity, six department domains. Every model belongs to
 // exactly one domain; the domain prefixes below mirror the API layout in

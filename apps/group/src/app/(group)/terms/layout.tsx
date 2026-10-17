@@ -3,7 +3,7 @@ import { publicPageMetadata } from '@/lib/seo';
 
 export const metadata: Metadata = publicPageMetadata({
   title: 'شرایط استفاده',
-  description: 'شرایط استفاده از خدمات کیا گروه.',
+  description: 'شرایط استفاده از خدمات کیا..',
   path: '/terms',
 });
 

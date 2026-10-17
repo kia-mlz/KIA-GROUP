@@ -7,7 +7,7 @@ import {
   type AdminAccessSection,
   type AdminSectionPermission,
   type SiteAdminAccessSettings,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { useAuth } from '@/context/AuthProvider';
 
 /**

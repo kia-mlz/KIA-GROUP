@@ -5,7 +5,7 @@ import type {
   LearnerState,
   LoginDto,
   TwoFactorChallengeResponse,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import {
   createContext,
   useCallback,

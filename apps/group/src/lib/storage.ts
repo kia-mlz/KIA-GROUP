@@ -1,4 +1,4 @@
-import type { AssessmentAnswers, ReadinessScores, RoadmapResponse } from '@kia-group/shared';
+import type { AssessmentAnswers, ReadinessScores, RoadmapResponse } from '@kia./shared';
 
 export interface CourseItem {
   id: string;

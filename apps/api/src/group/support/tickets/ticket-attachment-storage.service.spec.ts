@@ -4,7 +4,7 @@ import {
   MAX_TICKET_ATTACHMENT_BYTES,
   MAX_TICKET_ATTACHMENTS,
   isAllowedTicketAttachment,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { TicketAttachmentStorageService } from './ticket-attachment-storage.service';
 
 describe('TicketAttachmentStorageService', () => {

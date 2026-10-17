@@ -1,11 +1,11 @@
 /**
- * Platform roles (KIA GROUP identity layer).
+ * Platform roles (kia. identity layer).
  *
  * One identity spans all six departments. These roles live at the platform
  * level — department-scoped roles come from `departments.ts` and the
  * per-moderator access matrix comes from `admin-access.ts`.
  *
- * Moved verbatim from `@kia-group/shared` so the permission model has one
+ * Moved verbatim from `@kia./shared` so the permission model has one
  * home; `shared` re-exports for backwards compatibility.
  */
 

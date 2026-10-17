@@ -1,12 +1,12 @@
 'use client';
 
-import type { SupportTicketDetail } from '@kia-group/shared';
+import type { SupportTicketDetail } from '@kia./shared';
 import {
   containsProgrammingCode,
   isAllowedTicketAttachment,
   MAX_TICKET_ATTACHMENT_BYTES,
   MAX_TICKET_ATTACHMENTS,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { Loader2, Ticket } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';

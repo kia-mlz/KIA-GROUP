@@ -107,7 +107,7 @@ import type {
   CourseExamQuestion,
   CourseExamAttemptSummary,
   CourseExamKind,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { clearTokens, getAccessToken, setAccessToken } from '@/lib/auth';
 import { ApiError } from '@/lib/apiError';
 import { demoApi } from '@/lib/demoApi';
@@ -328,7 +328,7 @@ const liveApi = {
     });
   },
 
-  uploadAvatar(file: File): Promise<import('@kia-group/shared').ProfileDetails> {
+  uploadAvatar(file: File): Promise<import('@kia./shared').ProfileDetails> {
     const form = new FormData();
     form.append('avatar', file);
     return request('/auth/profile/avatar', {
@@ -399,13 +399,13 @@ const liveApi = {
     return request<PaymentResponse[]>('/payments/my');
   },
 
-  getWallet(limit = 5): Promise<import('@kia-group/shared').WalletSummary> {
+  getWallet(limit = 5): Promise<import('@kia./shared').WalletSummary> {
     return request(`/payments/wallet?limit=${limit}`);
   },
 
   listPaymentTransactions(
     limit = 5,
-  ): Promise<import('@kia-group/shared').WalletTransactionDto[]> {
+  ): Promise<import('@kia./shared').WalletTransactionDto[]> {
     return request(`/payments/transactions?limit=${limit}`);
   },
 

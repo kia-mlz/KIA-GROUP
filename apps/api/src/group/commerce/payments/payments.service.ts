@@ -24,15 +24,15 @@ import {
   type RoadmapResponse,
   type WalletSummary,
   type WalletTransactionDto,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import type Stripe from 'stripe';
-import { isProductionEnv } from '@kia-group/platform';
-import { Prisma } from '@kia-group/platform';
+import { isProductionEnv } from '@kia./platform';
+import { Prisma } from '@kia./platform';
 import { CartService } from '../cart/cart.service';
-import { EmailService } from '@kia-group/platform';
-import { EventBusService } from '@kia-group/platform';
-import { PrismaService } from '@kia-group/platform';
-import { SiteSettingsService } from '@kia-group/platform';
+import { EmailService } from '@kia./platform';
+import { EventBusService } from '@kia./platform';
+import { PrismaService } from '@kia./platform';
+import { SiteSettingsService } from '@kia./platform';
 import { StripeService } from '../stripe/stripe.service';
 import {
   assertValidPaymentTransition,
@@ -783,7 +783,7 @@ export class PaymentsService {
   async renderInvoiceHtml(userId: string, orderId: string): Promise<string> {
     const invoice = await this.getInvoiceForUser(userId, orderId);
     const settings = await this.siteSettings.get();
-    const siteName = settings.general.siteName || 'Kia Group';
+    const siteName = settings.general.siteName || 'kia.';
     const currency = normalizePaymentCurrency(invoice.currency || settings.payment?.currency);
     const label = currency === 'irt' ? 'IRT' : 'IRR';
     const fmt = (amount: number) => `${toDisplayUnits(amount, currency)} ${label}`;
@@ -923,7 +923,7 @@ export class PaymentsService {
 
     const description =
       paymentCfg.description?.trim() ||
-      (lines.length === 1 ? lines[0].title : `${lines.length} courses — Kia Group`);
+      (lines.length === 1 ? lines[0].title : `${lines.length} courses — kia.`);
 
     const result = await provider.createPayment(
       {
@@ -1076,7 +1076,7 @@ export class PaymentsService {
 
   private async resolveDirectLines(userId: string, dto: CheckoutDto): Promise<LineDraft[]> {
     const settings = await this.siteSettings.get();
-    const siteName = settings.general.siteName || 'کیا گروه';
+    const siteName = settings.general.siteName || 'کیا.';
     const trackMap = new Map(settings.tracks.map((t) => [t.key, t.name]));
 
     if (dto.productType === 'READINESS_TEST') {

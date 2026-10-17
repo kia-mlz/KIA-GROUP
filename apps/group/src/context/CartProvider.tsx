@@ -1,6 +1,6 @@
 'use client';
 
-import type { CartResponse } from '@kia-group/shared';
+import type { CartResponse } from '@kia./shared';
 import {
   createContext,
   useCallback,

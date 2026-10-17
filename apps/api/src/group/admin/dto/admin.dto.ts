@@ -12,7 +12,7 @@ import {
 import { Type } from 'class-transformer';
 import {
   SiteAdminAccessDto,
-} from '@kia-group/platform';
+} from '@kia./platform';
 
 export class AdminCreateUserDto {
   @IsString()

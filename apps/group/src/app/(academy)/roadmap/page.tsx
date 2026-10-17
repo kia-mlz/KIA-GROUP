@@ -1,9 +1,9 @@
 'use client';
 
-import { hasRoadmapEntitlement } from '@kia-group/shared';
+import { hasRoadmapEntitlement } from '@kia./shared';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { buildRoadmapFromAnswers } from '@kia-group/shared';
+import { buildRoadmapFromAnswers } from '@kia./shared';
 import { PurchaseSection } from '@/components/roadmap/PurchaseSection';
 import { RoadmapTree } from '@/components/roadmap/RoadmapTree';
 import { useApp } from '@/context/AppProvider';

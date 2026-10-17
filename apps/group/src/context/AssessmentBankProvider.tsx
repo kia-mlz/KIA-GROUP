@@ -4,7 +4,7 @@ import {
   DEFAULT_ASSESSMENT_BANK,
   type AssessmentBank,
   type AssessmentQuestion,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import {
   createContext,
   useContext,

@@ -53,11 +53,11 @@ const nextConfig: NextConfig = {
   // Workspace packages are transpiled from source (tsconfig paths map them to
   // packages/*/src), so shared tokens/types flow straight into the bundle.
   transpilePackages: [
-    '@kia-group/shared',
-    '@kia-group/brand',
-    '@kia-group/permissions',
+    '@kia./shared',
+    '@kia./brand',
+    '@kia./permissions',
     // kia-material ships source (main points at .ts) — no build step.
-    '@kia-group/kia-material',
+    '@kia./kia-material',
   ],
   // Allow importing monorepo-root `db.json` into the web app.
   outputFileTracingRoot: path.join(__dirname, '../..'),

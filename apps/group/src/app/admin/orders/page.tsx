@@ -1,6 +1,6 @@
 'use client';
 
-import type { AdminOrder } from '@kia-group/shared';
+import type { AdminOrder } from '@kia./shared';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useLanguage } from '@/context/LanguageProvider';

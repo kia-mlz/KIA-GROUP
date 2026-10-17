@@ -2,7 +2,7 @@
 
 import { Loader2, Mail } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import type { AdminContactMessage } from '@kia-group/shared';
+import type { AdminContactMessage } from '@kia./shared';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api, ApiError } from '@/lib/api';
 

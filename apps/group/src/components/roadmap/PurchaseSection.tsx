@@ -1,6 +1,6 @@
 'use client';
 
-import type { CourseSummary, RoadmapResponse } from '@kia-group/shared';
+import type { CourseSummary, RoadmapResponse } from '@kia./shared';
 import { Loader2, ShoppingCart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';

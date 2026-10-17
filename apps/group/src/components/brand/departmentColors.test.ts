@@ -9,16 +9,16 @@ import {
   contrastRatio,
   normalizeHex,
   readableInk,
-} from '@kia-group/brand';
+} from '@kia./brand';
 
 /**
- * Kia Group colour separation.
+ * kia. colour separation.
  *
  * Three rules, and the second exists only because of the first:
  *
  * 1. Every department owns one colour, and its tile *and* its logo both read
  *    from it — a card in the hub and the page it opens can never drift apart.
- * 2. `--group-gold` (#ffc864) is Kia Group's alone. No department may use it.
+ * 2. `--group-gold` (#ffc864) is kia.'s alone. No department may use it.
  *    This is not free: `--amber-400` has always been #ffc864, and `tint--amber`
  *    is painted on tiles that live *inside* department pages, so its fill had
  *    to move to `--amber-500` or gold would show up inside a department.
@@ -49,8 +49,8 @@ const token = (name: string) => {
 
 const deptColour = (slug: string) => token(`dept-${slug}`);
 
-describe('Kia Group parent colour', () => {
-  it('reserves the parent gold for Kia Group', () => {
+describe('kia. parent colour', () => {
+  it('reserves the parent gold for kia.', () => {
     expect(token('group-gold')).toBe(GROUP_COLOR.toLowerCase());
   });
 
@@ -83,8 +83,8 @@ describe('department colours', () => {
   });
 
   it('carries the official logo colours verbatim, from the brand package', () => {
-    // These six hexes are Kia Group's published brand values, not a palette
-    // tuned for this UI. The values live in @kia-group/brand (src/tokens.ts)
+    // These six hexes are kia.'s published brand values, not a palette
+    // tuned for this UI. The values live in @kia./brand (src/tokens.ts)
     // and are re-declared in css/brands.css — this suite keeps the stylesheet
     // and the package pinned to each other so neither can drift.
     expect(
@@ -95,7 +95,7 @@ describe('department colours', () => {
   it('puts the more readable ink on every fill', () => {
     // The official colours span very light to very dark fills, so ink choice
     // is a measurement, not a preference. Each tile must wear whichever of
-    // the two inks wins — computed by @kia-group/brand (readableInk), which
+    // the two inks wins — computed by @kia./brand (readableInk), which
     // also means a future recolour cannot quietly leave the wrong ink behind.
     for (const tokenInfo of BRAND_TOKENS) {
       const fill = deptColour(tokenInfo.slug);
@@ -168,7 +168,7 @@ describe('department marks in the markup', () => {
     const page = {
       academy: path.join(appDir, '(academy)', 'tracks', 'page.tsx'),
       work: path.join(appDir, '(work)', 'freelance', 'page.tsx'),
-      material: pathFile(path.join(appDir, '..', '..', '..', '..', 'kia-group', 'kia-material', 'resources', 'MaterialStudio.tsx')),
+      material: pathFile(path.join(appDir, '..', '..', '..', '..', 'kia.', 'kia-material', 'resources', 'MaterialStudio.tsx')),
       events: path.join(appDir, '(events)', 'events', 'page.tsx'),
       community: path.join(appDir, '(community)', 'community', 'page.tsx'),
       labs: path.join(appDir, '(labs)', 'labs', 'page.tsx'),

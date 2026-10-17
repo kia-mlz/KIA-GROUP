@@ -1,6 +1,6 @@
 'use client';
 
-import type { BootcampState } from '@kia-group/shared';
+import type { BootcampState } from '@kia./shared';
 import { Clock, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

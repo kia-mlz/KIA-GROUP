@@ -1,6 +1,6 @@
 'use client';
 
-import type { CourseAttachmentDto, CourseSummary } from '@kia-group/shared';
+import type { CourseAttachmentDto, CourseSummary } from '@kia./shared';
 import { BookOpen, Loader2, Paperclip, Ticket } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

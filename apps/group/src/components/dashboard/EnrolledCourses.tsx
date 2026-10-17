@@ -1,6 +1,6 @@
 'use client';
 
-import type { CourseSummary } from '@kia-group/shared';
+import type { CourseSummary } from '@kia./shared';
 import { BookOpen, Play } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

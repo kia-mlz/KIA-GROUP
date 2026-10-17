@@ -1,15 +1,15 @@
 /** Site-wide settings editable from the admin panel. */
 
-import { normalizeAdminAccess, type SiteAdminAccessSettings } from '@kia-group/permissions';
+import { normalizeAdminAccess, type SiteAdminAccessSettings } from '@kia./permissions';
 
-// The admin-panel access model lives in `@kia-group/permissions` (one home
+// The admin-panel access model lives in `@kia./permissions` (one home
 // for the permission model across the ecosystem); re-exported here so every
 // existing consumer of the shared package keeps working unchanged.
 export type {
   AdminAccessSection,
   AdminSectionPermission,
   SiteAdminAccessSettings,
-} from '@kia-group/permissions';
+} from '@kia./permissions';
 export {
   adminSectionAllowed,
   createSectionPermission,
@@ -17,7 +17,7 @@ export {
   normalizeAdminSectionPermission,
   resolveModeratorAdminAccess,
   resolveStaffAdminAccess,
-} from '@kia-group/permissions';
+} from '@kia./permissions';
 
 export interface SiteGeneralSettings {
   siteName: string;

@@ -7,7 +7,7 @@ import { HOME_PATH } from '@/lib/postLoginPath';
 /**
  * Post-auth landing — the single page every signed-in user lands on after
  * registration/profile completion or login. It now carries the departments
- * solar system (Kia Group sun + six department planets), which replaced the
+ * solar system (kia. sun + six department planets), which replaced the
  * old door grid.
  *
  * `learnerFlow` sends guests into the phone OTP flow and users whose profile is

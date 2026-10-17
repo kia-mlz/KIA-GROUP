@@ -5,7 +5,7 @@ import { FlaskConical, MessageSquare } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageProvider';
 
 /**
- * KIA Lab — the sixth department of Kia Group: technology, innovation,
+ * KIA Lab — the sixth department of kia.: technology, innovation,
  * research, product development and published articles.
  *
  * Nothing to read yet, so the page states its scope and offers the contact form

@@ -1,6 +1,6 @@
 'use client';
 
-import type { AdminLearnerMessage, AdminUser } from '@kia-group/shared';
+import type { AdminLearnerMessage, AdminUser } from '@kia./shared';
 import { Loader2, Send, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/context/LanguageProvider';

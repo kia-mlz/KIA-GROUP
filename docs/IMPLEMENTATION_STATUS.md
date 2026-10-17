@@ -798,7 +798,7 @@ of them.
   `.dept--<slug>` sets `--dept` and derives the tile fill, hairline, tint, glow
   and hover from it; `.dept-mark--<slug>` paints the KIA emblem in it. Measured
   live: all six resolve to those exact hexes, distinct, in both themes.
-- **The reserved colour.** `--group-gold: #ffc864` belongs to Kia Group alone,
+- **The reserved colour.** `--group-gold: #ffc864` belongs to kia. alone,
   and every parent emblem now wears it: rail, footer, guest landing, auth pages
   and the admin control room (`.logo-mark`, `.footer-logo-mark`,
   `.landing-brand-mark`, `.education-brand-mark`, `.admin-brand-mark`).
@@ -863,12 +863,12 @@ mix of the department directly over it, with a dark glyph.
 
 ### UX-28 — the six official logo colours replace the tuned palette (implemented this session)
 
-Kia Group's published logo colours, applied verbatim. They are the brand's
+kia.'s published logo colours, applied verbatim. They are the brand's
 values, not a palette tuned for this UI, and they overrule UX-26.
 
 | Brand | Official | Replaced |
 | --- | --- | --- |
-| KIA GROUP | `#ffc864` | unchanged (already the reserved parent gold) |
+| kia. | `#ffc864` | unchanged (already the reserved parent gold) |
 | KIA Academy | `#6464ff` | unchanged |
 | KIA Work | `#1687ff` | `#e8590c` orange |
 | KIA Material | `#20bfa9` | `#9646dc` violet |
@@ -909,7 +909,7 @@ values, not a palette tuned for this UI, and they overrule UX-26.
 ### UX-27 — the rail becomes the department you are standing in (implemented this session)
 
 The sidebar rail was the one piece of chrome that stayed generic: inside KIA Labs
-it still announced KIA GROUP in gold, while the page below wore the department's
+it still announced kia. in gold, while the page below wore the department's
 colour. The rail now takes the department's identity — its mark, its colour and
 its name — with the parent left visible underneath.
 
@@ -920,11 +920,11 @@ its name — with the parent left visible underneath.
   against the hub cards, so a route, a colour class or a name cannot drift
   between the grid and the rail.
 - **The rail**, in [TopBar.tsx](apps/group/src/components/layout/TopBar.tsx): the
-  emblem keeps Kia Group's own mark and is repainted in the department's colour
+  emblem keeps kia.'s own mark and is repainted in the department's colour
   — the same logo the department page header shows, so only the colour changes,
   never the shape. The wordmark becomes the department's name, and the
   supporting line swaps from the group's five pillars to the parent name
-  **KIA GROUP** in the reserved gold — so a department still says who it
+  **kia.** in the reserved gold — so a department still says who it
   belongs to. Outside the six routes nothing changes: gold mark, wordmark,
   pillars.
 - **The root element carries `dept--<slug>`**, putting that department's token in
@@ -954,7 +954,7 @@ its name — with the parent left visible underneath.
 Two of the six read as near-copies, and measuring hue proved why:
 
 - **KIA Work `#f5ae33` sat 0.7° from the parent gold `#ffc864`** — the same hue,
-  so the amber department could be mistaken for Kia Group itself.
+  so the amber department could be mistaken for kia. itself.
 - **KIA Community `#2e9bea` sat 34.8° from KIA Academy `#6464ff`** — two blues in
   one six-card grid, which reads as one colour family.
 
@@ -978,13 +978,13 @@ only department outside the blue band). The rest of the palette is untouched.
 - Gates: typecheck, lint, 317 tests (shared 46 · web 118 · api 153), build (355
   static pages) all green.
 
-### UX-24 — Kia Academy becomes Kia Group, with six departments (implemented this session)
+### UX-24 — Kia Academy becomes kia., with six departments (implemented this session)
 
 The company name changed end to end, and the group got a department structure it
 did not have: four doors became six.
 
-- **Brand.** `common.brand` is now `کیا گروه` / `Kia Group` and the Latin
-  wordmark `BRAND_WORDMARK` is `KIA GROUP`. 49 replacements across 29 files:
+- **Brand.** `common.brand` is now `کیا.` / `kia.` and the Latin
+  wordmark `BRAND_WORDMARK` is `kia.`. 49 replacements across 29 files:
   both dictionaries (21 fa / 19 en mentions), page metadata, the 404 page,
   Material Studio, the financial card, demo data, the e-mail templates
   (welcome, receipt, password reset, readiness), payment invoice titles, cart
@@ -1147,7 +1147,7 @@ email+password sign-up is gone, end to end:
   `AuthProvider.register`, `api.register` and `demoApi.register` removed;
   `/register` dropped from `robots.ts`.
 - **Shared:** the now-dead `RegisterDto` type was removed from
-  `@kia-group/shared`.
+  `@kia./shared`.
 - **Staff provisioning is unchanged:** admins still create account holders with
   email+password through `POST /admin/users` (admin panel), which is how staff
   and test accounts are made.

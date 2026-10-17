@@ -21,18 +21,18 @@ import type {
   AdminWalletSummary,
   AuthUser,
   SiteAdminAccessSettings,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import {
   defaultExamBanks,
   genericExamQuestions,
   normalizeAdminAccess,
   normalizeIranianPhone,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import * as bcrypt from 'bcrypt';
 import { createHash } from 'crypto';
-import { MediaStorageService } from '@kia-group/platform';
-import { PrismaService } from '@kia-group/platform';
-import { SiteSettingsService } from '@kia-group/platform';
+import { MediaStorageService } from '@kia./platform';
+import { PrismaService } from '@kia./platform';
+import { SiteSettingsService } from '@kia./platform';
 import {
   AdminAdjustWalletDto,
   AdminCreateChallengeDto,
@@ -57,7 +57,7 @@ import {
 } from './dto/admin.dto';
 import { AdminAuditService } from './audit.service';
 import { PaymentsService } from '../commerce/payments/payments.service';
-import { Prisma, EntitlementResourceType } from '@kia-group/platform';
+import { Prisma, EntitlementResourceType } from '@kia./platform';
 
 const BCRYPT_ROUNDS = 12;
 

@@ -4,7 +4,7 @@ import type {
   CourseExamAttemptSession,
   CourseExamSubmitResult,
   LessonSummary,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { CheckCircle2, Loader2, Timer, XCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';

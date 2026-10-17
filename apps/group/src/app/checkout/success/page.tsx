@@ -8,7 +8,7 @@ import { api, ApiError } from '@/lib/api';
 import { useAuth } from '@/context/AuthProvider';
 import { useCart } from '@/context/CartProvider';
 import { useLanguage } from '@/context/LanguageProvider';
-import type { PaymentResponse } from '@kia-group/shared';
+import type { PaymentResponse } from '@kia./shared';
 
 function SuccessContent() {
   const router = useRouter();

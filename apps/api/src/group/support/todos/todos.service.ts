@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import type { CreateTodoDto, LearnerTodoDto, UpdateTodoDto } from '@kia-group/shared';
-import { PrismaService } from '@kia-group/platform';
+import type { CreateTodoDto, LearnerTodoDto, UpdateTodoDto } from '@kia./shared';
+import { PrismaService } from '@kia./platform';
 
 @Injectable()
 export class TodosService {

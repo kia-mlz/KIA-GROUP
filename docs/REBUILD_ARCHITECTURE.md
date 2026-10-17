@@ -17,7 +17,7 @@ Kia Academy is being rebuilt as **کیا آکادمی (Kia Academy)**: a Persian
 ## Technical decisions
 
 1. **Default locale:** `fa` (RTL). Other locales remain available but Persian is primary.
-2. **Material Studio:** Client-only feature under `kia-group/kia-material/resources/`. UI preserved; code split into data / utils / state / panels for maintainability. No Nest dependency.
+2. **Material Studio:** Client-only feature under `kia./kia-material/resources/`. UI preserved; code split into data / utils / state / panels for maintainability. No Nest dependency.
 3. **Education auth:** Phone-first OTP (Iranian `09xxxxxxxxx` / `+989…`). Email+password kept for admin/seed compatibility.
 4. **Profile gate:** After OTP, required profile (`firstName`, `lastName`, `city`, `email`); phone read-only. Optional `bio` + avatar upload on dashboard/profile. XSS/spam sanitization on text fields.
 5. **OTP delivery:** Configure Kavenegar (or another SMS provider) under Admin → OTP/SMS. In development, OTP is logged and returned in API response when `OTP_DEV_EXPOSE=true` (default in development) if SMS is disabled or using the `dev` provider.

@@ -16,7 +16,7 @@ import type {
   LearnerState,
   ProfileDetails,
   RequestOtpResponse,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import {
   ChangePasswordDto,
   ForgotPasswordDto,
@@ -30,18 +30,18 @@ import {
   normalizeIranianPhone,
   resolveStaffAdminAccess,
   sanitizeProfileText,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import * as bcrypt from 'bcrypt';
 import { createHash, randomBytes, randomInt, randomUUID } from 'crypto';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { EmailService } from '@kia-group/platform';
-import { PrismaService } from '@kia-group/platform';
-import { SiteSettingsService } from '@kia-group/platform';
+import { EmailService } from '@kia./platform';
+import { PrismaService } from '@kia./platform';
+import { SiteSettingsService } from '@kia./platform';
 import { SmsService } from '../sms/sms.service';
 import { TwoFactorService } from './two-factor/two-factor.service';
-import { EventBusService } from '@kia-group/platform';
-import { sniffImageMime } from '@kia-group/platform';
+import { EventBusService } from '@kia./platform';
+import { sniffImageMime } from '@kia./platform';
 import { LoginDto } from './dto/login.dto';
 
 import type { TwoFactorChallengeResponse } from './two-factor/two-factor.types';

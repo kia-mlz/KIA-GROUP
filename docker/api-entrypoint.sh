@@ -55,7 +55,7 @@ if [ -n "${BOOTSTRAP_ADMIN_EMAIL:-}" ] && [ -n "${BOOTSTRAP_ADMIN_PASSWORD:-}" ]
   fi
   node - <<'EOF'
 const { PrismaPg } = require('@prisma/adapter-pg');
-const { PrismaClient } = require('@kia-group/platform');
+const { PrismaClient } = require('@kia./platform');
 const bcrypt = require('bcrypt');
 
 async function main() {

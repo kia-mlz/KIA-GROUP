@@ -1,11 +1,11 @@
 export const en = {
   meta: {
-    title: 'Kia Group — Adaptive Learning Platform',
+    title: 'kia. — Adaptive Learning Platform',
     description:
       'Persian-first learning academy for Iran: design materials studio, phone signup, personalized assessment, and guided courses.',
   },
   common: {
-    brand: 'Kia Group',
+    brand: 'kia.',
     tagline: 'Learn · Work · Create · Connect · Grow',
     continue: 'Continue',
     loading: 'Loading…',
@@ -64,10 +64,10 @@ export const en = {
     profile: 'Profile',
     tickets: 'Tickets',
     messages: 'Messages',
-    homeAria: 'Kia Group home',
+    homeAria: 'kia. home',
     cart: 'Cart',
     footer: {
-      copyright: '© {year} Kia Group. All rights reserved.',
+      copyright: '© {year} kia.. All rights reserved.',
       status: 'Adaptive learning platform',
       enamad: 'E-Namad trust seal',
     },
@@ -84,9 +84,9 @@ export const en = {
     nativeFa: 'فارسی',
   },
   landing: {
-    eyebrow: 'Kia Group',
+    eyebrow: 'kia.',
     heroBody:
-      'Kia Group is one integrated ecosystem, bringing education, work, materials, innovation, events and community together in a single place.',
+      'kia. is one integrated ecosystem, bringing education, work, materials, innovation, events and community together in a single place.',
     ctaMaterial: 'Material Studio',
     ctaEducation: 'Start learning path',
     ctaContact: 'Contact us',
@@ -103,7 +103,7 @@ export const en = {
       stages: 'assessment stages',
       savings: 'bundle savings',
     },
-    howHeading: 'How Kia Group works',
+    howHeading: 'How kia. works',
     howSub:
       'Choose Material Studio for design tools, or Education to register and begin your assessment.',
     feature: {
@@ -173,7 +173,7 @@ export const en = {
   },
   freelance: {
     title: 'Employers & Freelancers',
-    sub: 'The bridge between businesses and Kia Group-trained talent.',
+    sub: 'The bridge between businesses and kia.-trained talent.',
     employer: {
       title: 'Hiring?',
       body: 'Access talent whose skills are proven through real assessments and challenges, and share your project or hiring need with us.',
@@ -184,11 +184,11 @@ export const en = {
       body: 'Complete your learning path, readiness test and bootcamp challenges to build a credible portfolio and get ready for real projects.',
       cta: 'Start your path →',
     },
-    note: 'To get started, send your request through the contact page — the Kia Group team replies as soon as possible.',
+    note: 'To get started, send your request through the contact page — the kia. team replies as soon as possible.',
   },
   tracks: {
     title: 'Which path?',
-    sub: 'Kia Group education splits into two directions. Pick one.',
+    sub: 'kia. education splits into two directions. Pick one.',
     technology: {
       title: 'Technology',
       desc: 'An adaptive path through programming, web, AI and data — foundations to shipped projects.',
@@ -382,7 +382,7 @@ export const en = {
   auth: {
     login: {
       eyebrow: 'Welcome back',
-      title: 'Sign in to Kia Group',
+      title: 'Sign in to kia.',
       sub: 'Continue your roadmap, courses, and bootcamp progress.',
       email: 'Email',
       password: 'Password',
@@ -653,7 +653,7 @@ export const en = {
       },
     },
     doors: {
-      heading: 'Kia Group departments',
+      heading: 'kia. departments',
       orbitsSub: 'The Kia ecosystem',
       academyTitle: 'KIA Academy',
       academyShort: 'Academy',
@@ -805,7 +805,7 @@ export const en = {
       title: 'Admin messages',
       viewAll: 'View all messages',
       unread: '{count} unread messages',
-      fromAdmin: 'Kia Group team',
+      fromAdmin: 'kia. team',
     },
     profile: {
       title: 'My profile',
@@ -1715,7 +1715,7 @@ export const en = {
      * one-line "what lives here" descriptions, one per department.
      */
     departments: {
-      what: 'Kia Group is six departments. Each card shows what is managed there, how much is already recorded, and where to manage it.',
+      what: 'kia. is six departments. Each card shows what is managed there, how much is already recorded, and where to manage it.',
       loading: 'Loading departments…',
       loadError: 'Failed to load department data.',
       partialError: 'Some department numbers could not be loaded; the rest of this page is up to date.',
@@ -2587,11 +2587,11 @@ export const en = {
       updated: 'Last updated: July 14, 2026',
       agreement: {
         h: 'Agreement',
-        p: 'By accessing Kia Group, you agree to these Terms of Service. If you do not agree, please do not use the platform.',
+        p: 'By accessing kia., you agree to these Terms of Service. If you do not agree, please do not use the platform.',
       },
       services: {
         h: 'Services',
-        p: 'Kia Group provides goal discovery, personalized roadmaps, readiness assessments, course content, and bootcamp challenges. Features may change as we improve the product.',
+        p: 'kia. provides goal discovery, personalized roadmaps, readiness assessments, course content, and bootcamp challenges. Features may change as we improve the product.',
       },
       accounts: {
         h: 'Accounts',
@@ -2614,11 +2614,11 @@ export const en = {
       },
       ip: {
         h: 'Intellectual property',
-        p: 'Kia Group content, branding, and software are owned by Kia Group or its licensors. Your submissions (e.g., challenge code) remain yours, but you grant us a license to use them for scoring and platform operation.',
+        p: 'kia. content, branding, and software are owned by kia. or its licensors. Your submissions (e.g., challenge code) remain yours, but you grant us a license to use them for scoring and platform operation.',
       },
       disclaimer: {
         h: 'Disclaimer',
-        p: 'Kia Group is an educational tool. We do not guarantee employment outcomes. Content is provided "as is" without warranties of any kind.',
+        p: 'kia. is an educational tool. We do not guarantee employment outcomes. Content is provided "as is" without warranties of any kind.',
       },
       contact: {
         h: 'Contact',
@@ -2630,7 +2630,7 @@ export const en = {
       updated: 'Last updated: July 14, 2026',
       overview: {
         h: 'Overview',
-        p: 'Kia Group ("we", "us") respects your privacy. This policy explains what information we collect, how we use it, and your choices when using our adaptive learning platform.',
+        p: 'kia. ("we", "us") respects your privacy. This policy explains what information we collect, how we use it, and your choices when using our adaptive learning platform.',
       },
       collect: {
         h: 'Information we collect',

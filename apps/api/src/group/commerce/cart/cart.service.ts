@@ -10,9 +10,9 @@ import {
   entitlementKey,
   type CartItemResponse,
   type CartResponse,
-} from '@kia-group/shared';
-import { PrismaService } from '@kia-group/platform';
-import { SiteSettingsService } from '@kia-group/platform';
+} from '@kia./shared';
+import { PrismaService } from '@kia./platform';
+import { SiteSettingsService } from '@kia./platform';
 
 @Injectable()
 export class CartService {
@@ -114,7 +114,7 @@ export class CartService {
     const settings = await this.siteSettings.get();
     const payment = normalizePaymentSettings(settings.payment);
     const unitPrice = settings.pricing.courseCents;
-    const siteName = settings.general.siteName || 'کیا گروه';
+    const siteName = settings.general.siteName || 'کیا.';
 
     const cart = await this.prisma.cart.findUniqueOrThrow({
       where: { id: cartId },

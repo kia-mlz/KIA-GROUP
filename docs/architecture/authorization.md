@@ -1,8 +1,8 @@
-# KIA GROUP — Authorization
+# kia. — Authorization
 
 ## Model
 
-Three layers, all server-enforced, all defined in `@kia-group/permissions`:
+Three layers, all server-enforced, all defined in `@kia./permissions`:
 
 1. **Platform roles** — `LEARNER`, `ADMIN` (moderator), `SUPER_ADMIN`, plus
    dynamic custom roles backed by the `Role` table.
@@ -35,5 +35,5 @@ ThrottlerGuard (per-route limits) → JwtAuthGuard (identity + status)
 ## Where checks live
 
 - Guards + decorators: `packages/platform/src/common/guards/`, `packages/platform/src/common/decorators/`.
-- Matrix resolution: `@kia-group/permissions` (single home; `shared` re-exports).
+- Matrix resolution: `@kia./permissions` (single home; `shared` re-exports).
 - Admin UI consumption: `apps/group/src/components/admin/useAdminAccess.ts`.

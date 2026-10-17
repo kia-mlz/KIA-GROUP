@@ -5,7 +5,7 @@ import {
   resolveStaffAdminAccess,
   type AuthUser,
   type SiteAdminAccessSettings,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { PrismaService } from '../prisma/prisma.service';
 import { SiteSettingsService } from '../group/site-settings/site-settings.service';
 

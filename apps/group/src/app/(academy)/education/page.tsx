@@ -10,7 +10,7 @@ import {
   isValidIranProvince,
   normalizeIranianPhone,
   sanitizeProfileText,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { RequireAuth } from '@/components/auth/RequireAuth';
 import { ProvinceCityFields } from '@/components/auth/ProvinceCityFields';
 import { BrandMark } from '@/components/brand/BrandMark';

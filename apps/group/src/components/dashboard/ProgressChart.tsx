@@ -1,6 +1,6 @@
 'use client';
 
-import type { LearnerProgressSummary } from '@kia-group/shared';
+import type { LearnerProgressSummary } from '@kia./shared';
 import { BarChart3 } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';

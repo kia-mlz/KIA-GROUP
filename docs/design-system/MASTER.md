@@ -65,19 +65,19 @@ Four brand seeds, each expanded to a ramp so we always have an accessible step a
 | --- | --- | --- |
 | Periwinkle | `#6464FF` | Brand identity, agency, primary action, focus (= KIA Academy) |
 | Mint | `#C4EED9` | Earned progress, success, completion |
-| Amber | `#FFC864` | Value, reward, premium, price, warning (= KIA GROUP, reserved) |
+| Amber | `#FFC864` | Value, reward, premium, price, warning (= kia., reserved) |
 | Ink | `#0E1626` | Foundation, dark surfaces, all text |
 
 ### Department identity tokens
 
 Each department owns exactly one colour. They are **not** free palette picks —
-they are the published KIA GROUP brand values, defined once in
+they are the published kia. brand values, defined once in
 [`packages/brand`](../../packages/brand) (`src/tokens.ts` + `css/brands.css`) and
 consumed as CSS custom properties. Never hard-code these hexes in a component.
 
 | Token | Brand | Hex |
 | --- | --- | --- |
-| `--group-gold` | KIA GROUP (parent — reserved, no department may use it) | `#FFC864` |
+| `--group-gold` | kia. (parent — reserved, no department may use it) | `#FFC864` |
 | `--dept-academy` | KIA Academy | `#6464FF` |
 | `--dept-work` | KIA Work | `#6492FF` |
 | `--dept-material` | KIA Material | `#148165` |
@@ -86,7 +86,7 @@ consumed as CSS custom properties. Never hard-code these hexes in a component.
 | `--dept-community` | KIA Community | `#FF7344` |
 
 Text on a department fill is chosen by measured WCAG contrast
-(`readableInk` in `@kia-group/brand`), not by eye — see
+(`readableInk` in `@kia./brand`), not by eye — see
 `apps/group/src/styles/base.css` (`.dept--<slug> { --tile-on-fill }`). Tests pin
 both the values and the ink choice on the TypeScript and CSS sides.
 

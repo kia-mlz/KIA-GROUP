@@ -1,4 +1,4 @@
-import type { CourseSummary, LessonSummary } from '@kia-group/shared';
+import type { CourseSummary, LessonSummary } from '@kia./shared';
 import { describe, expect, it } from 'vitest';
 import { localizeCourse, localizeLesson } from '@/lib/courseLocalization';
 

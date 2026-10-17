@@ -7,8 +7,8 @@ import helmet from 'helmet';
 import { join } from 'path';
 import type { Request, Response } from 'express';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from '@kia-group/platform';
-import { isProductionEnv } from '@kia-group/platform';
+import { HttpExceptionFilter } from '@kia./platform';
+import { isProductionEnv } from '@kia./platform';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, { rawBody: true });
@@ -78,7 +78,7 @@ async function bootstrap() {
   // Ensure SIGTERM/SIGINT close in-flight requests and DB connections cleanly.
   app.enableShutdownHooks();
 
-  new Logger('Bootstrap').log(`Kia Group API running on http://localhost:${port}/api`);
+  new Logger('Bootstrap').log(`kia. API running on http://localhost:${port}/api`);
 }
 
 bootstrap();

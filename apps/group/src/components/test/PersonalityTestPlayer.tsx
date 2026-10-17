@@ -6,7 +6,7 @@ import {
   type MiniIpipAnswers,
   type PersonalityItem,
   type PersonalityLikert,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { useEffect, useMemo, useState } from 'react';
 import { ProgressTrack } from '@/components/ui/ProgressTrack';
 import { useLanguage } from '@/context/LanguageProvider';

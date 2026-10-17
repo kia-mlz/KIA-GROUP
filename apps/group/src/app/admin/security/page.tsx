@@ -11,7 +11,7 @@ import {
   type TwoFactorSetupResponse,
   type TwoFactorStaffRow,
   type TwoFactorStatusResponse,
-} from '@kia-group/shared';
+} from '@kia./shared';
 
 type Stage = 'idle' | 'enrolling' | 'recovery-shown';
 

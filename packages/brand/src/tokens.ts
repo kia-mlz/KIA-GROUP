@@ -1,15 +1,15 @@
 /**
- * KIA GROUP brand tokens — the single source of truth for the seven brand
+ * kia. brand tokens — the single source of truth for the seven brand
  * colours. Every department reads its identity from here: the CSS custom
  * properties in `css/brands.css` are generated from these values, and the
  * group app's `departmentColors` suite cross-checks the stylesheet against
  * this module so the two can never drift apart.
  *
- * The hex values are the published brand values from the KIA GROUP identity
+ * The hex values are the published brand values from the kia. identity
  * (LOGO-1024). They are the specification — not a palette tuned for one UI —
  * so they are pinned verbatim:
  *
- *   KIA GROUP      #FFC864   parent company — reserved, no department may use it
+ *   kia.      #FFC864   parent company — reserved, no department may use it
  *   KIA Academy    #6464FF
  *   KIA Work       #6492FF
  *   KIA Material   #148165

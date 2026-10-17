@@ -1,6 +1,6 @@
 'use client';
 
-import type { AdminTicketDetail, AdminTicketPriority, AdminTicketStatus } from '@kia-group/shared';
+import type { AdminTicketDetail, AdminTicketPriority, AdminTicketStatus } from '@kia./shared';
 import { ArrowRight, Loader2, Send } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';

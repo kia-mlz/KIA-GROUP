@@ -1,15 +1,15 @@
 /* =============================================================================
-   Kia Group — design tokens & primitives
+   kia. — design tokens & primitives
    Source of truth: docs/design-system/MASTER.md
    Layer 1 primitives -> Layer 2 semantic -> Layer 3 component.
    No other stylesheet may hard-code a hex value.
    ========================================================================== */
 
 :root {
-  /* --- Kia Group palette ---------------------------------------------------
+  /* --- kia. palette ---------------------------------------------------
      Two tiers that must never be mixed:
 
-     1. `--group-gold` is the parent company, Kia Group. RESERVED: no
+     1. `--group-gold` is the parent company, kia.. RESERVED: no
         department may use #ffc864 for its tile or its mark, so the mother
         brand is never mistaken for one of its own departments. Note that
         `--amber-400` (below) happens to share this hex — it is a UI accent,
@@ -18,7 +18,7 @@
         logo both read from the same token, so the card and the page it opens
         can never drift apart. Every value is distinct from every other. */
   /* The seven official brand colours (--group-gold + six --dept-*) live in
-     @kia-group/brand (css/brands.css), imported before this file — one
+     @kia./brand (css/brands.css), imported before this file — one
      source of truth shared by every department. Ink on each fill is chosen
      by measurement and enforced by the departmentColors suite. */
 
@@ -116,7 +116,7 @@
   --fs-xs: 0.8125rem;
   --fs-micro: 0.75rem;
 
-  /* Pelak FA is the KIA GROUP brand typeface and the site UI font, site-wide.
+  /* Pelak FA is the kia. brand typeface and the site UI font, site-wide.
      Mono stays reserved for code / Latin digits in LTR. */
   --font-fa: var(--font-pelak), 'Pelak FA', Tahoma, Arial, sans-serif;
   --font-display: var(--font-fa);
@@ -930,10 +930,10 @@ input[type='tel'],
 }
 
 .tint--amber {
-  /* The tile fill is `--amber-500`, not `--amber-400`: #ffc864 is Kia Group's
+  /* The tile fill is `--amber-500`, not `--amber-400`: #ffc864 is kia.'s
      own gold, and these tiles sit *inside* department pages (the language track
      under KIA Academy, the leaderboard under KIA Event). A sub-tile wearing the
-     parent colour would break the rule that gold means Kia Group alone. */
+     parent colour would break the rule that gold means kia. alone. */
   --tile-hairline: color-mix(in srgb, var(--amber-500) 38%, transparent);
   --tile-tint: color-mix(in srgb, var(--amber-500) 11%, transparent);
   --tile-fill: var(--amber-500);

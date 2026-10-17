@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { PrismaService } from '@kia-group/platform';
+import { PrismaService } from '@kia./platform';
 import type { SearchHit, SearchableProvider } from './search.types';
 
 /**

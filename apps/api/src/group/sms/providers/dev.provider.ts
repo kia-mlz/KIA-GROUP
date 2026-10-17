@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common';
-import type { SiteSmsSettings } from '@kia-group/shared';
+import type { SiteSmsSettings } from '@kia./shared';
 import type { SmsOtpSendInput, SmsOtpSendResult, SmsProvider } from './sms-provider';
 
 /**

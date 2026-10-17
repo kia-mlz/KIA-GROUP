@@ -4,7 +4,7 @@ import type {
   AdminCourseExam,
   AdminLesson,
   CourseExamKind,
-} from '@kia-group/shared';
+} from '@kia./shared';
 import { Loader2, Plus, Trash2 } from 'lucide-react';
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { api, ApiError } from '@/lib/api';

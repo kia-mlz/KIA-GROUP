@@ -1,6 +1,6 @@
 'use client';
 
-import type { BootcampState, CompetitionSummary } from '@kia-group/shared';
+import type { BootcampState, CompetitionSummary } from '@kia./shared';
 import { Loader2, Trophy } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';

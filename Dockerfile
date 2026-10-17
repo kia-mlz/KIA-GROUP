@@ -45,12 +45,12 @@ COPY packages/shared/package.json packages/shared/
 # compiles the workspace libraries (fresh type declarations for API build below).
 COPY packages/shared/tsconfig.json packages/shared/
 COPY packages/shared/src packages/shared/src
-# Platform kernel + the six kia-group/* department packages: the root
+# Platform kernel + the six kia./* department packages: the root
 # postinstall runs `pnpm db:generate` (client output → packages/platform/src)
 # followed by `pnpm build:libs`, so manifests AND sources must exist pre-install.
 COPY packages/platform/package.json packages/platform/tsconfig.json packages/platform/tsconfig.build.json packages/platform/
 COPY packages/platform/src packages/platform/src
-COPY kia-group kia-group
+COPY kia. kia.
 COPY apps/api/package.json apps/api/
 # Prisma schema ships with the manifest layer: root `postinstall` generates the client.
 COPY apps/api/prisma apps/api/prisma
@@ -73,14 +73,14 @@ COPY packages/permissions packages/permissions
 COPY packages/brand packages/brand
 COPY packages/shared packages/shared
 COPY packages/platform packages/platform
-COPY kia-group kia-group
+COPY kia. kia.
 COPY apps/api apps/api
 
 # Generate before building libs: the Prisma client is compiled INTO
 # packages/platform (schema.prisma generator output).
-RUN pnpm --filter @kia-group/api exec prisma generate
+RUN pnpm --filter @kia./api exec prisma generate
 RUN pnpm build:libs
-RUN pnpm --filter @kia-group/api build
+RUN pnpm --filter @kia./api build
 
 # ----------------------------------------------------- web builder -----------
 # Separate stage so the api image build does not compile the Next.js app.
@@ -89,7 +89,7 @@ COPY packages/permissions packages/permissions
 COPY packages/brand packages/brand
 COPY packages/shared packages/shared
 # kia-material ships source (transpiled by Next via transpilePackages).
-COPY kia-group kia-group
+COPY kia. kia.
 COPY apps/group apps/group
 
 ARG NEXT_PUBLIC_API_URL=
@@ -102,7 +102,7 @@ ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
 # Webpack builds of this app can exceed the default V8 heap on CI runners
 # (7 GB RAM) — raise it explicitly and let Node fall back if unavailable.
 ENV NODE_OPTIONS=--max-old-space-size=6144
-RUN pnpm --filter @kia-group/group build
+RUN pnpm --filter @kia./group build
 
 # -------------------------------------------------------- api (runtime) ------
 FROM base AS api
@@ -121,9 +121,9 @@ COPY --from=builder /app/package.json /app/pnpm-workspace.yaml ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/packages/shared ./packages/shared
 # Platform kernel + department packages (dist + node_modules links) — the API
-# dist requires them at runtime (`require('@kia-group/platform')` etc.).
+# dist requires them at runtime (`require('@kia./platform')` etc.).
 COPY --from=builder /app/packages/platform ./packages/platform
-COPY --from=builder /app/kia-group ./kia-group
+COPY --from=builder /app/kia. ./kia.
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
 COPY --from=builder /app/apps/api/prisma ./apps/api/prisma
 COPY --from=builder /app/apps/api/package.json ./apps/api/package.json

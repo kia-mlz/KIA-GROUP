@@ -1,4 +1,4 @@
-import type { LocaleText } from '@kia-group/shared';
+import type { LocaleText } from '@kia./shared';
 
 export function localeText(value: LocaleText | undefined, locale: string): string {
   if (!value) return '';

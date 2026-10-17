@@ -1,6 +1,6 @@
 'use client';
 
-import type { AdminEntitlement, AdminUser } from '@kia-group/shared';
+import type { AdminEntitlement, AdminUser } from '@kia./shared';
 import { Loader2, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useLanguage } from '@/context/LanguageProvider';

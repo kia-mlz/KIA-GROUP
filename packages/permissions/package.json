@@ -1,8 +1,8 @@
 {
-  "name": "@kia-group/permissions",
+  "name": "@kia./permissions",
   "version": "1.0.0",
   "private": true,
-  "description": "KIA GROUP permission model — roles, department taxonomy and admin access resolution",
+  "description": "kia. permission model — roles, department taxonomy and admin access resolution",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {

@@ -1,7 +1,7 @@
 'use client';
 
-import type { TicketAttachmentDto } from '@kia-group/shared';
-import { formatFileSize } from '@kia-group/shared';
+import type { TicketAttachmentDto } from '@kia./shared';
+import { formatFileSize } from '@kia./shared';
 import { FileText, Image as ImageIcon } from 'lucide-react';
 
 export function TicketAttachmentList({

@@ -1,4 +1,4 @@
-import { MaterialStudio } from "@kia-group/kia-material";
+import { MaterialStudio } from "@kia./kia-material";
 
 export default function MaterialPage() {
   return <MaterialStudio />;

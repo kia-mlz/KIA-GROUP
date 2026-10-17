@@ -1,6 +1,6 @@
 'use client';
 
-import type { CourseSummary } from '@kia-group/shared';
+import type { CourseSummary } from '@kia./shared';
 import {
   BarChart3,
   BookOpen,

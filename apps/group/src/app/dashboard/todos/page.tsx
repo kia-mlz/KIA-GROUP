@@ -1,6 +1,6 @@
 'use client';
 
-import type { LearnerTodoDto } from '@kia-group/shared';
+import type { LearnerTodoDto } from '@kia./shared';
 import { CheckSquare, Loader2, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { DashboardGate, PanelPage } from '@/components/dashboard/DashboardShell';

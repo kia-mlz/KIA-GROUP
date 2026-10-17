@@ -1,5 +1,5 @@
-import type { CourseSummary } from '@kia-group/shared';
-import { TRACKS } from '@kia-group/shared';
+import type { CourseSummary } from '@kia./shared';
+import { TRACKS } from '@kia./shared';
 
 /**
  * `/courses` opens on the academy's حوزه‌ها (domains) — one card per track —

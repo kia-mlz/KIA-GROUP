@@ -11,8 +11,8 @@ import { JwtService } from '@nestjs/jwt';
 import { randomInt } from 'crypto';
 import * as bcrypt from 'bcrypt';
 import * as QRCode from 'qrcode';
-import type { AuthUser } from '@kia-group/shared';
-import { PrismaService } from '@kia-group/platform';
+import type { AuthUser } from '@kia./shared';
+import { PrismaService } from '@kia./platform';
 import {
   decryptTotpSecret,
   encryptTotpSecret,
@@ -369,7 +369,7 @@ export class TwoFactorService {
   }
 
   private buildOtpauthUrl(secret: string, accountName: string): string {
-    const issuer = 'Kia Group';
+    const issuer = 'kia.';
     const label = encodeURIComponent(`${issuer}:${accountName}`);
     const params = new URLSearchParams({
       secret,

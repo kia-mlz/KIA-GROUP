@@ -13,8 +13,8 @@ import {
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
-import type { CourseExamSummary, LessonDetail, LessonSummary } from '@kia-group/shared';
-import { parseLessonContent } from '@kia-group/shared';
+import type { CourseExamSummary, LessonDetail, LessonSummary } from '@kia./shared';
+import { parseLessonContent } from '@kia./shared';
 import { RequireAuth } from '@/components/auth/RequireAuth';
 import { LessonPlayground } from '@/components/lesson/LessonPlayground';
 import { LessonVideo } from '@/components/lesson/LessonVideo';

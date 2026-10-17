@@ -1,4 +1,4 @@
-import { isStaffRole } from '@kia-group/shared';
+import { isStaffRole } from '@kia./shared';
 
 /** Post-auth landing: a single page holding only the three primary doors. */
 export const HOME_PATH = '/home';

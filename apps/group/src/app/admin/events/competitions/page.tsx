@@ -1,6 +1,6 @@
 'use client';
 
-import type { AdminCompetition, AdminCompetitionRegistration } from '@kia-group/shared';
+import type { AdminCompetition, AdminCompetitionRegistration } from '@kia./shared';
 import { ChevronDown, Loader2, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/context/LanguageProvider';

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { SiteSmsSettings, SmsProviderId } from '@kia-group/shared';
+import type { SiteSmsSettings, SmsProviderId } from '@kia./shared';
 import { DevSmsProvider } from './dev.provider';
 import { KavenegarSmsProvider } from './kavenegar.provider';
 import type { SmsProvider } from './sms-provider';

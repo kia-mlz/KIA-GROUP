@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReadinessTestSummary } from '@kia-group/shared';
+import type { ReadinessTestSummary } from '@kia./shared';
 import { CheckCircle2, ClipboardList, XCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';

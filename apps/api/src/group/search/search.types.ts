@@ -1,5 +1,5 @@
 /**
- * Department keys mirror `@kia-group/permissions` (`DEPARTMENT_KEYS`). The API
+ * Department keys mirror `@kia./permissions` (`DEPARTMENT_KEYS`). The API
  * package does not depend on the permissions package (it consumes the shared
  * package), so the union is spelled here and `SearchModule` is the one place
  * to keep in sync when a department gains a search provider.

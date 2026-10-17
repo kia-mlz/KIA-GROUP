@@ -1,11 +1,11 @@
 {
-  "name": "@kia-group/shared",
+  "name": "@kia./shared",
   "version": "1.0.0",
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@kia-group/permissions": "workspace:*"
+    "@kia./permissions": "workspace:*"
   },
   "scripts": {
     "build": "tsc",

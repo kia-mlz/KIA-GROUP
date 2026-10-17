@@ -1,14 +1,14 @@
 'use client';
 
 /**
- * The six Kia Group departments — one registry, so nothing about a department
+ * The six kia. departments — one registry, so nothing about a department
  * is written down twice.
  *
  * The rail (TopBar) and the departments hub (DepartmentSolarSystem) both
  * describe a department from this list: a department's planet and the rail it
  * turns into can therefore never disagree about its colour or its route.
  *
- * There is no per-department *glyph* here. The rail wears the Kia Group emblem
+ * There is no per-department *glyph* here. The rail wears the kia. emblem
  * painted in the department's colour — the same mark its page header shows — so
  * the shape stays the brand's and only the colour changes.
  */
@@ -49,7 +49,7 @@ export const DEPARTMENTS: readonly Department[] = [
  * Sub-routes count (`/tracks/technology`, `/material/pdf`), but only on a slash
  * boundary: a bare `startsWith` would hand `/materiality` to Material. Anything
  * outside the six roots (the hub, the dashboard, the lesson player) has no
- * department, and the rail keeps the parent Kia Group identity there.
+ * department, and the rail keeps the parent kia. identity there.
  */
 export function departmentForPathname(pathname: string | null | undefined): Department | null {
   if (!pathname) return null;
