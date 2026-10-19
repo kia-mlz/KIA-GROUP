@@ -43,8 +43,6 @@ export interface BrandToken {
   readonly slug: DepartmentSlug;
   /** Official Latin brand name. */
   readonly name: string;
-  /** Official Persian brand name (transliteration, per the hub convention). */
-  readonly nameFa: string;
   /** Official brand hex (uppercase, 6-digit). */
   readonly color: string;
   /** CSS custom property carrying the colour in the app shell. */
@@ -61,7 +59,6 @@ export const BRAND_TOKENS: readonly BrandToken[] = [
   {
     slug: 'academy',
     name: 'KIA Academy',
-    nameFa: 'کیا آکادمی',
     color: '#6464FF',
     cssVariable: '--dept-academy',
     scope: 'Education, learning & skill development',
@@ -69,7 +66,6 @@ export const BRAND_TOKENS: readonly BrandToken[] = [
   {
     slug: 'work',
     name: 'KIA Work',
-    nameFa: 'کیا ورک',
     color: '#6492FF',
     cssVariable: '--dept-work',
     scope: 'Jobs, freelancing, hiring & projects',
@@ -77,7 +73,6 @@ export const BRAND_TOKENS: readonly BrandToken[] = [
   {
     slug: 'material',
     name: 'KIA Material',
-    nameFa: 'کیا متریل',
     color: '#148165',
     cssVariable: '--dept-material',
     scope: 'Materials, resources, tools & style',
@@ -85,7 +80,6 @@ export const BRAND_TOKENS: readonly BrandToken[] = [
   {
     slug: 'labs',
     name: 'KIA Lab',
-    nameFa: 'کیا لب',
     color: '#28C793',
     cssVariable: '--dept-labs',
     scope: 'Technology, innovation, research & development',
@@ -93,7 +87,6 @@ export const BRAND_TOKENS: readonly BrandToken[] = [
   {
     slug: 'events',
     name: 'KIA Event',
-    nameFa: 'کیا ایونت',
     color: '#E32B1B',
     cssVariable: '--dept-events',
     scope: 'Competitions, events, webinars, workshops & bootcamps',
@@ -101,7 +94,6 @@ export const BRAND_TOKENS: readonly BrandToken[] = [
   {
     slug: 'community',
     name: 'KIA Community',
-    nameFa: 'کیا کامیونیتی',
     color: '#FF7344',
     cssVariable: '--dept-community',
     scope: 'Community of users, professionals, students, teachers & employers',

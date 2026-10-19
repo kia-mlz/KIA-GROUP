@@ -80,10 +80,11 @@ describe('i18n usage coverage (admin + auth)', () => {
   });
 
   /**
-   * Values that are intentionally identical in both languages: masked input
-   * placeholders, an email example, the `IP` column label, an em-dash and an
-   * example slug.  Anything else that reads the same in English and Persian is
-   * untranslated copy.
+   * Values that are intentionally identical in both languages: proper names —
+   * the kia. wordmark and department names are English in both locales — plus
+   * masked input placeholders, an email example, the `IP` column label, an
+   * em-dash and an example slug.  Anything else that reads the same in English
+   * and Persian is untranslated copy.
    */
   const languageNeutral = new Set([
     'admin.audit.col.ip',
@@ -92,6 +93,9 @@ describe('i18n usage coverage (admin + auth)', () => {
     'auth.forgotPassword.emailPlaceholder',
     'auth.login.emailPlaceholder',
     'auth.login.passwordPlaceholder',
+    'common.brand',
+    'dashboard.doors.academyTitle',
+    'dashboard.doors.eventsTitle',
   ]);
 
   it('keeps a shrinking allowlist of language-neutral values', () => {

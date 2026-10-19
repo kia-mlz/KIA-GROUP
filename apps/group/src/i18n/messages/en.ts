@@ -67,7 +67,7 @@ export const en = {
     homeAria: 'kia. home',
     cart: 'Cart',
     footer: {
-      copyright: '© {year} kia.. All rights reserved.',
+      copyright: '© {year} kia. All rights reserved.',
       status: 'Adaptive learning platform',
       enamad: 'E-Namad trust seal',
     },

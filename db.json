@@ -272,7 +272,7 @@
     {
       "id": 1,
       "title": "HTML",
-      "description": "HTML اولین قدم برای ورود به دنیای طراحی وب است.\nبا یادگیری HTML در کیا آکادمی، به‌سادگی وب‌سایت خودت رو بساز و از ساختنش لذت ببر!",
+      "description": "HTML اولین قدم برای ورود به دنیای طراحی وب است.\nبا یادگیری HTML در KIA Academy، به‌سادگی وب‌سایت خودت رو بساز و از ساختنش لذت ببر!",
       "thumbnail_url": null,
       "order_index": 1,
       "created_at": "2026-07-28 15:48:07",
@@ -281,7 +281,7 @@
     {
       "id": 2,
       "title": "CSS",
-      "description": "CSS زبان استاندارد برای استایل‌دهی و زیباسازی صفحات وب است.\nبا یادگیری CSS در کیا آکادمی، ظاهر وب‌سایت خودت را حرفه‌ای طراحی کن و از نتیجه کار لذت ببر!",
+      "description": "CSS زبان استاندارد برای استایل‌دهی و زیباسازی صفحات وب است.\nبا یادگیری CSS در KIA Academy، ظاهر وب‌سایت خودت را حرفه‌ای طراحی کن و از نتیجه کار لذت ببر!",
       "thumbnail_url": null,
       "order_index": 2,
       "created_at": "2026-07-28 15:53:45",
@@ -610,12 +610,12 @@
       "video_url": null,
       "duration_minutes": 5,
       "order_index": 20,
-      "playground_config": "{\"language\":\"html\",\"html\":\"<h1>HTML Tables</h1><table border=\\\"1\\\"><tr><th>اسم</th><th>سن</th></tr><tr><td>کیا</td><td>25</td></tr></table>\"}",
+      "playground_config": "{\"language\":\"html\",\"html\":\"<h1>HTML Tables</h1><table border=\\\"1\\\"><tr><th>اسم</th><th>سن</th></tr><tr><td>kia.</td><td>25</td></tr></table>\"}",
       "created_at": "2026-07-28 16:38:09",
       "updated_at": "2026-07-28 16:38:09",
       "playground": {
         "language": "html",
-        "html": "<h1>HTML Tables</h1><table border=\"1\"><tr><th>اسم</th><th>سن</th></tr><tr><td>کیا</td><td>25</td></tr></table>"
+        "html": "<h1>HTML Tables</h1><table border=\"1\"><tr><th>اسم</th><th>سن</th></tr><tr><td>kia.</td><td>25</td></tr></table>"
       }
     },
     {
@@ -2070,12 +2070,12 @@
       "video_url": null,
       "duration_minutes": 5,
       "order_index": 21,
-      "playground_config": "{\"language\":\"css\",\"html\":\"<table border='1'><tr><th>اسم</th><th>سن</th></tr><tr><td>کیا</td><td>25</td></tr></table>\",\"css\":\"th { background: #f2f2f2; }\"}",
+      "playground_config": "{\"language\":\"css\",\"html\":\"<table border='1'><tr><th>اسم</th><th>سن</th></tr><tr><td>kia.</td><td>25</td></tr></table>\",\"css\":\"th { background: #f2f2f2; }\"}",
       "created_at": "2026-07-28 16:47:16",
       "updated_at": "2026-07-28 16:47:16",
       "playground": {
         "language": "css",
-        "html": "<table border='1'><tr><th>اسم</th><th>سن</th></tr><tr><td>کیا</td><td>25</td></tr></table>",
+        "html": "<table border='1'><tr><th>اسم</th><th>سن</th></tr><tr><td>kia.</td><td>25</td></tr></table>",
         "css": "th { background: #f2f2f2; }"
       }
     },

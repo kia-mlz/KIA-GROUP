@@ -149,7 +149,7 @@ export class EmailService {
     resetUrl: string,
     expiresMinutes: number,
   ): Promise<'sent' | 'skipped' | 'failed'> {
-    const subject = 'بازیابی رمز عبور کیا. | kia. password reset';
+    const subject = 'بازیابی رمز عبور kia. | kia. password reset';
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; color: #1a1a1a;" dir="rtl">
         <h1 style="color: #2563eb;">بازیابی رمز عبور</h1>

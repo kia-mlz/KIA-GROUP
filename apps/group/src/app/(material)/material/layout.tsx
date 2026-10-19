@@ -4,7 +4,7 @@ import { publicPageMetadata } from '@/lib/seo';
 export const metadata: Metadata = publicPageMetadata({
   title: 'استودیوی متریال',
   description:
-    'استودیوی متریال کیا. — پالت رنگ، آیکون و انیمیشن برای یادگیری طراحی رابط، بدون نیاز به ثبت‌نام.',
+    'استودیوی متریال kia. — پالت رنگ، آیکون و انیمیشن برای یادگیری طراحی رابط، بدون نیاز به ثبت‌نام.',
   path: '/material',
 });
 

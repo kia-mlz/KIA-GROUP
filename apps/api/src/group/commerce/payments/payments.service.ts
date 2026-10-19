@@ -1076,7 +1076,7 @@ export class PaymentsService {
 
   private async resolveDirectLines(userId: string, dto: CheckoutDto): Promise<LineDraft[]> {
     const settings = await this.siteSettings.get();
-    const siteName = settings.general.siteName || 'کیا.';
+    const siteName = settings.general.siteName || 'kia.';
     const trackMap = new Map(settings.tracks.map((t) => [t.key, t.name]));
 
     if (dto.productType === 'READINESS_TEST') {

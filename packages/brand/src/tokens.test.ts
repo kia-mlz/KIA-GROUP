@@ -50,10 +50,11 @@ describe('kia. brand tokens', () => {
     expect(() => departmentColor('nope' as never)).toThrow(/Unknown department/);
   });
 
-  it('carries Persian and English names for every department', () => {
+  it('carries the one official English name for every department', () => {
     for (const token of BRAND_TOKENS) {
+      // One name for both locales: departments are named in English even in
+      // the Persian UI, so no Persian spelling is stored anywhere.
       expect(token.name).toMatch(/^KIA /);
-      expect(token.nameFa).toMatch(/^کیا /);
       expect(token.cssVariable).toBe(`--dept-${token.slug}`);
     }
   });

@@ -11,11 +11,10 @@ import { BRAND_WORDMARK } from '@/components/brand/BrandMark';
  * A rename is the one change with no failing test to point at it: every string
  * still compiles, every page still renders. So the invariants live here.
  *
- * `کیا آکادمی` is deliberately NOT banned outright — it is the Persian name of
- * the KIA Academy *department*, one of the six boxes. Everything else that
- * spelled the old company is gone, and the sweep below proves it: any stale
- * `کیا آکادمی` outside that one key, or any `Kia Academy`/`KIA ACADEMY`
- * anywhere, fails this file.
+ * The six departments and the wordmark are written in English in both locales,
+ * so no Persian spelling of the brand survives in the source tree either. The
+ * sweep below proves it: any `Kia Academy`/`KIA ACADEMY`, any `کیا.` wordmark
+ * and any `کیا ` department name anywhere, fails this file.
  */
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -49,11 +48,6 @@ function* walk(dir: string): Generator<string> {
   }
 }
 
-/** The one place the old name is still correct: the KIA Academy department. */
-const ALLOWED = [
-  { file: path.join('i18n', 'messages', 'fa.ts'), text: "academyTitle: 'کیا آکادمی'" },
-];
-
 const hits = (needle: string) => {
   const found: string[] = [];
   for (const root of SWEEP_ROOTS) {
@@ -62,11 +56,7 @@ const hits = (needle: string) => {
       const text = readFileSync(file, 'utf8');
       text.split('\n').forEach((line, i) => {
         if (!line.includes(needle)) return;
-        const rel = path.relative(ROOT, file);
-        const allowed = ALLOWED.some(
-          (a) => rel.endsWith(a.file) && line.includes(a.text),
-        );
-        if (!allowed) found.push(`${rel}:${i + 1}`);
+        found.push(`${path.relative(ROOT, file)}:${i + 1}`);
       });
     }
   }
@@ -74,9 +64,9 @@ const hits = (needle: string) => {
 };
 
 describe('kia. brand', () => {
-  it('renames the wordmark in both scripts', () => {
+  it('uses one Latin wordmark in both locales', () => {
     expect(BRAND_WORDMARK).toBe('kia.');
-    expect(fa.common.brand).toBe('کیا.');
+    expect(fa.common.brand).toBe('kia.');
     expect(en.common.brand).toBe('kia.');
   });
 
@@ -85,11 +75,14 @@ describe('kia. brand', () => {
     expect(en.common.tagline).toBe('Learn · Work · Create · Connect · Grow');
   });
 
-  it('leaves no stale company name in the source tree', () => {
+  it('leaves no stale company name or Persian brand spelling in the source tree', () => {
     expect(hits('Kia Academy')).toEqual([]);
     expect(hits('KIA ACADEMY')).toEqual([]);
-    // One allowed hit: the KIA Academy department title.
-    expect(hits('کیا آکادمی')).toEqual([]);
+    // Neither the wordmark nor a department name may be spelled in Persian.
+    // `کیا ` / `کیا.` catch both forms without matching the city names in the
+    // province data (کیاکلا، کیاشهر … have no space or dot after کیا).
+    expect(hits('کیا.')).toEqual([]);
+    expect(hits('کیا ')).toEqual([]);
   });
 
   it('names the admin control room after the group, not the academy', () => {
@@ -141,7 +134,7 @@ describe('kia. departments', () => {
       faDoors.eventsTitle,
       faDoors.communityTitle,
       faDoors.labsTitle,
-    ]).toEqual(['کیا آکادمی', 'کیا ورک', 'کیا متریال', 'کیا ایونت', 'کیا کامیونیتی', 'کیا لب']);
+    ]).toEqual(['KIA Academy', 'KIA Work', 'KIA Material', 'KIA Event', 'KIA Community', 'KIA Lab']);
     expect([
       enDoors.academyTitle,
       enDoors.workTitle,
@@ -150,7 +143,7 @@ describe('kia. departments', () => {
       enDoors.communityTitle,
       enDoors.labsTitle,
     ]).toEqual(['KIA Academy', 'KIA Work', 'KIA Material', 'KIA Event', 'KIA Community', 'KIA Lab']);
-    expect(faDoors.heading).toBe('دپارتمان‌های کیا.');
+    expect(faDoors.heading).toBe('دپارتمان‌های kia.');
     expect(enDoors.heading).toBe('kia. departments');
   });
 
