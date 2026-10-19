@@ -63,6 +63,8 @@
   font-family: var(--font-fa);
   letter-spacing: 0;
   line-height: 1.35;
+  direction: ltr;
+  unicode-bidi: embed;
 }
 
 .landing-brand-mark {

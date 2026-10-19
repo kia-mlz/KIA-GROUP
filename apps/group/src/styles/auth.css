@@ -351,6 +351,8 @@
   text-decoration: none;
   margin-bottom: var(--space-5);
   letter-spacing: -0.02em;
+  direction: ltr;
+  unicode-bidi: embed;
 }
 
 .education-brand-mark {

@@ -2,6 +2,7 @@
 
 import { HistoryTracker } from '@/components/layout/HistoryTracker';
 import { Modal } from '@/components/ui/Modal';
+import { DepartmentBrowserTab } from '@/components/brand/DepartmentBrowserTab';
 import { AppProvider, useApp } from '@/context/AppProvider';
 import { AuthProvider } from '@/context/AuthProvider';
 import { CartProvider } from '@/context/CartProvider';
@@ -28,6 +29,7 @@ export function ClientProviders({
           <CartProvider>
             <AppProvider>
               <HistoryTracker />
+            <DepartmentBrowserTab />
               {children}
               <ModalBridge />
             </AppProvider>

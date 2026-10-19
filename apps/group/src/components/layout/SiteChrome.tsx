@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 
 import { PageBackButton } from '@/components/layout/PageBackButton';
 import { SiteAurora } from '@/components/layout/SiteAurora';
+import { TitleUpdater } from '@/components/layout/TitleUpdater';
 import { TopBar } from '@/components/layout/TopBar';
 import { useAuth } from '@/context/AuthProvider';
 import { useEffect } from 'react';
@@ -57,6 +58,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
 
   return (
     <>
+      <TitleUpdater />
       {!isAdminRoute ? <SiteAurora /> : null}
       {/* One shell, both shapes: `.panel-shell` is the rail on desktop and adds
           only a column above the mobile bar, which stays pinned across the top. */}
