@@ -54,9 +54,12 @@ describe('department registry', () => {
     expect(SLUGS).toEqual(['academy', 'work', 'material', 'events', 'community', 'labs']);
     expect(new Set(DEPARTMENTS.map((d) => d.href)).size).toBe(6);
     expect(new Set(DEPARTMENTS.map((d) => d.titleKey)).size).toBe(6);
-    for (const dept of DEPARTMENTS) {
-      expect(dept.href, dept.slug).toMatch(/^\/[a-z]+$/);
-    }
+    // Every route root a department claims — the hub href plus its owned
+    // `paths` — must be spelled like a route and claimed by exactly one
+    // department, so two rails can never fight over the same page.
+    const roots = DEPARTMENTS.flatMap((d) => [d.href, ...(d.paths ?? [])]);
+    expect(new Set(roots).size).toBe(roots.length);
+    for (const root of roots) expect(root).toMatch(/^\/[a-z]+$/);
   });
 
   it('gives every department a colour token and a translated name', () => {
@@ -87,17 +90,37 @@ describe('departmentForPathname', () => {
     for (const dept of DEPARTMENTS) {
       expect(departmentForPathname(dept.href)?.slug, dept.href).toBe(dept.slug);
     }
+    // The rail must wear the department everywhere it works, not only under
+    // the one hub URL: the academy teaches across /courses, /learn, the
+    // assessment flow and /roadmap, and the events hub hands off to /bootcamp.
+    for (const [root, slug] of [
+      ['/academy', 'academy'],
+      ['/assessment', 'academy'],
+      ['/courses', 'academy'],
+      ['/courses/html', 'academy'],
+      ['/courses/html/exams/midterm', 'academy'],
+      ['/education', 'academy'],
+      ['/learn/html/html-home', 'academy'],
+      ['/readiness/test', 'academy'],
+      ['/roadmap', 'academy'],
+      ['/work', 'work'],
+      ['/bootcamp', 'events'],
+      ['/bootcamp/challenge', 'events'],
+    ] as const) {
+      expect(departmentForPathname(root)?.slug, root).toBe(slug);
+    }
   });
 
-  it('claims nothing outside the six departments', () => {
+  it('claims nothing outside its departments', () => {
     for (const pathname of [
       '/',
       '/home',
       '/dashboard',
-      '/courses',
-      '/education',
-      '/learn/abc',
+      '/dashboard/my-courses',
       '/admin',
+      '/cart',
+      '/checkout',
+      '/rewards',
       undefined,
       null,
       '',
@@ -113,6 +136,13 @@ describe('departmentForPathname', () => {
     expect(departmentForPathname('/labsx')).toBeNull();
     expect(departmentForPathname('/events-archive')).toBeNull();
     expect(departmentForPathname('/tracksy')).toBeNull();
+    // The same boundary protects the extra roots a department owns.
+    expect(departmentForPathname('/course')).toBeNull();
+    expect(departmentForPathname('/courses-archive')).toBeNull();
+    expect(departmentForPathname('/learnx')).toBeNull();
+    expect(departmentForPathname('/working')).toBeNull();
+    expect(departmentForPathname('/bootcamping')).toBeNull();
+    expect(departmentForPathname('/roadmaps')).toBeNull();
   });
 });
 
