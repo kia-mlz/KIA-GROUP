@@ -63,11 +63,29 @@ const hits = (needle: string) => {
   return found;
 };
 
-describe('kia. brand', () => {
+describe('KIA. brand', () => {
   it('uses one Latin wordmark in both locales', () => {
-    expect(BRAND_WORDMARK).toBe('kia.');
-    expect(fa.common.brand).toBe('kia.');
-    expect(en.common.brand).toBe('kia.');
+    expect(BRAND_WORDMARK).toBe('KIA.');
+    expect(fa.common.brand).toBe('KIA.');
+    expect(en.common.brand).toBe('KIA.');
+  });
+
+  it('never spells the wordmark lowercase anywhere in either dictionary', () => {
+    // "KIA." is the only spelling of the brand; the only legitimate lowercase
+    // `kia.` in the dictionaries is the contact domain (legal@kia.academy).
+    const walk = (node: unknown, trail: string): string[] => {
+      if (typeof node === 'string') {
+        const copy = node.replace(/@kia\.academy/g, '');
+        return copy.includes('kia.') ? [`${trail}: ${node}`] : [];
+      }
+      if (node && typeof node === 'object') {
+        return Object.entries(node).flatMap(([key, value]) =>
+          walk(value, `${trail}.${key}`),
+        );
+      }
+      return [];
+    };
+    expect([...walk(fa, 'fa'), ...walk(en, 'en')]).toEqual([]);
   });
 
   it('carries the five-pillar tagline', () => {
@@ -91,7 +109,7 @@ describe('kia. brand', () => {
   });
 });
 
-describe('kia. departments', () => {
+describe('KIA. departments', () => {
   const hub = readFileSync(
     path.join(WEB, 'src', 'components', 'hub', 'DepartmentSolarSystem.tsx'),
     'utf8',
@@ -134,7 +152,7 @@ describe('kia. departments', () => {
       faDoors.eventsTitle,
       faDoors.communityTitle,
       faDoors.labsTitle,
-    ]).toEqual(['KIA Academy', 'KIA Work', 'KIA Material', 'KIA Event', 'KIA Community', 'KIA Lab']);
+    ]).toEqual(['KIA. Academy', 'KIA. Work', 'KIA. Material', 'KIA. Event', 'KIA. Community', 'KIA. Lab']);
     expect([
       enDoors.academyTitle,
       enDoors.workTitle,
@@ -142,9 +160,9 @@ describe('kia. departments', () => {
       enDoors.eventsTitle,
       enDoors.communityTitle,
       enDoors.labsTitle,
-    ]).toEqual(['KIA Academy', 'KIA Work', 'KIA Material', 'KIA Event', 'KIA Community', 'KIA Lab']);
-    expect(faDoors.heading).toBe('دپارتمان‌های kia.');
-    expect(enDoors.heading).toBe('kia. departments');
+    ]).toEqual(['KIA. Academy', 'KIA. Work', 'KIA. Material', 'KIA. Event', 'KIA. Community', 'KIA. Lab']);
+    expect(faDoors.heading).toBe('دپارتمان‌های KIA.');
+    expect(enDoors.heading).toBe('KIA. departments');
   });
 
   it('routes every planet title through the dictionary, never a literal', () => {

@@ -91,7 +91,7 @@ describe('departments hub', () => {
   it('does not hard-code a department name of its own', () => {
     // Names come from `dashboard.doors.*Title`; a second spelling here is how
     // the rail and the hub start disagreeing.
-    expect(HUB).not.toMatch(/KIA (Academy|Work|Material|Labs|Events|Community)/);
+    expect(HUB).not.toMatch(/KIA\.? (Academy|Work|Material|Labs|Events|Community)/);
     expect(HUB).toContain('t(department.titleKey)');
   });
 

@@ -1,11 +1,11 @@
 export const en = {
   meta: {
-    title: 'kia. — Adaptive Learning Platform',
+    title: 'KIA. — Adaptive Learning Platform',
     description:
       'Persian-first learning academy for Iran: design materials studio, phone signup, personalized assessment, and guided courses.',
   },
   common: {
-    brand: 'kia.',
+    brand: 'KIA.',
     tagline: 'Learn · Work · Create · Connect · Grow',
     continue: 'Continue',
     loading: 'Loading…',
@@ -64,10 +64,10 @@ export const en = {
     profile: 'Profile',
     tickets: 'Tickets',
     messages: 'Messages',
-    homeAria: 'kia. home',
+    homeAria: 'KIA. home',
     cart: 'Cart',
     footer: {
-      copyright: '© {year} kia. All rights reserved.',
+      copyright: '© {year} KIA. All rights reserved.',
       status: 'Adaptive learning platform',
       enamad: 'E-Namad trust seal',
     },
@@ -84,9 +84,9 @@ export const en = {
     nativeFa: 'فارسی',
   },
   landing: {
-    eyebrow: 'kia.',
+    eyebrow: 'KIA.',
     heroBody:
-      'kia. is one integrated ecosystem, bringing education, work, materials, innovation, events and community together in a single place.',
+      'KIA. is one integrated ecosystem, bringing education, work, materials, innovation, events and community together in a single place.',
     ctaMaterial: 'Material Studio',
     ctaEducation: 'Start learning path',
     ctaContact: 'Contact us',
@@ -103,7 +103,7 @@ export const en = {
       stages: 'assessment stages',
       savings: 'bundle savings',
     },
-    howHeading: 'How kia. works',
+    howHeading: 'How KIA. works',
     howSub:
       'Choose Material Studio for design tools, or Education to register and begin your assessment.',
     feature: {
@@ -173,7 +173,7 @@ export const en = {
   },
   freelance: {
     title: 'Employers & Freelancers',
-    sub: 'The bridge between businesses and kia.-trained talent.',
+    sub: 'The bridge between businesses and KIA.-trained talent.',
     employer: {
       title: 'Hiring?',
       body: 'Access talent whose skills are proven through real assessments and challenges, and share your project or hiring need with us.',
@@ -184,11 +184,11 @@ export const en = {
       body: 'Complete your learning path, readiness test and bootcamp challenges to build a credible portfolio and get ready for real projects.',
       cta: 'Start your path →',
     },
-    note: 'To get started, send your request through the contact page — the kia. team replies as soon as possible.',
+    note: 'To get started, send your request through the contact page — the KIA. team replies as soon as possible.',
   },
   tracks: {
     title: 'Which path?',
-    sub: 'kia. education splits into two directions. Pick one.',
+    sub: 'KIA. education splits into two directions. Pick one.',
     technology: {
       title: 'Technology',
       desc: 'An adaptive path through programming, web, AI and data — foundations to shipped projects.',
@@ -249,13 +249,13 @@ export const en = {
     tellUs: 'Tell us which event you want',
   },
   community: {
-    title: 'KIA Community',
+    title: 'KIA. Community',
     sub: 'A community of users, specialists, students, mentors and employers.',
     soon: 'Coming soon.',
     tellUs: 'Tell us what you want from the community',
   },
   labs: {
-    title: 'KIA Lab',
+    title: 'KIA. Lab',
     sub: 'Technology, innovation, research, product development and published articles.',
     soon: 'Coming soon.',
     tellUs: 'Tell us what you want to see in labs',
@@ -382,7 +382,7 @@ export const en = {
   auth: {
     login: {
       eyebrow: 'Welcome back',
-      title: 'Sign in to kia.',
+      title: 'Sign in to KIA.',
       sub: 'Continue your roadmap, courses, and bootcamp progress.',
       email: 'Email',
       password: 'Password',
@@ -653,19 +653,19 @@ export const en = {
       },
     },
     doors: {
-      heading: 'kia. departments',
-      orbitsSub: 'The Kia ecosystem',
-      academyTitle: 'KIA Academy',
+      heading: 'KIA. departments',
+      orbitsSub: 'The KIA. ecosystem',
+      academyTitle: 'KIA. Academy',
       academyShort: 'Academy',
-      workTitle: 'KIA Work',
+      workTitle: 'KIA. Work',
       workShort: 'Work',
-      materialTitle: 'KIA Material',
+      materialTitle: 'KIA. Material',
       materialShort: 'Material',
-      eventsTitle: 'KIA Event',
+      eventsTitle: 'KIA. Event',
       eventsShort: 'Event',
-      communityTitle: 'KIA Community',
+      communityTitle: 'KIA. Community',
       communityShort: 'Community',
-      labsTitle: 'KIA Lab',
+      labsTitle: 'KIA. Lab',
       labsShort: 'Lab',
     },
     tile: {
@@ -805,7 +805,7 @@ export const en = {
       title: 'Admin messages',
       viewAll: 'View all messages',
       unread: '{count} unread messages',
-      fromAdmin: 'kia. team',
+      fromAdmin: 'KIA. team',
     },
     profile: {
       title: 'My profile',
@@ -897,7 +897,7 @@ export const en = {
       title: 'Enrolled bootcamps',
       sub: 'Your active bootcamp profile and challenge arena.',
       loadError: 'Could not load bootcamp state.',
-      active: 'Kia Bootcamp Arena',
+      active: 'KIA. Bootcamp Arena',
       rank: 'Rank #{rank}',
       points: '{points} pts',
       openArena: 'Open arena',
@@ -932,7 +932,7 @@ export const en = {
     },
     tickets: {
       title: 'Previous tickets',
-      sub: 'Support conversations with the Kia team.',
+      sub: 'Support conversations with the KIA. team.',
       newTitle: 'New ticket',
       newSub: 'Describe your question or issue. Link a course when relevant.',
       detailTitle: 'Ticket',
@@ -1199,7 +1199,7 @@ export const en = {
   exam: {
     gate: {
       eyebrow: 'Timed exam · server-graded',
-      title: 'Kia digital readiness exam',
+      title: 'KIA. digital readiness exam',
       desc: 'Twenty real workplace questions across five domains — 30 minutes, no mid-exam correctness feedback. Your score updates your roadmap for real.',
       digitalOps: 'Folders, account safety, everyday tools',
       logicalReasoning: 'Conditions, sequencing, inference',
@@ -1438,7 +1438,7 @@ export const en = {
   contact: {
     eyebrow: 'Support',
     title: 'Contact us',
-    sub: 'Questions, feedback, or technical issues? Send a message and the Kia team will respond soon.',
+    sub: 'Questions, feedback, or technical issues? Send a message and the KIA. team will respond soon.',
     infoTitle: 'Contact information',
     infoBody: 'Reach out for technical support, course questions, or partnership inquiries.',
     phone: '+98 21 1234 5678',
@@ -1594,7 +1594,7 @@ export const en = {
   admin: {
     checking: 'Checking admin access…',
     sidebar: 'Admin',
-    brand: 'Kia Admin',
+    brand: 'KIA. Admin',
     brandSub: 'Group control center',
     menu: 'Open menu',
     backToSite: 'Back to site',
@@ -1715,7 +1715,7 @@ export const en = {
      * one-line "what lives here" descriptions, one per department.
      */
     departments: {
-      what: 'kia. is six departments. Each card shows what is managed there, how much is already recorded, and where to manage it.',
+      what: 'KIA. is six departments. Each card shows what is managed there, how much is already recorded, and where to manage it.',
       loading: 'Loading departments…',
       loadError: 'Failed to load department data.',
       partialError: 'Some department numbers could not be loaded; the rest of this page is up to date.',
@@ -2587,11 +2587,11 @@ export const en = {
       updated: 'Last updated: July 14, 2026',
       agreement: {
         h: 'Agreement',
-        p: 'By accessing kia., you agree to these Terms of Service. If you do not agree, please do not use the platform.',
+        p: 'By accessing KIA., you agree to these Terms of Service. If you do not agree, please do not use the platform.',
       },
       services: {
         h: 'Services',
-        p: 'kia. provides goal discovery, personalized roadmaps, readiness assessments, course content, and bootcamp challenges. Features may change as we improve the product.',
+        p: 'KIA. provides goal discovery, personalized roadmaps, readiness assessments, course content, and bootcamp challenges. Features may change as we improve the product.',
       },
       accounts: {
         h: 'Accounts',
@@ -2614,11 +2614,11 @@ export const en = {
       },
       ip: {
         h: 'Intellectual property',
-        p: 'kia. content, branding, and software are owned by kia. or its licensors. Your submissions (e.g., challenge code) remain yours, but you grant us a license to use them for scoring and platform operation.',
+        p: 'KIA. content, branding, and software are owned by KIA. or its licensors. Your submissions (e.g., challenge code) remain yours, but you grant us a license to use them for scoring and platform operation.',
       },
       disclaimer: {
         h: 'Disclaimer',
-        p: 'kia. is an educational tool. We do not guarantee employment outcomes. Content is provided "as is" without warranties of any kind.',
+        p: 'KIA. is an educational tool. We do not guarantee employment outcomes. Content is provided "as is" without warranties of any kind.',
       },
       contact: {
         h: 'Contact',
@@ -2630,7 +2630,7 @@ export const en = {
       updated: 'Last updated: July 14, 2026',
       overview: {
         h: 'Overview',
-        p: 'kia. ("we", "us") respects your privacy. This policy explains what information we collect, how we use it, and your choices when using our adaptive learning platform.',
+        p: 'KIA. ("we", "us") respects your privacy. This policy explains what information we collect, how we use it, and your choices when using our adaptive learning platform.',
       },
       collect: {
         h: 'Information we collect',

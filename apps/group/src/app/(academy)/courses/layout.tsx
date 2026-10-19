@@ -3,7 +3,7 @@ import { publicPageMetadata } from '@/lib/seo';
 
 export const metadata: Metadata = publicPageMetadata({
   title: 'دوره‌های موجود',
-  description: 'کاتالوگ کامل دوره‌های kia. — معرفی هر دوره را قبل از خرید ببینید.',
+  description: 'کاتالوگ کامل دوره‌های KIA. — معرفی هر دوره را قبل از خرید ببینید.',
   path: '/courses',
 });
 

@@ -49,8 +49,8 @@ const token = (name: string) => {
 
 const deptColour = (slug: string) => token(`dept-${slug}`);
 
-describe('kia. parent colour', () => {
-  it('reserves the parent gold for kia.', () => {
+describe('KIA. parent colour', () => {
+  it('reserves the parent gold for KIA.', () => {
     expect(token('group-gold')).toBe(GROUP_COLOR.toLowerCase());
   });
 

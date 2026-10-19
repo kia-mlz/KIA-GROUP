@@ -369,7 +369,7 @@ export class TwoFactorService {
   }
 
   private buildOtpauthUrl(secret: string, accountName: string): string {
-    const issuer = 'kia.';
+    const issuer = 'KIA.';
     const label = encodeURIComponent(`${issuer}:${accountName}`);
     const params = new URLSearchParams({
       secret,

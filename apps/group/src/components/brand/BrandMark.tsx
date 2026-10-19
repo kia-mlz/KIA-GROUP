@@ -4,13 +4,13 @@
 const LOGO_ASPECT = 497.37 / 512;
 
 /** Latin wordmark rendered beside the mark — brand-styled, same in every locale. */
-export const BRAND_WORDMARK = 'kia.';
+export const BRAND_WORDMARK = 'KIA.';
 
 /** kia. mark — dual-path blue emblem from brand assets. */
 export function BrandMark({
   className = 'brand-mark',
   size,
-  title = 'kia.',
+  title = 'KIA.',
 }: {
   className?: string;
   /** Pixel height; width follows the mark’s native aspect ratio. Omit to size via CSS. */

@@ -9,13 +9,13 @@
  * (LOGO-1024). They are the specification — not a palette tuned for one UI —
  * so they are pinned verbatim:
  *
- *   kia.      #FFC864   parent company — reserved, no department may use it
- *   KIA Academy    #6464FF
- *   KIA Work       #6492FF
- *   KIA Material   #148165
- *   KIA Lab       #28C793
- *   KIA Event     #E32B1B
- *   KIA Community  #FF7344
+ *   KIA.      #FFC864   parent company — reserved, no department may use it
+ *   KIA. Academy    #6464FF
+ *   KIA. Work       #6492FF
+ *   KIA. Material   #148165
+ *   KIA. Lab       #28C793
+ *   KIA. Event     #E32B1B
+ *   KIA. Community  #FF7344
  *
  * `readableInk` (contrast.ts) chooses the on-fill ink by measurement, so a
  * recolour can never quietly leave unreadable text on a department tile.
@@ -58,42 +58,42 @@ export interface BrandToken {
 export const BRAND_TOKENS: readonly BrandToken[] = [
   {
     slug: 'academy',
-    name: 'KIA Academy',
+    name: 'KIA. Academy',
     color: '#6464FF',
     cssVariable: '--dept-academy',
     scope: 'Education, learning & skill development',
   },
   {
     slug: 'work',
-    name: 'KIA Work',
+    name: 'KIA. Work',
     color: '#6492FF',
     cssVariable: '--dept-work',
     scope: 'Jobs, freelancing, hiring & projects',
   },
   {
     slug: 'material',
-    name: 'KIA Material',
+    name: 'KIA. Material',
     color: '#148165',
     cssVariable: '--dept-material',
     scope: 'Materials, resources, tools & style',
   },
   {
     slug: 'labs',
-    name: 'KIA Lab',
+    name: 'KIA. Lab',
     color: '#28C793',
     cssVariable: '--dept-labs',
     scope: 'Technology, innovation, research & development',
   },
   {
     slug: 'events',
-    name: 'KIA Event',
+    name: 'KIA. Event',
     color: '#E32B1B',
     cssVariable: '--dept-events',
     scope: 'Competitions, events, webinars, workshops & bootcamps',
   },
   {
     slug: 'community',
-    name: 'KIA Community',
+    name: 'KIA. Community',
     color: '#FF7344',
     cssVariable: '--dept-community',
     scope: 'Community of users, professionals, students, teachers & employers',

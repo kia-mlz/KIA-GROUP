@@ -33,7 +33,7 @@ const PREVIEW_WIDTHS: Record<PreviewSize, string> = {
 
 function defaultBundle(html?: string, css?: string, js?: string): CodeBundle {
   return {
-    html: html ?? '<div class="demo">\n  <h1>Hello Kia</h1>\n  <p>Edit HTML, CSS, and JS — then Run.</p>\n</div>',
+    html: html ?? '<div class="demo">\n  <h1>Hello KIA.</h1>\n  <p>Edit HTML, CSS, and JS — then Run.</p>\n</div>',
     css:
       css ??
       '.demo {\n  font-family: system-ui, sans-serif;\n  padding: 1rem;\n  color: #0e1626;\n}\n.demo h1 { margin: 0 0 0.5rem; }',

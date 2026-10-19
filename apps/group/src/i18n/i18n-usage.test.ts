@@ -81,7 +81,7 @@ describe('i18n usage coverage (admin + auth)', () => {
 
   /**
    * Values that are intentionally identical in both languages: proper names —
-   * the kia. wordmark and department names are English in both locales — plus
+   * the KIA. wordmark and department names are English in both locales — plus
    * masked input placeholders, an email example, the `IP` column label, an
    * em-dash and an example slug.  Anything else that reads the same in English
    * and Persian is untranslated copy.

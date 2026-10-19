@@ -114,7 +114,7 @@ export class CartService {
     const settings = await this.siteSettings.get();
     const payment = normalizePaymentSettings(settings.payment);
     const unitPrice = settings.pricing.courseCents;
-    const siteName = settings.general.siteName || 'kia.';
+    const siteName = settings.general.siteName || 'KIA.';
 
     const cart = await this.prisma.cart.findUniqueOrThrow({
       where: { id: cartId },

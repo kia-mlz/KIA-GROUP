@@ -78,7 +78,7 @@ async function bootstrap() {
   // Ensure SIGTERM/SIGINT close in-flight requests and DB connections cleanly.
   app.enableShutdownHooks();
 
-  new Logger('Bootstrap').log(`kia. API running on http://localhost:${port}/api`);
+  new Logger('Bootstrap').log(`KIA. API running on http://localhost:${port}/api`);
 }
 
 bootstrap();

@@ -67,7 +67,7 @@ export class TicketsService {
         id: reply.id,
         body: reply.body,
         isStaff: reply.isStaff,
-        authorName: reply.author.name || 'Kia',
+        authorName: reply.author.name || 'KIA.',
         createdAt: reply.createdAt.toISOString(),
         attachments: reply.attachments.map((item) => this.toAttachment(item, ticket.id)),
       })),

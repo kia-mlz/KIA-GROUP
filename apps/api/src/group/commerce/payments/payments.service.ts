@@ -783,7 +783,7 @@ export class PaymentsService {
   async renderInvoiceHtml(userId: string, orderId: string): Promise<string> {
     const invoice = await this.getInvoiceForUser(userId, orderId);
     const settings = await this.siteSettings.get();
-    const siteName = settings.general.siteName || 'kia.';
+    const siteName = settings.general.siteName || 'KIA.';
     const currency = normalizePaymentCurrency(invoice.currency || settings.payment?.currency);
     const label = currency === 'irt' ? 'IRT' : 'IRR';
     const fmt = (amount: number) => `${toDisplayUnits(amount, currency)} ${label}`;
@@ -923,7 +923,7 @@ export class PaymentsService {
 
     const description =
       paymentCfg.description?.trim() ||
-      (lines.length === 1 ? lines[0].title : `${lines.length} courses — kia.`);
+      (lines.length === 1 ? lines[0].title : `${lines.length} courses — KIA.`);
 
     const result = await provider.createPayment(
       {
@@ -1076,7 +1076,7 @@ export class PaymentsService {
 
   private async resolveDirectLines(userId: string, dto: CheckoutDto): Promise<LineDraft[]> {
     const settings = await this.siteSettings.get();
-    const siteName = settings.general.siteName || 'kia.';
+    const siteName = settings.general.siteName || 'KIA.';
     const trackMap = new Map(settings.tracks.map((t) => [t.key, t.name]));
 
     if (dto.productType === 'READINESS_TEST') {

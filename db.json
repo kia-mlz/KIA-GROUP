@@ -272,7 +272,7 @@
     {
       "id": 1,
       "title": "HTML",
-      "description": "HTML اولین قدم برای ورود به دنیای طراحی وب است.\nبا یادگیری HTML در KIA Academy، به‌سادگی وب‌سایت خودت رو بساز و از ساختنش لذت ببر!",
+      "description": "HTML اولین قدم برای ورود به دنیای طراحی وب است.\nبا یادگیری HTML در KIA. Academy، به‌سادگی وب‌سایت خودت رو بساز و از ساختنش لذت ببر!",
       "thumbnail_url": null,
       "order_index": 1,
       "created_at": "2026-07-28 15:48:07",
@@ -281,7 +281,7 @@
     {
       "id": 2,
       "title": "CSS",
-      "description": "CSS زبان استاندارد برای استایل‌دهی و زیباسازی صفحات وب است.\nبا یادگیری CSS در KIA Academy، ظاهر وب‌سایت خودت را حرفه‌ای طراحی کن و از نتیجه کار لذت ببر!",
+      "description": "CSS زبان استاندارد برای استایل‌دهی و زیباسازی صفحات وب است.\nبا یادگیری CSS در KIA. Academy، ظاهر وب‌سایت خودت را حرفه‌ای طراحی کن و از نتیجه کار لذت ببر!",
       "thumbnail_url": null,
       "order_index": 2,
       "created_at": "2026-07-28 15:53:45",
@@ -610,12 +610,12 @@
       "video_url": null,
       "duration_minutes": 5,
       "order_index": 20,
-      "playground_config": "{\"language\":\"html\",\"html\":\"<h1>HTML Tables</h1><table border=\\\"1\\\"><tr><th>اسم</th><th>سن</th></tr><tr><td>kia.</td><td>25</td></tr></table>\"}",
+      "playground_config": "{\"language\":\"html\",\"html\":\"<h1>HTML Tables</h1><table border=\\\"1\\\"><tr><th>اسم</th><th>سن</th></tr><tr><td>KIA.</td><td>25</td></tr></table>\"}",
       "created_at": "2026-07-28 16:38:09",
       "updated_at": "2026-07-28 16:38:09",
       "playground": {
         "language": "html",
-        "html": "<h1>HTML Tables</h1><table border=\"1\"><tr><th>اسم</th><th>سن</th></tr><tr><td>kia.</td><td>25</td></tr></table>"
+        "html": "<h1>HTML Tables</h1><table border=\"1\"><tr><th>اسم</th><th>سن</th></tr><tr><td>KIA.</td><td>25</td></tr></table>"
       }
     },
     {
@@ -1214,16 +1214,16 @@
       "id": 58,
       "course_id": 1,
       "title": "HTML Web Storage",
-      "description": "Web Storage API امکان ذخیره‌سازی داده در سمت مرورگر کاربر را فراهم میکند و شامل دو نوع اصلی است:\n    • localStorage: داده تا زمانی که کاربر آن را پاک نکند، به‌صورت دائمی باقی می‌ماند\n    • sessionStorage: داده فقط تا زمان بسته شدن تب مرورگر باقی می‌ماند\n\nمثال استفاده:\nlocalStorage.setItem(\"name\", \"Kia\");\nlet name = localStorage.getItem(\"name\");\n\n** برخلاف کوکی (Cookie)، اطلاعات Web Storage به سرور ارسال نمیشود و فقط در سمت کلاینت ذخیره میماند. **",
+      "description": "Web Storage API امکان ذخیره‌سازی داده در سمت مرورگر کاربر را فراهم میکند و شامل دو نوع اصلی است:\n    • localStorage: داده تا زمانی که کاربر آن را پاک نکند، به‌صورت دائمی باقی می‌ماند\n    • sessionStorage: داده فقط تا زمان بسته شدن تب مرورگر باقی می‌ماند\n\nمثال استفاده:\nlocalStorage.setItem(\"name\", \"KIA.\");\nlet name = localStorage.getItem(\"name\");\n\n** برخلاف کوکی (Cookie)، اطلاعات Web Storage به سرور ارسال نمیشود و فقط در سمت کلاینت ذخیره میماند. **",
       "video_url": null,
       "duration_minutes": 5,
       "order_index": 58,
-      "playground_config": "{\"language\":\"html\",\"html\":\"<h1>HTML Web Storage</h1><button onclick=\\\"localStorage.setItem('name', 'Kia')\\\">ذخیره در مرورگر</button>\"}",
+      "playground_config": "{\"language\":\"html\",\"html\":\"<h1>HTML Web Storage</h1><button onclick=\\\"localStorage.setItem('name', 'KIA.')\\\">ذخیره در مرورگر</button>\"}",
       "created_at": "2026-07-28 16:38:57",
       "updated_at": "2026-07-28 16:38:57",
       "playground": {
         "language": "html",
-        "html": "<h1>HTML Web Storage</h1><button onclick=\"localStorage.setItem('name', 'Kia')\">ذخیره در مرورگر</button>"
+        "html": "<h1>HTML Web Storage</h1><button onclick=\"localStorage.setItem('name', 'KIA.')\">ذخیره در مرورگر</button>"
       }
     },
     {
@@ -2070,12 +2070,12 @@
       "video_url": null,
       "duration_minutes": 5,
       "order_index": 21,
-      "playground_config": "{\"language\":\"css\",\"html\":\"<table border='1'><tr><th>اسم</th><th>سن</th></tr><tr><td>kia.</td><td>25</td></tr></table>\",\"css\":\"th { background: #f2f2f2; }\"}",
+      "playground_config": "{\"language\":\"css\",\"html\":\"<table border='1'><tr><th>اسم</th><th>سن</th></tr><tr><td>KIA.</td><td>25</td></tr></table>\",\"css\":\"th { background: #f2f2f2; }\"}",
       "created_at": "2026-07-28 16:47:16",
       "updated_at": "2026-07-28 16:47:16",
       "playground": {
         "language": "css",
-        "html": "<table border='1'><tr><th>اسم</th><th>سن</th></tr><tr><td>kia.</td><td>25</td></tr></table>",
+        "html": "<table border='1'><tr><th>اسم</th><th>سن</th></tr><tr><td>KIA.</td><td>25</td></tr></table>",
         "css": "th { background: #f2f2f2; }"
       }
     },
@@ -3979,7 +3979,7 @@
       "id": 223,
       "course_id": 3,
       "title": "JS Strings",
-      "description": "رشته‌ها (Strings) در جاوااسکریپت برای ذخیره و کار با متن استفاده میشوند و میتوانند با گیومه تک، دوتایی یا بک‌تیک (Template Literal) تعریف شوند.\n\nمثال Template Literal:\nlet name = \"Kia\";\nconsole.log(`سلام ${name}`);\n\nمهمترین متدهای رایج رشته:\n    • length: طول رشته\n    • toUpperCase() و toLowerCase(): تبدیل حروف\n    • slice() و substring(): برش بخشی از رشته\n    • split(): تبدیل رشته به آرایه\n    • trim(): حذف فاصله‌های اضافی از ابتدا و انتهای رشته\n    • replace(): جایگزینی بخشی از متن",
+      "description": "رشته‌ها (Strings) در جاوااسکریپت برای ذخیره و کار با متن استفاده میشوند و میتوانند با گیومه تک، دوتایی یا بک‌تیک (Template Literal) تعریف شوند.\n\nمثال Template Literal:\nlet name = \"KIA.\";\nconsole.log(`سلام ${name}`);\n\nمهمترین متدهای رایج رشته:\n    • length: طول رشته\n    • toUpperCase() و toLowerCase(): تبدیل حروف\n    • slice() و substring(): برش بخشی از رشته\n    • split(): تبدیل رشته به آرایه\n    • trim(): حذف فاصله‌های اضافی از ابتدا و انتهای رشته\n    • replace(): جایگزینی بخشی از متن",
       "video_url": null,
       "duration_minutes": 5,
       "order_index": 9,
@@ -4015,12 +4015,12 @@
       "video_url": null,
       "duration_minutes": 5,
       "order_index": 11,
-      "playground_config": "{\"language\":\"javascript\",\"js\":\"function greet(name) {\\n  return 'Hello ' + name;\\n}\\nconsole.log(greet('Kia'));\"}",
+      "playground_config": "{\"language\":\"javascript\",\"js\":\"function greet(name) {\\n  return 'Hello ' + name;\\n}\\nconsole.log(greet('KIA.'));\"}",
       "created_at": "2026-07-28 16:53:46",
       "updated_at": "2026-07-28 16:53:46",
       "playground": {
         "language": "javascript",
-        "js": "function greet(name) {\n  return 'Hello ' + name;\n}\nconsole.log(greet('Kia'));"
+        "js": "function greet(name) {\n  return 'Hello ' + name;\n}\nconsole.log(greet('KIA.'));"
       }
     },
     {
@@ -4043,16 +4043,16 @@
       "id": 227,
       "course_id": 3,
       "title": "JS Objects",
-      "description": "شیء (Object) در جاوااسکریپت مجموعه‌ای از جفت‌های کلید-مقدار (Key-Value) است و برای نگهداری داده‌های ساختاریافته و مرتبط استفاده میشود.\n\nمثال:\nconst person = {\n  name: \"Kia\",\n  age: 25,\n  greet: function() {\n    console.log(\"سلام، من \" + this.name + \" هستم\");\n  }\n};\n\nروش‌های دسترسی به مقادیر:\n    • Dot Notation: person.name\n    • Bracket Notation: person[\"name\"]\n\n** شیءها میتوانند شامل متد (تابع درون شیء) نیز باشند که به آنها امکان تعریف رفتار میدهد، نه فقط داده. **",
+      "description": "شیء (Object) در جاوااسکریپت مجموعه‌ای از جفت‌های کلید-مقدار (Key-Value) است و برای نگهداری داده‌های ساختاریافته و مرتبط استفاده میشود.\n\nمثال:\nconst person = {\n  name: \"KIA.\",\n  age: 25,\n  greet: function() {\n    console.log(\"سلام، من \" + this.name + \" هستم\");\n  }\n};\n\nروش‌های دسترسی به مقادیر:\n    • Dot Notation: person.name\n    • Bracket Notation: person[\"name\"]\n\n** شیءها میتوانند شامل متد (تابع درون شیء) نیز باشند که به آنها امکان تعریف رفتار میدهد، نه فقط داده. **",
       "video_url": null,
       "duration_minutes": 5,
       "order_index": 13,
-      "playground_config": "{\"language\":\"javascript\",\"js\":\"let person = {name: 'Kia', age: 25};\\nconsole.log(person.name);\"}",
+      "playground_config": "{\"language\":\"javascript\",\"js\":\"let person = {name: 'KIA.', age: 25};\\nconsole.log(person.name);\"}",
       "created_at": "2026-07-28 16:53:46",
       "updated_at": "2026-07-28 16:53:46",
       "playground": {
         "language": "javascript",
-        "js": "let person = {name: 'Kia', age: 25};\nconsole.log(person.name);"
+        "js": "let person = {name: 'KIA.', age: 25};\nconsole.log(person.name);"
       }
     },
     {
@@ -4139,16 +4139,16 @@
       "id": 233,
       "course_id": 3,
       "title": "JS Maps",
-      "description": "شیء Map در جاوااسکریپت ساختار داده‌ای شبیه به Object است، اما با تفاوت‌های مهمی که آن را برای برخی سناریوها مناسب‌تر میکند.\n\nمثال:\nlet myMap = new Map();\nmyMap.set(\"name\", \"Kia\");\nconsole.log(myMap.get(\"name\"));\n\nمزایای Map نسبت به Object ساده:\n    • کلیدهای Map میتوانند از هر نوع داده‌ای باشند (نه فقط رشته)\n    • حفظ ترتیب درج کلیدها تضمین‌شده است\n    • دارای متد size برای دریافت تعداد اعضا بدون محاسبه دستی",
+      "description": "شیء Map در جاوااسکریپت ساختار داده‌ای شبیه به Object است، اما با تفاوت‌های مهمی که آن را برای برخی سناریوها مناسب‌تر میکند.\n\nمثال:\nlet myMap = new Map();\nmyMap.set(\"name\", \"KIA.\");\nconsole.log(myMap.get(\"name\"));\n\nمزایای Map نسبت به Object ساده:\n    • کلیدهای Map میتوانند از هر نوع داده‌ای باشند (نه فقط رشته)\n    • حفظ ترتیب درج کلیدها تضمین‌شده است\n    • دارای متد size برای دریافت تعداد اعضا بدون محاسبه دستی",
       "video_url": null,
       "duration_minutes": 5,
       "order_index": 19,
-      "playground_config": "{\"language\":\"javascript\",\"js\":\"let map = new Map();\\nmap.set('name', 'Kia');\\nconsole.log(map.get('name'));\"}",
+      "playground_config": "{\"language\":\"javascript\",\"js\":\"let map = new Map();\\nmap.set('name', 'KIA.');\\nconsole.log(map.get('name'));\"}",
       "created_at": "2026-07-28 16:53:46",
       "updated_at": "2026-07-28 16:53:46",
       "playground": {
         "language": "javascript",
-        "js": "let map = new Map();\nmap.set('name', 'Kia');\nconsole.log(map.get('name'));"
+        "js": "let map = new Map();\nmap.set('name', 'KIA.');\nconsole.log(map.get('name'));"
       }
     },
     {
@@ -4191,12 +4191,12 @@
       "video_url": null,
       "duration_minutes": 5,
       "order_index": 22,
-      "playground_config": "{\"language\":\"javascript\",\"js\":\"let text = 'Hello Kia';\\nlet result = text.match(/Kia/);\\nconsole.log(result);\"}",
+      "playground_config": "{\"language\":\"javascript\",\"js\":\"let text = 'Hello KIA.';\\nlet result = text.match(/KIA./);\\nconsole.log(result);\"}",
       "created_at": "2026-07-28 16:53:57",
       "updated_at": "2026-07-28 16:53:57",
       "playground": {
         "language": "javascript",
-        "js": "let text = 'Hello Kia';\nlet result = text.match(/Kia/);\nconsole.log(result);"
+        "js": "let text = 'Hello KIA.';\nlet result = text.match(/KIA./);\nconsole.log(result);"
       }
     },
     {
@@ -4395,16 +4395,16 @@
       "id": 249,
       "course_id": 3,
       "title": "JS Objects",
-      "description": "در این بخش، تکنیک‌های پیشرفته کار با شیءها در جاوااسکریپت، از جمله Destructuring، بررسی میشود.\n\nمثال Object Destructuring:\nlet {name} = {name: 'Kia'};\nconsole.log(name);\n\nمزایای Destructuring:\n    • استخراج سریع و خوانا چند مقدار از یک شیء یا آرایه بدون نوشتن کد تکراری\n    • امکان تغییر نام متغیر هنگام استخراج: let {name: userName} = person;\n    • امکان تعیین مقدار پیش‌فرض در صورت نبود کلید در شیء",
+      "description": "در این بخش، تکنیک‌های پیشرفته کار با شیءها در جاوااسکریپت، از جمله Destructuring، بررسی میشود.\n\nمثال Object Destructuring:\nlet {name} = {name: 'KIA.'};\nconsole.log(name);\n\nمزایای Destructuring:\n    • استخراج سریع و خوانا چند مقدار از یک شیء یا آرایه بدون نوشتن کد تکراری\n    • امکان تغییر نام متغیر هنگام استخراج: let {name: userName} = person;\n    • امکان تعیین مقدار پیش‌فرض در صورت نبود کلید در شیء",
       "video_url": null,
       "duration_minutes": 5,
       "order_index": 35,
-      "playground_config": "{\"language\":\"javascript\",\"js\":\"// Object Destructuring\\nlet {name} = {name: 'Kia'};\\nconsole.log(name);\"}",
+      "playground_config": "{\"language\":\"javascript\",\"js\":\"// Object Destructuring\\nlet {name} = {name: 'KIA.'};\\nconsole.log(name);\"}",
       "created_at": "2026-07-28 16:54:08",
       "updated_at": "2026-07-28 16:54:08",
       "playground": {
         "language": "javascript",
-        "js": "// Object Destructuring\nlet {name} = {name: 'Kia'};\nconsole.log(name);"
+        "js": "// Object Destructuring\nlet {name} = {name: 'KIA.'};\nconsole.log(name);"
       }
     },
     {
@@ -4427,16 +4427,16 @@
       "id": 251,
       "course_id": 3,
       "title": "JS JSON",
-      "description": "JSON مخفف JavaScript Object Notation است، فرمتی سبک و متنی برای ذخیره و تبادل داده که ساختاری شبیه به شیء جاوااسکریپت دارد و بسیار در ارتباط با سرورها استفاده میشود.\n\nمثال:\nlet obj = {name: 'Kia'};\nlet json = JSON.stringify(obj);\nconsole.log(json);\n\nمهمترین متدهای مرتبط:\n    • JSON.stringify(): تبدیل شیء جاوااسکریپت به رشته JSON\n    • JSON.parse(): تبدیل رشته JSON به شیء جاوااسکریپت\n\n** JSON مستقل از زبان برنامه‌نویسی است و امروزه رایج‌ترین فرمت تبادل داده بین سرور و کلاینت محسوب میشود. **",
+      "description": "JSON مخفف JavaScript Object Notation است، فرمتی سبک و متنی برای ذخیره و تبادل داده که ساختاری شبیه به شیء جاوااسکریپت دارد و بسیار در ارتباط با سرورها استفاده میشود.\n\nمثال:\nlet obj = {name: 'KIA.'};\nlet json = JSON.stringify(obj);\nconsole.log(json);\n\nمهمترین متدهای مرتبط:\n    • JSON.stringify(): تبدیل شیء جاوااسکریپت به رشته JSON\n    • JSON.parse(): تبدیل رشته JSON به شیء جاوااسکریپت\n\n** JSON مستقل از زبان برنامه‌نویسی است و امروزه رایج‌ترین فرمت تبادل داده بین سرور و کلاینت محسوب میشود. **",
       "video_url": null,
       "duration_minutes": 5,
       "order_index": 37,
-      "playground_config": "{\"language\":\"javascript\",\"js\":\"let obj = {name: 'Kia'};\\nlet json = JSON.stringify(obj);\\nconsole.log(json);\"}",
+      "playground_config": "{\"language\":\"javascript\",\"js\":\"let obj = {name: 'KIA.'};\\nlet json = JSON.stringify(obj);\\nconsole.log(json);\"}",
       "created_at": "2026-07-28 16:54:08",
       "updated_at": "2026-07-28 16:54:08",
       "playground": {
         "language": "javascript",
-        "js": "let obj = {name: 'Kia'};\nlet json = JSON.stringify(obj);\nconsole.log(json);"
+        "js": "let obj = {name: 'KIA.'};\nlet json = JSON.stringify(obj);\nconsole.log(json);"
       }
     },
     {

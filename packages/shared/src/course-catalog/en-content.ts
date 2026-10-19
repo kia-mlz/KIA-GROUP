@@ -9,9 +9,9 @@ import type { CourseDbEnLesson, CourseDbEnOverlay, CourseDbPlayground } from './
  */
 export const EN_COURSE_DESCRIPTIONS: Record<number, string> = {
   1: `HTML is the first step into the world of web design.
-By learning HTML at kia., you can easily build your own website and enjoy the process of creating it.`,
+By learning HTML at KIA., you can easily build your own website and enjoy the process of creating it.`,
   2: `CSS is the standard language for styling and beautifying web pages.
-By learning CSS at kia., you will give your website a professional look and full control over colors, layout, and typography.`,
+By learning CSS at KIA., you will give your website a professional look and full control over colors, layout, and typography.`,
   3: `JavaScript is the programming language of the web. Learning it lets you add behavior and interactivity to your pages and build complete web applications.`,
 };
 
@@ -536,7 +536,7 @@ Simple example:
     • sessionStorage: data only lasts until the browser tab is closed
 
 Usage example:
-localStorage.setItem("name", "Kia");
+localStorage.setItem("name", "KIA.");
 let name = localStorage.getItem("name");
 
 ** Unlike cookies, Web Storage data is not sent to the server and stays on the client side. **`,
@@ -2275,7 +2275,7 @@ Common output methods:
 The basics:
     • Statements end with a semicolon (optional but recommended)
     • Comments: // single-line and /* multi-line */
-    • Variables: let name = "Kia"; const pi = 3.14;
+    • Variables: let name = "KIA."; const pi = 3.14;
     • Operators: +, -, *, /, %, =, ===, &&, ||
     • Blocks are grouped with curly braces { }
 
@@ -2360,7 +2360,7 @@ clearTimeout(id);
   227: `Objects in JavaScript store collections of key-value pairs and are the foundation of the language's data model.
 
 Object basics:
-    • Create: const user = { name: "Kia", age: 25 };
+    • Create: const user = { name: "KIA.", age: 25 };
     • Access: user.name or user["name"]
     • Add/update: user.city = "Tehran";
     • Delete: delete user.age;
@@ -2777,7 +2777,7 @@ export const EN_LESSON_PLAYGROUNDS: Record<number, CourseDbPlayground> = {
   19: { language: 'html', html: '<head><title>My Page Title</title></head><h1>Sample page</h1>' },
   20: {
     language: 'html',
-    html: '<h1>HTML Tables</h1><table border="1"><tr><th>Name</th><th>Age</th></tr><tr><td>Kia</td><td>25</td></tr></table>',
+    html: '<h1>HTML Tables</h1><table border="1"><tr><th>Name</th><th>Age</th></tr><tr><td>KIA.</td><td>25</td></tr></table>',
   },
   21: { language: 'html', html: '<h1>HTML Lists</h1><ul><li>Coffee</li><li>Tea</li></ul>' },
   22: {
@@ -2875,7 +2875,7 @@ export const EN_LESSON_PLAYGROUNDS: Record<number, CourseDbPlayground> = {
   },
   58: {
     language: 'html',
-    html: '<h1>HTML Web Storage</h1><button onclick="localStorage.setItem(\'name\', \'Kia\')">Save in browser</button>',
+    html: '<h1>HTML Web Storage</h1><button onclick="localStorage.setItem(\'name\', \'KIA.\')">Save in browser</button>',
   },
   59: {
     language: 'html',
@@ -3042,7 +3042,7 @@ export const EN_LESSON_PLAYGROUNDS: Record<number, CourseDbPlayground> = {
   },
   110: {
     language: 'css',
-    html: "<table border='1'><tr><th>Name</th><th>Age</th></tr><tr><td>Kia</td><td>25</td></tr></table>",
+    html: "<table border='1'><tr><th>Name</th><th>Age</th></tr><tr><td>KIA.</td><td>25</td></tr></table>",
     css: 'th { background: #f2f2f2; }',
   },
   111: {

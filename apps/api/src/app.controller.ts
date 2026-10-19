@@ -5,7 +5,7 @@ export class AppController {
   @Get()
   root() {
     return {
-      name: 'kia. API',
+      name: 'KIA. API',
       status: 'ok',
       timestamp: new Date().toISOString(),
       endpoints: {
