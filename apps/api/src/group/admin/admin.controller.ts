@@ -30,6 +30,7 @@ import {
   AdminCreateChallengeDto,
   AdminCreateCompetitionDto,
   AdminCreateCourseDto,
+  AdminCreateDiscountCodeDto,
   AdminCreateLessonDto,
   AdminCreateRoleDto,
   AdminCreateUserDto,
@@ -39,6 +40,7 @@ import {
   AdminUpdateChallengeDto,
   AdminUpdateCompetitionDto,
   AdminUpdateCourseDto,
+  AdminUpdateDiscountCodeDto,
   AdminUpdateLessonDto,
   AdminUpdateRoleDto,
   AdminUpdateTicketDto,
@@ -526,6 +528,45 @@ export class AdminController {
     @Body() dto: RefundPaymentDto,
   ) {
     return this.adminService.refundPayment(paymentId, dto, actor, auditMeta);
+  }
+
+  /* --- Discount codes -------------------------------------------------------------- */
+
+  @Get('discounts')
+  @AdminAccess('discounts', 'view')
+  listDiscountCodes() {
+    return this.adminService.listDiscountCodes();
+  }
+
+  @Post('discounts')
+  @AdminAccess('discounts', 'manage')
+  createDiscountCode(
+    @CurrentUser() actor: AuthUser,
+    @AuditMeta() auditMeta: AuditRequestMeta,
+    @Body() dto: AdminCreateDiscountCodeDto,
+  ) {
+    return this.adminService.createDiscountCode(dto, actor, auditMeta);
+  }
+
+  @Patch('discounts/:id')
+  @AdminAccess('discounts', 'manage')
+  updateDiscountCode(
+    @CurrentUser() actor: AuthUser,
+    @AuditMeta() auditMeta: AuditRequestMeta,
+    @Param('id') id: string,
+    @Body() dto: AdminUpdateDiscountCodeDto,
+  ) {
+    return this.adminService.updateDiscountCode(id, dto, actor, auditMeta);
+  }
+
+  @Delete('discounts/:id')
+  @AdminAccess('discounts', 'manage')
+  deleteDiscountCode(
+    @CurrentUser() actor: AuthUser,
+    @AuditMeta() auditMeta: AuditRequestMeta,
+    @Param('id') id: string,
+  ) {
+    return this.adminService.deleteDiscountCode(id, actor, auditMeta);
   }
 
   /* --- Audit log (read-only; immutable) --------------------------------------------- */

@@ -15,6 +15,8 @@ export interface CheckoutDto {
   courseSlugs?: string[];
   /** When true, checkout the authenticated user's cart instead of dto products. */
   fromCart?: boolean;
+  /** Optional discount code for direct (non-cart) checkouts; cart checkouts use the code saved on the cart. */
+  discountCode?: string;
 }
 
 export interface PaymentResponse {

@@ -132,6 +132,14 @@ describe('PaymentsService', () => {
     clearCart: jest.fn().mockResolvedValue({ items: [] }),
   };
 
+  // Coupons are exercised in their own service; here they default to "no code".
+  const discounts = {
+    evaluate: jest.fn(),
+    evaluateOrNull: jest.fn().mockResolvedValue(null),
+    validateForCheckout: jest.fn().mockResolvedValue(null),
+    recordUsage: jest.fn().mockResolvedValue(true),
+  };
+
   const service = new PaymentsService(
     prisma as never,
     stripeService as never,
@@ -140,6 +148,7 @@ describe('PaymentsService', () => {
     siteSettings as never,
     providers as never,
     cartService as never,
+    discounts as never,
     { publish: jest.fn().mockResolvedValue(undefined) } as never,
   );
 

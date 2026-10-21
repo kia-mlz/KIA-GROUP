@@ -1277,6 +1277,71 @@ provider-verify-never-reached assertion).
   logged link → old-password 401 → new login → wrong-current 401 → change →
   final login).
 
+## Course discount codes (2026-10-21)
+
+Learner-facing coupons for courses, manageable from the admin panel.
+
+- **Data**: `DiscountCode` (PERCENT 1–100 or FIXED IRR amount, optional
+  `startsAt`/`expiresAt`, `maxUses` + `usageCount`, `minSubtotalCents`,
+  `courseSlugs` scope; `code` unique, stored uppercase) and `DiscountCodeUsage`
+  (one audit row per redemption). Migration `20261020120000_discount_codes`.
+  `Cart.discountCode` stores the coupon the learner applied.
+- **Engine**: `apps/api/src/group/commerce/discounts` — validate + amount math
+  comes from the pure helpers in `packages/shared/src/utils/discount.ts`, so the
+  API, demo mode and tests share one implementation. A FIXED code is clamped to
+  the eligible subtotal (never negative totals). Discounts apply to COURSE lines
+  only; roadmap bundles are excluded.
+- **Learner API**: `POST /api/cart/discount` (validates against the live cart,
+  stores the normalized code) and `DELETE /api/cart/discount`. Cart responses
+  carry `discountCode: { code, type, value, amountCents }`; a stale
+  (expired/deleted/disabled) code silently drops out and is cleared. Checkout
+  re-validates authoritatively, records the coupon on the order
+  (`Order.metadata.discountCode`) and consumes one redemption.
+- **Admin API**: `GET/POST /api/admin/discounts`, `PATCH|DELETE
+  /api/admin/discounts/:id`, gated by the new `discounts` admin-access section
+  (view/manage) and fully audited (`discount.create|update|delete`).
+  `PATCH` accepts `null` to clear limits (`maxUses`, `minSubtotalCents`,
+  `courseSlugs`, dates) and validates the *merged* rule.
+- **UI**: `/admin/discounts` (table + create/edit form: type, value in the
+  site's display currency, validity window, usage cap, minimum cart, course
+  scope); cart page coupon box with localized failure reasons; checkout shows
+  the applied code and amount. Demo mode mirrors the whole flow.
+- **Verified**: `pnpm typecheck`, `pnpm lint`, `pnpm test` (all suites) plus a
+  live end-to-end pass — admin create/update/delete, learner apply/reject
+  (`NOT_FOUND`, `NOT_APPLICABLE`), totals `1,490,000 → −298,000 → 1,192,000`,
+  checkout order persisted with `discountCents=298000` and the code in metadata,
+  and usage counted once. Redemptions are reserved at order creation (an
+  abandoned pending order consumes a use).
+
+## Admin service extraction (2026-10-21)
+
+`AdminService` (formerly a 2,453-line god-service owning all 55 admin
+endpoints) is now a thin facade that delegates to one service per department:
+
+| Service | Department / scope |
+| --- | --- |
+| `admin-stats.service.ts` | platform dashboard counters |
+| `admin-users.service.ts` | accounts, roles, moderator panel access |
+| `admin-academy.service.ts` | courses, lessons, lesson media |
+| `admin-events.service.ts` | challenges and competitions |
+| `admin-support.service.ts` | tickets, learner inbox, contact form |
+| `admin-commerce.service.ts` | payments, orders, entitlements, wallets, refunds |
+| `admin-discounts.service.ts` | course discount codes |
+
+`AdminRequestMeta` moved to `admin-types.ts` (still re-exported from
+`admin.service.ts`) so the extracted services never import the facade.
+The department services are plain classes instantiated in the facade's
+constructor, so the Nest wiring **and** the existing `admin.service.spec.ts`
+(which builds `new AdminService(prisma, media, settings, audit, payments)`)
+are untouched and still exercise the real extracted logic. New callers should
+inject the department service directly.
+
+Verified: `pnpm --filter api typecheck|lint|test` (126/126, spec untouched),
+then a live A/B pass — all 14 admin read endpoints return byte-identical
+payloads (volatile timestamps stripped) before vs after, and a create/duplicate-409/delete
+round-trip through the events and discounts services still audits
+`challenge.create`, `discount.create` and `discount.delete`.
+
 ## Audit backlog (remaining, by priority)
 
 ### Dependency audit closure (implemented 2026-09-29)

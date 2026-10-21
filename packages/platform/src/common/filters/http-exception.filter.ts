@@ -12,7 +12,14 @@ import { isProductionEnv } from '../utils/node-env';
 interface ErrorResponseBody {
   statusCode: number;
   message: string | string[];
+  /** HTTP reason phrase by default; a domain error code when one is supplied. */
   error: string;
+  /**
+   * Machine-readable domain code (e.g. a discount failure reason) preserved
+   * from the exception body so clients can map it to localized copy without
+   * parsing English prose.
+   */
+  code?: string;
   timestamp: string;
   path: string;
 }
@@ -33,6 +40,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     let message: string | string[] = 'Internal server error';
     let error = HttpStatus[status] ?? 'Error';
+    let code: string | undefined;
 
     if (typeof exceptionResponse === 'string') {
       message = exceptionResponse;
@@ -44,9 +52,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
       const body = exceptionResponse as {
         message?: string | string[];
         error?: string;
+        code?: unknown;
       };
       message = body.message ?? message;
       error = body.error ?? error;
+      if (typeof body.code === 'string' && body.code.length > 0) {
+        code = body.code;
+      }
     } else if (exception instanceof Error) {
       // Never leak internal Error.message to clients in production.
       if (isProductionEnv()) {
@@ -68,6 +80,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       statusCode: status,
       message,
       error,
+      ...(code ? { code } : {}),
       timestamp: new Date().toISOString(),
       path: request.url,
     };

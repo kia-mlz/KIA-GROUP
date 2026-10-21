@@ -23,6 +23,7 @@ export type AdminAccessSection =
   | 'challenges'
   | 'users'
   | 'payments'
+  | 'discounts'
   | 'tests'
   | 'tickets'
   | 'messages'
@@ -65,6 +66,7 @@ export function normalizeAdminAccess(raw: unknown): SiteAdminAccessSettings {
     challenges: normalizeAdminSectionPermission(source.challenges),
     users: normalizeAdminSectionPermission(source.users),
     payments: normalizeAdminSectionPermission(source.payments),
+    discounts: normalizeAdminSectionPermission(source.discounts),
     tests: normalizeAdminSectionPermission(source.tests),
     tickets: normalizeAdminSectionPermission(source.tickets),
     messages: normalizeAdminSectionPermission(source.messages),

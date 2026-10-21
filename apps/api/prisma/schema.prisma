@@ -170,6 +170,7 @@ model User {
   payments               Payment[]
   orders                 Order[]
   cart                   Cart?
+  discountUsages         DiscountCodeUsage[]
   entitlements           Entitlement[]
   enrollments            Enrollment[]
   lessonProgress         LessonProgress[]
@@ -499,6 +500,11 @@ model Cart {
   userId    String     @unique
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   items     CartItem[]
+  /**
+   * Discount code applied to the cart (null = none). Re-validated at checkout;
+   * if the code is deleted/disabled meanwhile, checkout ignores it.
+   */
+  discountCode String?
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -513,6 +519,64 @@ model CartItem {
 
   @@unique([cartId, courseId])
   @@index([courseId])
+}
+
+/**
+ * Discount code for course checkout. Two kinds:
+ *  - PERCENT: `value` is an integer percent (1-100) off the eligible subtotal.
+ *  - FIXED:   `value` is a flat IRR amount off the eligible subtotal.
+ *
+ * Codes are case-insensitive (stored uppercase). `usageCount` is incremented
+ * atomically at checkout; `maxUses` (null = unlimited) caps redemptions.
+ */
+model DiscountCode {
+  id          String       @id @default(cuid())
+  /** Normalized uppercase code the learner types in. Unique. */
+  code        String       @unique
+  type        DiscountType
+  /** Percent (1-100) for PERCENT, flat IRR amount for FIXED. */
+  value       Int
+  description String?
+  active      Boolean      @default(true)
+  startsAt    DateTime?
+  expiresAt   DateTime?
+  /** Max redemptions across all users (null = unlimited). */
+  maxUses     Int?
+  usageCount  Int          @default(0)
+  /** Minimum eligible subtotal (IRR) required for the code to apply. */
+  minSubtotalCents Int?
+  /** Course slugs the code applies to (null/empty = every course). JSON array. */
+  courseSlugs Json?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  usages DiscountCodeUsage[]
+
+  @@index([active])
+}
+
+/**
+ * One row per redemption — audit trail linking a user + order to the code and
+ * the discount amount it granted.
+ */
+model DiscountCodeUsage {
+  id       String       @id @default(cuid())
+  codeId   String
+  code     DiscountCode @relation(fields: [codeId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderId  String?
+  /** Discount amount granted, in IRR. */
+  amountCents Int
+  createdAt DateTime    @default(now())
+
+  @@index([codeId, createdAt])
+  @@index([userId])
+}
+
+enum DiscountType {
+  PERCENT
+  FIXED
 }
 
 model Entitlement {

@@ -1,5 +1,7 @@
 /** Shopping cart types — courses only; quantity is always 1. */
 
+import type { CartDiscountInfo } from './discount';
+
 export interface CartItemResponse {
   id: string;
   courseId: string;
@@ -28,6 +30,8 @@ export interface CartResponse {
   discountCents: number;
   /** Payable total (IRR). */
   totalCents: number;
+  /** Applied coupon, folded into `discountCents` above (null when none). */
+  discountCode: CartDiscountInfo | null;
   currency: string;
   updatedAt: string;
 }

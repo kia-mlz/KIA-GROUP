@@ -35,6 +35,8 @@ export interface SitePricingSettings {
   modulePrices: number[];
   /** Bundle discount as percent, e.g. 20 = 20% off. */
   bundleDiscountPercent: number;
+  /** Per-course price overrides in IRR, keyed by course slug. */
+  coursePrices: Record<string, number>;
 }
 
 export interface SiteTrackSettings {
@@ -227,6 +229,19 @@ export function toPublicSiteSettings(settings: SiteSettings): SiteSettings {
 }
 
 export type SiteSettingsSection = keyof SiteSettings;
+
+/**
+ * Price for a course in IRR: the per-course override (coursePrices[slug]) wins,
+ * otherwise the global catalog price (courseCents).
+ */
+export function coursePriceCents(
+  pricing: Pick<SitePricingSettings, 'courseCents' | 'coursePrices'>,
+  slug: string,
+): number {
+  const override = pricing.coursePrices?.[slug];
+  if (typeof override === 'number' && override >= 0) return override;
+  return pricing.courseCents;
+}
 
 export interface UpdateSiteSettingsDto {
   general?: Partial<SiteGeneralSettings>;

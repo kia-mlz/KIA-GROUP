@@ -56,6 +56,11 @@ export class SiteSettingsService {
     if (settings.pricing.readinessTestCents < 0 || settings.pricing.courseCents < 0) {
       throw new BadRequestException('Prices cannot be negative');
     }
+    for (const [slug, price] of Object.entries(settings.pricing.coursePrices ?? {})) {
+      if (price < 0) {
+        throw new BadRequestException(`Price for course ${slug} cannot be negative`);
+      }
+    }
     if (!settings.pricing.modulePrices.length) {
       throw new BadRequestException('At least one module price is required');
     }

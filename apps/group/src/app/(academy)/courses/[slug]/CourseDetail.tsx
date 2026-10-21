@@ -1,6 +1,6 @@
 'use client';
 
-import type { CourseSummary, LessonSummary } from '@kia./shared';
+import { coursePriceCents, type CourseSummary, type LessonSummary } from '@kia./shared';
 import { BookOpen, Loader2, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -8,15 +8,17 @@ import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/AuthProvider';
 import { useCart } from '@/context/CartProvider';
 import { useLanguage } from '@/context/LanguageProvider';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 import { api, ApiError } from '@/lib/api';
 import { localizeCourse, localizeLesson } from '@/lib/courseLocalization';
 
 export default function CoursePage() {
   const { slug } = useParams<{ slug: string }>();
   const router = useRouter();
-  const { t, locale } = useLanguage();
+  const { t, locale, format } = useLanguage();
   const { isAuthenticated } = useAuth();
   const { addCourse } = useCart();
+  const { settings } = useSiteSettings();
   const [course, setCourse] = useState<(CourseSummary & { lessons: LessonSummary[] }) | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -52,6 +54,9 @@ export default function CoursePage() {
       </div>
     );
   }
+  const priceCents = localizedCourse
+    ? coursePriceCents(settings.pricing, localizedCourse.slug)
+    : null;
   if (error || !localizedCourse) {
     return (
       <div className="page-content">
@@ -110,6 +115,9 @@ export default function CoursePage() {
         <div className="catalog-panel" style={{ maxWidth: 760 }}>
           <div className="catalog-meta">
             <span>{t('common.lessonsCount', { count: localizedCourse.lessonCount })}</span>
+            <span>
+              {t('publicCourses.price')}: {format.currency(priceCents ?? 0)}
+            </span>
             <span>{t('publicCourses.sessionsLocked')}</span>
           </div>
           <h3>{t('publicCourses.previewTitle')}</h3>

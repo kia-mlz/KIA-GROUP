@@ -7,6 +7,7 @@ import {
   IsOptional,
   IsString,
   Min,
+  MinLength,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -412,4 +413,100 @@ export class RefundPaymentDto {
   /** Required — admin must justify the refund for the audit trail. */
   @IsString()
   reason!: string;
+}
+
+export class AdminCreateDiscountCodeDto {
+  @IsString()
+  @MinLength(3)
+  code!: string;
+
+  @IsIn(['PERCENT', 'FIXED'])
+  type!: 'PERCENT' | 'FIXED';
+
+  /** Percent (1-100) for PERCENT, flat IRR amount for FIXED. */
+  @IsInt()
+  @Min(1)
+  value!: number;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  active?: boolean;
+
+  @IsOptional()
+  @IsDateString()
+  startsAt?: string;
+
+  @IsOptional()
+  @IsDateString()
+  expiresAt?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  maxUses?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  minSubtotalCents?: number;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  courseSlugs?: string[];
+}
+
+/**
+ * Partial update. Nullable fields accept `null` to clear them (unlimited uses,
+ * all courses, no date window) — the admin form relies on this to undo limits.
+ */
+export class AdminUpdateDiscountCodeDto {
+  @IsOptional()
+  @IsString()
+  @MinLength(3)
+  code?: string;
+
+  @IsOptional()
+  @IsIn(['PERCENT', 'FIXED'])
+  type?: 'PERCENT' | 'FIXED';
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  value?: number;
+
+  @IsOptional()
+  @IsString()
+  description?: string | null;
+
+  @IsOptional()
+  @IsBoolean()
+  active?: boolean;
+
+  @IsOptional()
+  @IsDateString()
+  startsAt?: string | null;
+
+  @IsOptional()
+  @IsDateString()
+  expiresAt?: string | null;
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  maxUses?: number | null;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  minSubtotalCents?: number | null;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  courseSlugs?: string[] | null;
 }

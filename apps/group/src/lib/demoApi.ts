@@ -97,12 +97,18 @@ import type {
   ProfileDetails,
   UpdateProfileDto,
   BootcampState,
+  AdminDiscountCode,
+  AdminDiscountCodeInput,
+  AdminDiscountCodeUpdate,
+  CartDiscountInfo,
 } from '@kia./shared';
 import { courseCatalog, primaryCourseSlug } from '@/lib/courseCatalog';
 import {
   buildRoadmapFromAnswers,
   computeReadinessResult,
   buildChallengeResult,
+  checkDiscountCode,
+  coursePriceCents,
   createDefaultSiteSettings,
   defaultExamBanks,
   genericExamQuestions,
@@ -121,6 +127,9 @@ import {
   scoreMiniIpip,
   toPublicExamQuestions,
   SYSTEM_ROLES,
+  eligibleSubtotalCents,
+  normalizeDiscountCode,
+  validateDiscountInput,
 } from '@kia./shared';
 import { ApiError } from '@/lib/apiError';
 import { clearTokens, setAccessToken } from '@/lib/auth';
@@ -129,6 +138,7 @@ const DEMO_SESSION_KEY = 'kia-academy-demo-session';
 const DEMO_STATE_KEY = 'kia-academy-demo-state';
 const DEMO_SETTINGS_KEY = 'kia-academy-demo-settings';
 const DEMO_TEST_BANKS_KEY = 'kia-academy-demo-test-banks';
+const DEMO_DISCOUNTS_KEY = 'kia-academy-demo-discounts';
 
 const DEMO_LEARNER: AuthUser = {
   id: 'demo-learner',
@@ -446,6 +456,8 @@ interface DemoPersistedState {
   lastAnswers: AssessmentAnswers | null;
   payments: PaymentResponse[];
   cartCourseSlugs: string[];
+  /** Coupon stored on the demo cart (null = none), mirroring `Cart.discountCode`. */
+  cartDiscountCode: string | null;
   orders: OrderResponse[];
   examAttempt: {
     attemptId: string;
@@ -616,6 +628,7 @@ function defaultState(): DemoPersistedState {
     },
     payments: [],
     cartCourseSlugs: [],
+    cartDiscountCode: null,
     orders: [],
     examAttempt: null,
     personalityResult: null,
@@ -698,9 +711,107 @@ function delay<T>(value: T, ms = 80): Promise<T> {
   });
 }
 
+/* ------------------------------------------------------------------ *
+ * Discount codes — demo parity with the API's DiscountCode + cart coupon.
+ * The same pure helpers decide validity, so demo and live behave alike.
+ * ------------------------------------------------------------------ */
+
+function demoSeedDiscounts(): AdminDiscountCode[] {
+  return [
+    {
+      id: 'disc-welcome20',
+      code: 'WELCOME20',
+      type: 'PERCENT',
+      value: 20,
+      description: '۲۰٪ تخفیف خوش‌آمدگویی',
+      active: true,
+      startsAt: null,
+      expiresAt: null,
+      maxUses: null,
+      usedCount: 0,
+      minSubtotalCents: null,
+      courseSlugs: null,
+      createdAt: DEMO_CREATED_AT,
+      updatedAt: DEMO_CREATED_AT,
+    },
+    {
+      id: 'disc-html100',
+      code: 'HTML100',
+      type: 'FIXED',
+      value: 1_000_000,
+      description: '۱۰۰ هزار تومان تخفیف دوره HTML',
+      active: true,
+      startsAt: null,
+      expiresAt: null,
+      maxUses: 50,
+      usedCount: 0,
+      minSubtotalCents: null,
+      courseSlugs: ['html'],
+      createdAt: DEMO_CREATED_AT,
+      updatedAt: DEMO_CREATED_AT,
+    },
+  ];
+}
+
+function readDemoDiscounts(): AdminDiscountCode[] {
+  if (typeof window === 'undefined') return demoSeedDiscounts();
+  try {
+    const raw = localStorage.getItem(DEMO_DISCOUNTS_KEY);
+    if (!raw) return demoSeedDiscounts();
+    return JSON.parse(raw) as AdminDiscountCode[];
+  } catch {
+    return demoSeedDiscounts();
+  }
+}
+
+function writeDemoDiscounts(codes: AdminDiscountCode[]): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(DEMO_DISCOUNTS_KEY, JSON.stringify(codes));
+}
+
+/** Failure reasons shared with the API so the UI can map them to messages. */
+const DEMO_DISCOUNT_ERRORS: Record<string, string> = {
+  NOT_FOUND: 'Discount code not found',
+  INACTIVE: 'Discount code is disabled',
+  NOT_STARTED: 'Discount code is not active yet',
+  EXPIRED: 'Discount code has expired',
+  EXHAUSTED: 'Discount code has reached its usage limit',
+  MIN_SUBTOTAL: 'Cart does not meet the minimum for this code',
+  NOT_APPLICABLE: 'Discount code does not apply to these courses',
+};
+
+/** Same check the API runs: the applied coupon or the failure reason. */
+function demoEvaluateDiscount(
+  code: string,
+  lines: Array<{ courseSlug: string; priceCents: number }>,
+): { ok: true; coupon: CartDiscountInfo } | { ok: false; reason: string } {
+  const normalized = normalizeDiscountCode(code);
+  const rule = readDemoDiscounts().find((candidate) => candidate.code === normalized);
+  if (!rule) return { ok: false, reason: 'NOT_FOUND' };
+  const subtotalCents = lines.reduce((sum, line) => sum + line.priceCents, 0);
+  const result = checkDiscountCode(rule, {
+    now: new Date(),
+    subtotalCents,
+    eligibleSubtotalCents: eligibleSubtotalCents(rule, lines),
+  });
+  if (!result.ok) return { ok: false, reason: result.reason };
+  return {
+    ok: true,
+    coupon: {
+      code: rule.code,
+      type: rule.type,
+      value: rule.value,
+      amountCents: result.amountCents,
+    },
+  };
+}
+
+function demoCartLines(items: CartItemResponse[]) {
+  return items.map((item) => ({ courseSlug: item.courseSlug, priceCents: item.priceCents }));
+}
+
 function buildDemoCart(state: DemoPersistedState): CartResponse {
   const settings = readDemoSettings();
-  const unitPrice = settings.pricing.courseCents;
   const siteName = settings.general.siteName || 'KIA.';
   const trackMap = new Map(settings.tracks.map((t) => [t.key, t.name]));
   const items: CartItemResponse[] = [];
@@ -708,7 +819,7 @@ function buildDemoCart(state: DemoPersistedState): CartResponse {
     const course = courses.find((c) => c.slug === slug);
     if (!course) continue;
     if (state.enrollments.includes(slug)) continue;
-    const priceCents = unitPrice;
+    const priceCents = coursePriceCents(settings.pricing, slug);
     const discountCents = 0;
     items.push({
       id: `cart-item-${course.id}`,
@@ -725,8 +836,15 @@ function buildDemoCart(state: DemoPersistedState): CartResponse {
     });
   }
   const subtotalCents = items.reduce((s, i) => s + i.priceCents, 0);
-  const discountCents = items.reduce((s, i) => s + i.discountCents, 0);
-  const totalCents = items.reduce((s, i) => s + i.finalPriceCents, 0);
+  const itemDiscountCents = items.reduce((s, i) => s + i.discountCents, 0);
+  // A stale code (expired, deactivated, deleted) silently drops out of the
+  // totals — same behaviour as the API's cart response.
+  const couponResult = state.cartDiscountCode
+    ? demoEvaluateDiscount(state.cartDiscountCode, demoCartLines(items))
+    : null;
+  const coupon = couponResult?.ok ? couponResult.coupon : null;
+  const discountCents = itemDiscountCents + (coupon?.amountCents ?? 0);
+  const totalCents = subtotalCents - discountCents;
   return {
     id: 'demo-cart',
     items,
@@ -734,6 +852,7 @@ function buildDemoCart(state: DemoPersistedState): CartResponse {
     subtotalCents,
     discountCents,
     totalCents,
+    discountCode: coupon,
     currency: settings.payment.currency,
     updatedAt: new Date().toISOString(),
   };
@@ -1228,7 +1347,16 @@ export const demoApi = {
     const state = readState();
     const settings = readDemoSettings();
     let amountCents = 0;
-    if (dto.productType === 'COURSE') amountCents = settings.pricing.courseCents;
+    if (dto.productType === 'COURSE') {
+      const slugs = dto.courseSlugs?.length
+        ? [...new Set(dto.courseSlugs.map((s) => s.trim()).filter(Boolean))]
+        : dto.productRef
+          ? [dto.productRef.trim()]
+          : [];
+      amountCents = slugs.length
+        ? slugs.reduce((sum, slug) => sum + coursePriceCents(settings.pricing, slug), 0)
+        : settings.pricing.courseCents;
+    }
     else if (dto.productType === 'ROADMAP_BUNDLE') {
       const answers = state.lastAnswers ?? defaultState().lastAnswers!;
       const roadmap = buildRoadmapFromAnswers(answers, false, 'local', {
@@ -1495,6 +1623,35 @@ export const demoApi = {
     requireUser();
     const state = readState();
     state.cartCourseSlugs = [];
+    state.cartDiscountCode = null;
+    writeState(state);
+    return delay(buildDemoCart(state));
+  },
+
+  async applyCartDiscount(code: string): Promise<CartResponse> {
+    requireUser();
+    const state = readState();
+    const raw = (code ?? '').trim();
+    if (!raw) throw new ApiError('Enter a discount code', 400, { code: 'DISCOUNT_REQUIRED' });
+    const cart = buildDemoCart(state);
+    if (cart.itemCount === 0) throw new ApiError('Cart is empty', 400, { code: 'CART_EMPTY' });
+    const result = demoEvaluateDiscount(raw, demoCartLines(cart.items));
+    if (!result.ok) {
+      throw new ApiError(
+        DEMO_DISCOUNT_ERRORS[result.reason] ?? 'Invalid discount code',
+        result.reason === 'NOT_FOUND' ? 404 : 400,
+        { code: result.reason },
+      );
+    }
+    state.cartDiscountCode = normalizeDiscountCode(raw);
+    writeState(state);
+    return delay(buildDemoCart(state));
+  },
+
+  async removeCartDiscount(): Promise<CartResponse> {
+    requireUser();
+    const state = readState();
+    state.cartDiscountCode = null;
     writeState(state);
     return delay(buildDemoCart(state));
   },
@@ -2854,6 +3011,108 @@ export const demoApi = {
         createdAt: DEMO_CREATED_AT,
       })),
     );
+  },
+
+  // ---- Discount codes (admin, demo parity with the real service) ----
+
+  async adminListDiscountCodes(): Promise<AdminDiscountCode[]> {
+    requireUser();
+    return delay(readDemoDiscounts());
+  },
+
+  async adminCreateDiscountCode(dto: AdminDiscountCodeInput): Promise<AdminDiscountCode> {
+    requireUser();
+    const codes = readDemoDiscounts();
+    const code = normalizeDiscountCode(dto.code);
+    const verdict = validateDiscountInput({
+      type: dto.type,
+      value: dto.value,
+      startsAt: dto.startsAt ?? null,
+      expiresAt: dto.expiresAt ?? null,
+      maxUses: dto.maxUses ?? null,
+    });
+    if (verdict) {
+      throw new ApiError('Invalid discount code', 400, { code: verdict });
+    }
+    if (codes.some((candidate) => candidate.code === code)) {
+      throw new ApiError(`Discount code "${code}" already exists`, 409);
+    }
+    const now = new Date().toISOString();
+    const slugs = dto.courseSlugs?.map((slug) => slug.trim()).filter(Boolean) ?? [];
+    const created: AdminDiscountCode = {
+      id: `disc-${Date.now()}`,
+      code,
+      type: dto.type,
+      value: dto.value,
+      description: dto.description?.trim() || null,
+      active: dto.active ?? true,
+      startsAt: dto.startsAt ?? null,
+      expiresAt: dto.expiresAt ?? null,
+      maxUses: dto.maxUses ?? null,
+      usedCount: 0,
+      minSubtotalCents: dto.minSubtotalCents ?? null,
+      courseSlugs: slugs.length > 0 ? slugs : null,
+      createdAt: now,
+      updatedAt: now,
+    };
+    writeDemoDiscounts([created, ...codes]);
+    return delay(created);
+  },
+
+  async adminUpdateDiscountCode(
+    id: string,
+    dto: AdminDiscountCodeUpdate,
+  ): Promise<AdminDiscountCode> {
+    requireUser();
+    const codes = readDemoDiscounts();
+    const existing = codes.find((candidate) => candidate.id === id);
+    if (!existing) throw new ApiError('Discount code not found', 404);
+
+    const code = dto.code ? normalizeDiscountCode(dto.code) : existing.code;
+    if (codes.some((candidate) => candidate.code === code && candidate.id !== id)) {
+      throw new ApiError(`Discount code "${code}" already exists`, 409);
+    }
+    const type = dto.type ?? existing.type;
+    const value = dto.value ?? existing.value;
+    const startsAt = dto.startsAt !== undefined ? dto.startsAt : existing.startsAt;
+    const expiresAt = dto.expiresAt !== undefined ? dto.expiresAt : existing.expiresAt;
+    const maxUses = dto.maxUses !== undefined ? dto.maxUses : existing.maxUses;
+    const verdict = validateDiscountInput({ type, value, startsAt, expiresAt, maxUses });
+    if (verdict) {
+      throw new ApiError('Invalid discount code', 400, { code: verdict });
+    }
+    const slugs =
+      dto.courseSlugs !== undefined
+        ? (dto.courseSlugs ?? []).map((slug) => slug.trim()).filter(Boolean)
+        : (existing.courseSlugs ?? []);
+    const updated: AdminDiscountCode = {
+      ...existing,
+      code,
+      type,
+      value,
+      description:
+        dto.description !== undefined ? dto.description?.trim() || null : existing.description,
+      active: dto.active ?? existing.active,
+      startsAt,
+      expiresAt,
+      maxUses,
+      minSubtotalCents:
+        dto.minSubtotalCents !== undefined ? dto.minSubtotalCents : existing.minSubtotalCents,
+      courseSlugs: slugs.length > 0 ? slugs : null,
+      updatedAt: new Date().toISOString(),
+    };
+    writeDemoDiscounts(codes.map((candidate) => (candidate.id === id ? updated : candidate)));
+    return delay(updated);
+  },
+
+  async adminDeleteDiscountCode(id: string): Promise<{ deleted: true }> {
+    requireUser();
+    const codes = readDemoDiscounts();
+    if (!codes.some((candidate) => candidate.id === id)) {
+      throw new ApiError('Discount code not found', 404);
+    }
+    writeDemoDiscounts(codes.filter((candidate) => candidate.id !== id));
+    return delay({ deleted: true as const });
   },
 
   /**

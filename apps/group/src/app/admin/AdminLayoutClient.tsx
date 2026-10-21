@@ -82,6 +82,7 @@ const GROUP_OF: Record<string, string> = {
   tests: 'content',
   competitions: 'content',
   finance: 'finance',
+  'finance-discounts': 'finance',
   analytics: 'finance',
   tickets: 'support',
   messages: 'support',
@@ -443,6 +444,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             key: 'payments',
           },
           {
+            id: 'finance-discounts',
+            href: '/admin/discounts',
+            label: t('admin.nav.discounts'),
+            key: 'discounts',
+          },
+          {
             id: 'finance-entitlements',
             href: '/admin/entitlements',
             label: t('admin.nav.financeEntitlements'),
@@ -574,7 +581,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               : item.id === 'settings'
                 ? pathname.startsWith('/admin/settings') || pathname.startsWith('/admin/contact')
                 : item.id === 'finance'
-                  ? pathname.startsWith('/admin/finance') || pathname.startsWith('/admin/payments')
+                  ? pathname.startsWith('/admin/finance') ||
+                    pathname.startsWith('/admin/payments') ||
+                    pathname.startsWith('/admin/discounts')
                   : false;
         if (childHit || nestedHit) next[item.id] = true;
       }

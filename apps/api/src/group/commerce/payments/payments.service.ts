@@ -6,6 +6,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { randomBytes } from 'crypto';
 import {
+  coursePriceCents,
   hasCourseEntitlement,
   normalizePaymentSettings,
   entitlementKey,
@@ -29,6 +30,7 @@ import type Stripe from 'stripe';
 import { isProductionEnv } from '@kia./platform';
 import { Prisma } from '@kia./platform';
 import { CartService } from '../cart/cart.service';
+import { DiscountService, type AppliedCoupon, type DiscountLine } from '../discounts/discount.service';
 import { EmailService } from '@kia./platform';
 import { EventBusService } from '@kia./platform';
 import { PrismaService } from '@kia./platform';
@@ -93,6 +95,7 @@ export class PaymentsService {
     private readonly siteSettings: SiteSettingsService,
     private readonly providers: PaymentProviderRegistry,
     private readonly cartService: CartService,
+    private readonly discounts: DiscountService,
     private readonly events: EventBusService,
   ) {}
 
@@ -104,7 +107,11 @@ export class PaymentsService {
       throw new BadRequestException('productType is required');
     }
     const lines = await this.resolveDirectLines(userId, { ...dto, productType: dto.productType });
-    return this.createOrderAndPay(userId, lines, 'DIRECT');
+    // A direct checkout may carry an optional coupon; only COURSE lines are eligible.
+    const coupon = dto.discountCode
+      ? await this.discounts.validateForCheckout(dto.discountCode, this.courseDiscountLines(lines))
+      : null;
+    return this.createOrderAndPay(userId, lines, 'DIRECT', coupon);
   }
 
   async checkoutCart(userId: string): Promise<PaymentResponse> {
@@ -124,7 +131,12 @@ export class PaymentsService {
       quantity: 1,
       courseId: item.courseId,
     }));
-    return this.createOrderAndPay(userId, lines, 'CART');
+    // Re-validate the stored coupon authoritatively at checkout time; a code
+    // that went invalid drops out and checkout proceeds at the full price.
+    const coupon = cart.discountCode
+      ? await this.discounts.validateForCheckout(cart.discountCode.code, this.courseDiscountLines(lines))
+      : null;
+    return this.createOrderAndPay(userId, lines, 'CART', coupon);
   }
 
   async retryPayment(userId: string, orderId: string): Promise<PaymentResponse> {
@@ -832,6 +844,7 @@ export class PaymentsService {
     userId: string,
     lines: LineDraft[],
     source: 'CART' | 'DIRECT',
+    coupon?: AppliedCoupon | null,
   ): Promise<PaymentResponse> {
     const paymentCfg = await this.resolvePaymentConfig();
     this.assertPaymentsEnabled(paymentCfg);
@@ -843,8 +856,14 @@ export class PaymentsService {
     await this.assertNotAlreadyOwned(userId, lines);
 
     const subtotalCents = lines.reduce((s, l) => s + l.unitPriceCents * l.quantity, 0);
-    const discountCents = lines.reduce((s, l) => s + l.discountCents, 0);
-    const totalCents = lines.reduce((s, l) => s + l.finalPriceCents, 0);
+    const itemDiscountCents = lines.reduce((s, l) => s + l.discountCents, 0);
+    // The coupon is clamped to what is still payable after per-item discounts,
+    // so a cart is never paid to take a course.
+    const couponCents = coupon
+      ? Math.max(0, Math.min(coupon.amountCents, subtotalCents - itemDiscountCents))
+      : 0;
+    const discountCents = itemDiscountCents + couponCents;
+    const totalCents = subtotalCents - discountCents;
     const currency = paymentCfg.currency;
 
     const productType = lines.length === 1 ? lines[0].productType : 'COURSE';
@@ -864,6 +883,8 @@ export class PaymentsService {
         totalCents,
         currency,
         source,
+        // Keep the applied code on the order for the finance/orders admin list.
+        metadata: coupon ? JSON.stringify({ discountCode: coupon.code }) : null,
         items: {
           create: lines.map((l) => ({
             productType: l.productType,
@@ -894,7 +915,20 @@ export class PaymentsService {
       },
     });
 
+    // Consume one redemption of the coupon and record the audit row. Best-effort:
+    // a lost race on `maxUses` never blocks the already-created order.
+    if (coupon) {
+      await this.discounts.recordUsage(coupon, userId, order.id);
+    }
+
     return this.startProviderCheckout(userId, payment.id, order.id, lines, paymentCfg);
+  }
+
+  /** Discount codes apply to COURSE lines only — roadmap bundles are excluded. */
+  private courseDiscountLines(lines: LineDraft[]): DiscountLine[] {
+    return lines
+      .filter((l) => l.productType === 'COURSE')
+      .map((l) => ({ courseSlug: l.productRef, priceCents: l.unitPriceCents * l.quantity }));
   }
 
   private async startProviderCheckout(
@@ -1099,7 +1133,7 @@ export class PaymentsService {
           where: { OR: [{ slug }, { id: slug }], published: true },
         });
         if (!course) throw new NotFoundException(`Course ${slug} not found`);
-        const unit = settings.pricing.courseCents;
+        const unit = coursePriceCents(settings.pricing, course.slug);
         lines.push({
           productType: 'COURSE',
           productRef: course.slug,

@@ -20,6 +20,7 @@ export function AdminAccessMatrix({
     'challenges',
     'users',
     'payments',
+    'discounts',
     'tests',
     'tickets',
     'messages',

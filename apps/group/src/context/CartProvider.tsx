@@ -22,6 +22,9 @@ interface CartContextValue {
   addCourse: (slug: string) => Promise<CartResponse>;
   removeItem: (id: string) => Promise<void>;
   clear: () => Promise<void>;
+  /** Apply a coupon; rejects with ApiError (details.code holds the reason). */
+  applyDiscount: (code: string) => Promise<void>;
+  removeDiscount: () => Promise<void>;
 }
 
 const emptyCart = (): CartResponse => ({
@@ -31,6 +34,7 @@ const emptyCart = (): CartResponse => ({
   subtotalCents: 0,
   discountCents: 0,
   totalCents: 0,
+  discountCode: null,
   currency: 'irr',
   updatedAt: new Date(0).toISOString(),
 });
@@ -94,6 +98,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setError('');
   }, []);
 
+  const applyDiscount = useCallback(async (code: string) => {
+    const next = await api.applyCartDiscount(code);
+    setCart(next);
+    setError('');
+  }, []);
+
+  const removeDiscount = useCallback(async () => {
+    const next = await api.removeCartDiscount();
+    setCart(next);
+    setError('');
+  }, []);
+
   const value = useMemo<CartContextValue>(
     () => ({
       cart,
@@ -104,8 +120,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
       addCourse,
       removeItem,
       clear,
+      applyDiscount,
+      removeDiscount,
     }),
-    [cart, loading, error, refresh, addCourse, removeItem, clear],
+    [cart, loading, error, refresh, addCourse, removeItem, clear, applyDiscount, removeDiscount],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

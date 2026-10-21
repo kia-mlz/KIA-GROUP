@@ -11,6 +11,12 @@ class AddToCartBodyDto {
   courseSlug!: string;
 }
 
+class ApplyDiscountBodyDto {
+  @IsString()
+  @MinLength(1)
+  code!: string;
+}
+
 @Controller('cart')
 @UseGuards(JwtAuthGuard)
 export class CartController {
@@ -45,5 +51,18 @@ export class CartController {
   @Delete()
   clear(@CurrentUser() user: AuthUser): Promise<CartResponse> {
     return this.cartService.clearCart(user.id);
+  }
+
+  @Post('discount')
+  applyDiscount(
+    @CurrentUser() user: AuthUser,
+    @Body() dto: ApplyDiscountBodyDto,
+  ): Promise<CartResponse> {
+    return this.cartService.applyDiscount(user.id, dto.code);
+  }
+
+  @Delete('discount')
+  removeDiscount(@CurrentUser() user: AuthUser): Promise<CartResponse> {
+    return this.cartService.removeDiscount(user.id);
   }
 }

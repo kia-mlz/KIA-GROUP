@@ -9,6 +9,11 @@ import {
 import { MODULE_PRICES, TRACKS } from './tracks';
 import { PRODUCT_PRICES } from '../types/payment';
 
+/** Per-course launch prices in Iranian Rials (IRR) — 4,000,000 IRR = 400,000 Toman. */
+const COURSE_PRICES: Record<string, number> = {
+  html: 4_000_000,
+};
+
 const TRACK_ICONS: Record<string, string> = {
   web: '🌐',
   ai: '🤖',
@@ -42,6 +47,8 @@ export function createDefaultSiteSettings(): SiteSettings {
       courseCents: PRODUCT_PRICES.COURSE,
       modulePrices: [...MODULE_PRICES],
       bundleDiscountPercent: 20,
+      // Per-course launch pricing (IRR). The HTML course sells at 400,000 Toman.
+      coursePrices: { ...COURSE_PRICES },
     },
     tracks: Object.entries(TRACKS).map(([key, track]) => ({
       key,
@@ -97,6 +104,7 @@ export function createDefaultSiteSettings(): SiteSettings {
       challenges: createSectionPermission(true, true, false),
       users: createSectionPermission(false, false, false),
       payments: createSectionPermission(true, false, false),
+      discounts: createSectionPermission(true, true, false),
       tests: createSectionPermission(true, true, true),
       tickets: createSectionPermission(true, true, true),
       messages: createSectionPermission(true, true, true),
@@ -128,6 +136,10 @@ export function mergeSiteSettings(
       modulePrices: patch.pricing?.modulePrices
         ? [...patch.pricing.modulePrices]
         : [...base.pricing.modulePrices],
+      coursePrices: {
+        ...base.pricing.coursePrices,
+        ...patch.pricing?.coursePrices,
+      },
     },
     tracks: patch.tracks
       ? patch.tracks.map((t) => ({ ...t, modules: [...t.modules] }))
@@ -145,6 +157,7 @@ export function mergeSiteSettings(
           challenges: { ...base.adminAccess.challenges, ...patch.adminAccess.challenges },
           users: { ...base.adminAccess.users, ...patch.adminAccess.users },
           payments: { ...base.adminAccess.payments, ...patch.adminAccess.payments },
+          discounts: { ...base.adminAccess.discounts, ...patch.adminAccess.discounts },
           tests: { ...base.adminAccess.tests, ...patch.adminAccess.tests },
           tickets: { ...base.adminAccess.tickets, ...patch.adminAccess.tickets },
           messages: { ...base.adminAccess.messages, ...patch.adminAccess.messages },

@@ -1,7 +1,7 @@
 'use client';
 
-import type { CartResponse } from '@kia./shared';
-import { Check, CreditCard, Loader2, ShoppingCart } from 'lucide-react';
+import { coursePriceCents, type CartResponse } from '@kia./shared';
+import { BadgePercent, Check, CreditCard, Loader2, ShoppingCart } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { RequireAuth } from '@/components/auth/RequireAuth';
@@ -49,8 +49,10 @@ function CheckoutContent() {
     roadmap?.id === roadmapId ? (roadmap?.pricing?.discounted ?? null) : null,
   );
 
-  const courseUnitPrice = settings.pricing.courseCents;
-  const courseTotal = courseSlugs.length * courseUnitPrice;
+  const courseTotal = courseSlugs.reduce(
+    (sum, slug) => sum + coursePriceCents(settings.pricing, slug),
+    0,
+  );
   const amount = fromCart
     ? (cartSummary?.totalCents ?? 0)
     : isCourseCheckout
@@ -257,6 +259,13 @@ function CheckoutContent() {
                   </li>
                 ))}
               </ul>
+            ) : null}
+            {cartSummary?.discountCode ? (
+              <p className="auth-sub">
+                <BadgePercent size={14} className="inline-leading-icon" />{' '}
+                {t('cart.couponApplied', { code: cartSummary.discountCode.code })} —{' '}
+                {format.currency(cartSummary.discountCents)}
+              </p>
             ) : null}
           </div>
         ) : (

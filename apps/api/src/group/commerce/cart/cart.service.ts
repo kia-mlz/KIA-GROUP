@@ -5,20 +5,24 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import {
+  coursePriceCents,
   hasCourseEntitlement,
   normalizePaymentSettings,
+  normalizeDiscountCode,
   entitlementKey,
   type CartItemResponse,
   type CartResponse,
 } from '@kia./shared';
 import { PrismaService } from '@kia./platform';
 import { SiteSettingsService } from '@kia./platform';
+import { DiscountService, type DiscountLine } from '../discounts/discount.service';
 
 @Injectable()
 export class CartService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly siteSettings: SiteSettingsService,
+    private readonly discounts: DiscountService,
   ) {}
 
   async getCart(userId: string): Promise<CartResponse> {
@@ -113,7 +117,6 @@ export class CartService {
   private async toResponse(cartId: string, userId: string): Promise<CartResponse> {
     const settings = await this.siteSettings.get();
     const payment = normalizePaymentSettings(settings.payment);
-    const unitPrice = settings.pricing.courseCents;
     const siteName = settings.general.siteName || 'KIA.';
 
     const cart = await this.prisma.cart.findUniqueOrThrow({
@@ -145,7 +148,7 @@ export class CartService {
     const trackMap = new Map(settings.tracks.map((t) => [t.key, t.name]));
     const items: CartItemResponse[] = kept.map((item) => {
       const discountCents = 0;
-      const priceCents = unitPrice;
+      const priceCents = coursePriceCents(settings.pricing, item.course.slug);
       const instructor =
         (item.course.trackKey && trackMap.get(item.course.trackKey)) || siteName;
       return {
@@ -164,8 +167,26 @@ export class CartService {
     });
 
     const subtotalCents = items.reduce((s, i) => s + i.priceCents, 0);
-    const discountCents = items.reduce((s, i) => s + i.discountCents, 0);
-    const totalCents = items.reduce((s, i) => s + i.finalPriceCents, 0);
+    const itemDiscountCents = items.reduce((s, i) => s + i.discountCents, 0);
+
+    // Apply the cart-level coupon (if any). A stale code silently drops out of
+    // the totals and is cleared, so an expired/deactivated code never blocks the
+    // cart from rendering.
+    const lines: DiscountLine[] = items.map((i) => ({
+      courseSlug: i.courseSlug,
+      priceCents: i.priceCents,
+    }));
+    const applied = await this.discounts.evaluateOrNull(cart.discountCode, lines);
+    if (cart.discountCode && !applied) {
+      await this.prisma.cart.update({
+        where: { id: cart.id },
+        data: { discountCode: null },
+      });
+    }
+
+    const couponCents = applied?.amountCents ?? 0;
+    const discountCents = itemDiscountCents + couponCents;
+    const totalCents = subtotalCents - discountCents;
 
     return {
       id: cart.id,
@@ -174,8 +195,44 @@ export class CartService {
       subtotalCents,
       discountCents,
       totalCents,
+      discountCode: applied,
       currency: payment.currency,
       updatedAt: cart.updatedAt.toISOString(),
     };
+  }
+
+  /**
+   * Validate a coupon against the current cart and store it. Throws a mapped
+   * exception (with a machine-readable `code`) when the coupon is unusable so
+   * the UI can show a localized reason.
+   */
+  async applyDiscount(userId: string, code: string): Promise<CartResponse> {
+    const trimmed = (code ?? '').trim();
+    if (!trimmed) throw new BadRequestException({ code: 'DISCOUNT_REQUIRED', message: 'Enter a discount code' });
+
+    const cart = await this.ensureCart(userId);
+    const settings = await this.siteSettings.get();
+    const rows = await this.prisma.cartItem.findMany({
+      where: { cartId: cart.id },
+      include: { course: true },
+    });
+    const lines: DiscountLine[] = rows.map((r) => ({
+      courseSlug: r.course.slug,
+      priceCents: coursePriceCents(settings.pricing, r.course.slug),
+    }));
+    if (lines.length === 0) throw new BadRequestException({ code: 'CART_EMPTY', message: 'Cart is empty' });
+
+    // Throws on an invalid code — the learner sees why before it is stored.
+    await this.discounts.evaluate(trimmed, lines);
+
+    const normalized = normalizeDiscountCode(trimmed);
+    await this.prisma.cart.update({ where: { id: cart.id }, data: { discountCode: normalized } });
+    return this.toResponse(cart.id, userId);
+  }
+
+  async removeDiscount(userId: string): Promise<CartResponse> {
+    const cart = await this.ensureCart(userId);
+    await this.prisma.cart.update({ where: { id: cart.id }, data: { discountCode: null } });
+    return this.toResponse(cart.id, userId);
   }
 }

@@ -380,6 +380,40 @@ export default function AdminSettingsPage() {
               </div>
               <div className="admin-section">
                 <div className="admin-header-row">
+                  <h3>{t('admin.settings.pricing.coursePrices')}</h3>
+                </div>
+                <p className="admin-sub">{t('admin.settings.pricing.coursePricesHint')}</p>
+                {courses.map((course) => (
+                  <label className="form-field" key={course.slug}>
+                    <span>{course.title}</span>
+                    <input
+                      type="number"
+                      min={0}
+                      value={
+                        settings.pricing.coursePrices?.[course.slug] !== undefined
+                          ? Math.round(settings.pricing.coursePrices[course.slug] / 10)
+                          : ''
+                      }
+                      placeholder={t('admin.settings.pricing.coursePricePlaceholder')}
+                      onChange={(e) => {
+                        const raw = e.target.value.trim();
+                        const next = { ...(settings.pricing.coursePrices ?? {}) };
+                        if (raw === '') {
+                          delete next[course.slug];
+                        } else {
+                          next[course.slug] = Math.round(Number(raw) * 10);
+                        }
+                        setSettings({
+                          ...settings,
+                          pricing: { ...settings.pricing, coursePrices: next },
+                        });
+                      }}
+                    />
+                  </label>
+                ))}
+              </div>
+              <div className="admin-section">
+                <div className="admin-header-row">
                   <h3>{t('admin.settings.pricing.modules')}</h3>
                   <button
                     type="button"

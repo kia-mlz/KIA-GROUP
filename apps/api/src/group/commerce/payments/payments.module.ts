@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CartModule } from '../cart/cart.module';
+import { DiscountModule } from '../discounts/discount.module';
 import { EmailModule } from '@kia./platform';
 import { SiteSettingsModule } from '@kia./platform';
 import { StripeModule } from '../stripe/stripe.module';
@@ -9,7 +10,7 @@ import { PaymentsController } from './payments.controller';
 import { PaymentsService } from './payments.service';
 
 @Module({
-  imports: [StripeModule, EmailModule, SiteSettingsModule, CartModule],
+  imports: [StripeModule, EmailModule, SiteSettingsModule, CartModule, DiscountModule],
   controllers: [PaymentsController],
   providers: [PaymentsService, StripePaymentProvider, PaymentProviderRegistry],
   exports: [PaymentsService],

@@ -135,7 +135,9 @@ describe('admin refund action', () => {
 describe('admin soft delete + restore', () => {
   const usersPage = readFileSync(path.join(ADMIN_DIR, 'users', 'page.tsx'), 'utf8');
   const apiLib = readSrc('lib/api.ts');
-  const service = readRepo('apps/api/src/group/admin/admin.service.ts');
+  // The users filter moved out of the AdminService facade into its department
+  // service (admin-users.service.ts); assert against the file that owns it.
+  const service = readRepo('apps/api/src/group/admin/admin-users.service.ts');
 
   it('hides deleted accounts unless the view asks for them', () => {
     // Default must stay "active only" — widening it would surprise every caller.

@@ -101,6 +101,9 @@ import type {
   UpdateProfileDto,
   BootcampState,
   AdminCourseExam,
+  AdminDiscountCode,
+  AdminDiscountCodeInput,
+  AdminDiscountCodeUpdate,
   CourseExamSummary,
   CourseExamAttemptSession,
   CourseExamSubmitResult,
@@ -438,6 +441,22 @@ const liveApi = {
 
   clearCart(): Promise<CartResponse> {
     return request<CartResponse>('/cart', { method: 'DELETE' });
+  },
+
+  /**
+   * Apply a coupon to the cart. The API validates it against the current cart
+   * and rejects with a machine-readable `details.code` (EXPIRED, MIN_SUBTOTAL,
+   * …) that the cart UI turns into a localized message.
+   */
+  applyCartDiscount(code: string): Promise<CartResponse> {
+    return request<CartResponse>('/cart/discount', {
+      method: 'POST',
+      body: JSON.stringify({ code }),
+    });
+  },
+
+  removeCartDiscount(): Promise<CartResponse> {
+    return request<CartResponse>('/cart/discount', { method: 'DELETE' });
   },
 
   listCourses(): Promise<CourseSummary[]> {
@@ -910,6 +929,33 @@ const liveApi = {
 
   adminListPayments(): Promise<AdminPayment[]> {
     return request<AdminPayment[]>('/admin/payments');
+  },
+
+  /* --- Discount codes -------------------------------------------------------- */
+
+  adminListDiscountCodes(): Promise<AdminDiscountCode[]> {
+    return request<AdminDiscountCode[]>('/admin/discounts');
+  },
+
+  adminCreateDiscountCode(dto: AdminDiscountCodeInput): Promise<AdminDiscountCode> {
+    return request<AdminDiscountCode>('/admin/discounts', {
+      method: 'POST',
+      body: JSON.stringify(dto),
+    });
+  },
+
+  adminUpdateDiscountCode(
+    id: string,
+    dto: AdminDiscountCodeUpdate,
+  ): Promise<AdminDiscountCode> {
+    return request<AdminDiscountCode>(`/admin/discounts/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(dto),
+    });
+  },
+
+  adminDeleteDiscountCode(id: string): Promise<{ deleted: true }> {
+    return request<{ deleted: true }>(`/admin/discounts/${id}`, { method: 'DELETE' });
   },
 
   /**
