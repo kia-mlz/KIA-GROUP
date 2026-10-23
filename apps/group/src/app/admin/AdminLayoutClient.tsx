@@ -190,6 +190,6 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
       </header>
       <div className="admin-page-content">{children}</div>
     </main>
-    <AdminCommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} commands={paletteCommands} />
+    <AdminCommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} commands={paletteCommands} canSearchUsers={can('users', 'view')} />
   </div>;
 }

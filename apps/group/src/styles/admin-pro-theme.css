@@ -45,6 +45,72 @@
   font-family: inherit;
 }
 
+/* ==========================================================================
+   Token remap (readability fix)
+   admin-pro.css defines --apro-* tokens for a dark tech base. On the light
+   canvas above several of those (near-white text, pale accents) are unreadable.
+   This remap keeps every --apro-* consumer in admin-pro.css working, but with
+   light-canvas values — dark ink text, readable accents and semantic colours
+   that pass contrast on white. Sidebars keep their own hardcoded treatment,
+   so they are unaffected.
+
+   .admin-control-room is the active Swiss control-center skin (light canvas,
+   white cards) — it needs the same remap: admin-pro.css component styles
+   underneath it still consume the dark-theme --apro-* tokens.
+   ========================================================================== */
+
+.admin-shell--redesigned,
+.admin-control-room {
+  --apro-bg: #f5f5f2;
+  --apro-surface: #ffffff;
+  --apro-surface-2: #fafaf8;
+  --apro-surface-3: #f1f1ec;
+  --apro-glass: rgba(255, 255, 255, 0.78);
+  --apro-overlay: rgba(20, 21, 22, 0.45);
+
+  --apro-text: #1b1d1f;
+  --apro-text-secondary: #45474b;
+  --apro-text-muted: #5d6065;
+  --apro-text-faint: #75797f;
+
+  --apro-accent: #3d55d1;
+  --apro-accent-hover: #2e44b8;
+  --apro-accent-active: #283da4;
+  --apro-accent-soft: #4f66d8;
+  --apro-accent-dim: rgba(61, 85, 209, 0.09);
+  --apro-accent-line: rgba(61, 85, 209, 0.32);
+
+  --apro-success: #16815f;
+  --apro-success-dim: rgba(22, 129, 95, 0.1);
+  --apro-success-line: rgba(22, 129, 95, 0.32);
+  --apro-warning: #9a660a;
+  --apro-warning-dim: rgba(183, 118, 12, 0.1);
+  --apro-warning-line: rgba(183, 118, 12, 0.32);
+  --apro-danger: #c42d40;
+  --apro-danger-dim: rgba(196, 45, 64, 0.08);
+  --apro-danger-line: rgba(196, 45, 64, 0.3);
+  --apro-info: #3267c8;
+  --apro-info-dim: rgba(50, 103, 200, 0.08);
+  --apro-info-line: rgba(50, 103, 200, 0.3);
+  --apro-money: #8a5c08;
+  --apro-money-dim: rgba(183, 118, 12, 0.12);
+  --apro-money-line: rgba(183, 118, 12, 0.32);
+
+  --apro-line: #e4e3de;
+  --apro-line-faint: #eeece7;
+  --apro-line-strong: #d4d3ce;
+
+  --apro-overlay: rgba(20, 21, 22, 0.45);
+}
+
+/* Inputs: admin-pro.css gives fields a dark translucent fill (dark-theme
+   base). On the light canvas they must be light fields with dark ink. */
+.admin-shell--redesigned :is(.admin-input, .admin-select, .admin-textarea),
+.admin-control-room :is(.admin-input, .admin-select, .admin-textarea) {
+  background: var(--apro-surface-2);
+  color: var(--apro-text);
+}
+
 /* ============================== Sidebar ==================================== */
 
 .admin-shell--redesigned .admin-sidebar {

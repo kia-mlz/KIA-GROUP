@@ -72,7 +72,10 @@ async function bootstrap() {
     credentials: true,
   });
 
-  const port = process.env.PORT ?? 3001;
+  // `PORT=0` (or any non-positive value) means "no usable port set" — fall back to 3001
+  // instead of letting listen() bind an ephemeral port silently.
+  const configuredPort = Number(process.env.PORT);
+  const port = Number.isFinite(configuredPort) && configuredPort > 0 ? configuredPort : 3001;
   await app.listen(port);
 
   // Ensure SIGTERM/SIGINT close in-flight requests and DB connections cleanly.

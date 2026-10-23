@@ -23,14 +23,18 @@ export default function AdminCommandPalette({
   open,
   onClose,
   commands,
+  canSearchUsers,
 }: {
   open: boolean;
   onClose: () => void;
   commands: PaletteCommand[];
+  /** Permission-aware: do not even request user data without users.view. */
+  canSearchUsers: boolean;
 }) {
   const router = useRouter();
   const { t } = useLanguage();
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState('');
   const [users, setUsers] = useState<AdminUser[]>([]);
@@ -43,7 +47,7 @@ export default function AdminCommandPalette({
     return commands.filter((cmd) => cmd.label.toLowerCase().includes(q));
   }, [commands, query]);
 
-  const showUserSearch = query.trim().length >= 2;
+  const showUserSearch = canSearchUsers && query.trim().length >= 2;
 
   const flatItems = useMemo(
     () => [
@@ -106,6 +110,20 @@ export default function AdminCommandPalette({
       if (event.key === 'Escape') {
         event.preventDefault();
         onClose();
+      } else if (event.key === 'Tab') {
+        const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), input:not([disabled]), [href]',
+        );
+        if (!focusable?.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
       } else if (event.key === 'ArrowDown') {
         event.preventDefault();
         setActiveIndex((i) => (flatItems.length ? (i + 1) % flatItems.length : 0));
@@ -134,6 +152,7 @@ export default function AdminCommandPalette({
       }}
     >
       <div
+        ref={dialogRef}
         className="admin-palette"
         role="dialog"
         aria-modal="true"

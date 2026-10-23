@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { AdminPayment, AdminStats } from '@kia./shared';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api, ApiError } from '@/lib/api';
+import { useAdminAccess } from '@/components/admin/useAdminAccess';
 
 function monthLabel(date: Date, locale: string): string {
   return new Intl.DateTimeFormat(locale === 'fa' ? 'fa-IR' : 'en-US', {
@@ -15,13 +16,20 @@ function monthLabel(date: Date, locale: string): string {
 
 export default function AdminAnalyticsPage() {
   const { t, format, locale } = useLanguage();
+  const { can } = useAdminAccess();
+  const canViewPayments = can('payments', 'view');
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [payments, setPayments] = useState<AdminPayment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    Promise.all([api.adminStats(), api.adminListPayments().catch(() => [] as AdminPayment[])])
+    Promise.all([
+      api.adminStats(),
+      canViewPayments
+        ? api.adminListPayments().catch(() => [] as AdminPayment[])
+        : Promise.resolve([] as AdminPayment[]),
+    ])
       .then(([nextStats, nextPayments]) => {
         setStats(nextStats);
         setPayments(nextPayments);
@@ -30,7 +38,7 @@ export default function AdminAnalyticsPage() {
         setError(err instanceof ApiError ? err.message : t('admin.analytics.error'));
       })
       .finally(() => setLoading(false));
-  }, [t]);
+  }, [t, canViewPayments]);
 
   const enrollmentRate = useMemo(() => {
     if (!stats || stats.users <= 0) return 0;
@@ -111,7 +119,7 @@ export default function AdminAnalyticsPage() {
   return (
     <div className="admin-content">
       <div className="admin-stat-grid">
-        <div className="admin-stat-card highlight">
+        {canViewPayments ? <div className="admin-stat-card highlight">
           <div className="admin-stat-row">
             <div>
               <span className="admin-stat-label">{t('admin.stats.revenue')}</span>
@@ -121,7 +129,7 @@ export default function AdminAnalyticsPage() {
               <Wallet size={18} />
             </span>
           </div>
-        </div>
+        </div> : null}
         <div className="admin-stat-card">
           <div className="admin-stat-row">
             <div>
@@ -157,7 +165,7 @@ export default function AdminAnalyticsPage() {
         </div>
       </div>
 
-      <div className="admin-grid admin-grid-3" style={{ marginBottom: '1.5rem' }}>
+      {canViewPayments ? <div className="admin-grid admin-grid-3" style={{ marginBottom: '1.5rem' }}>
         <article className="admin-card admin-span-2">
           <div className="admin-section-head">
             <div>
@@ -211,9 +219,9 @@ export default function AdminAnalyticsPage() {
             )}
           </div>
         </article>
-      </div>
+      </div> : null}
 
-      <article className="admin-card">
+      {canViewPayments ? <article className="admin-card">
         <div className="admin-section-head">
           <div>
             <h2>{t('admin.analytics.byProduct')}</h2>
@@ -248,7 +256,7 @@ export default function AdminAnalyticsPage() {
             </tbody>
           </table>
         </div>
-      </article>
+      </article> : null}
     </div>
   );
 }

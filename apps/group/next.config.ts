@@ -76,6 +76,30 @@ const nextConfig: NextConfig = {
       : {}),
   ...(!isGitHubPages
     ? {
+        async redirects() {
+          // Legacy admin routes moved into department panels — keep old
+          // bookmarks/links working with permanent redirects.
+          return [
+            { source: '/admin/courses', destination: '/admin/academy/courses', permanent: true },
+            {
+              source: '/admin/courses/new',
+              destination: '/admin/academy/courses/new',
+              permanent: true,
+            },
+            {
+              source: '/admin/courses/:slug/edit',
+              destination: '/admin/academy/courses/:slug/edit',
+              permanent: true,
+            },
+            { source: '/admin/tests', destination: '/admin/academy/tests', permanent: true },
+            {
+              source: '/admin/competitions',
+              destination: '/admin/events/competitions',
+              permanent: true,
+            },
+            { source: '/admin/challenges', destination: '/admin/events/challenges', permanent: true },
+          ];
+        },
         async rewrites() {
           return [
             {

@@ -66,6 +66,32 @@
 
 .admin-cr-mobile-menu,.admin-cr-scrim { display: none; }
 .admin-control-room.is-collapsed .admin-cr-brand-copy,.admin-control-room.is-collapsed :is(.admin-cr-overview span,.admin-cr-departments span,.admin-cr-nav-section-trigger span,.admin-cr-nav-item span,.admin-cr-department-switcher,.admin-cr-account > span:nth-child(2),.admin-cr-account button,.admin-cr-return) { display: none; }.admin-control-room.is-collapsed .admin-cr-sidebar { align-items: center; padding-inline: .5rem; overflow: visible; }.admin-control-room.is-collapsed .admin-cr-brand { margin-inline: 0; }.admin-control-room.is-collapsed .admin-cr-nav-section-trigger { justify-content: center; }.admin-control-room.is-collapsed .admin-cr-nav-section-chevron { display: none; }.admin-control-room.is-collapsed .admin-cr-nav-items { position: absolute; inset-inline-start: 4.2rem; margin-top: -2.45rem; min-width: 13rem; padding: .45rem; border: 1px solid var(--cr-line); border-radius: .5rem; background: #fff; box-shadow: 0 14px 28px rgba(15,23,42,.14); }.admin-control-room.is-collapsed .admin-cr-nav-item { color: #526177; }.admin-control-room.is-collapsed .admin-cr-nav-item:hover { background: #f4f7fb; }
+
 @media (max-width:900px) { .admin-control-room,.admin-control-room.is-collapsed { grid-template-columns:minmax(0,1fr); }.admin-control-room .admin-cr-sidebar { position:fixed; inset:0 0 0 auto; width:min(18rem,86vw); transform:translateX(105%); transition:transform 190ms ease; box-shadow:none; }.admin-control-room.is-drawer-open .admin-cr-sidebar { transform:translateX(0); box-shadow:0 12px 48px rgba(15,23,42,.26); }.admin-control-room .admin-cr-scrim { position:fixed; z-index:15; inset:0; border:0; opacity:0; pointer-events:none; background:rgba(15,23,42,.42); }.admin-control-room.is-drawer-open .admin-cr-scrim { display:block; opacity:1; pointer-events:auto; }.admin-control-room .admin-cr-mobile-menu { position:fixed; z-index:12; top:1.45rem; inset-inline-start:1rem; display:grid; place-items:center; width:2.5rem; height:2.5rem; padding:0; border:1px solid var(--cr-line); color:var(--cr-ink); border-radius:.42rem; background:#fff; cursor:pointer; }.admin-cr-header { padding-inline-start:4.15rem; }.admin-cr-collapse { display:none; } }
+
+/* Primary mobile-tablet responsiveness fixes: page content must shrink inside
+ the drawer layout instead of forcing wide rows (which clipped off the canvas),
+ and toolbar/header rows wrap their fixed-width fields. */
+@media (max-width:900px) {
+ .admin-control-room .admin-page-content,
+ .admin-control-room .admin-content {
+ min-width: 0;
+ max-width: 100%;
+ }
+ .admin-control-room .admin-header-row,
+ .admin-control-room .admin-toolbar,
+ .admin-control-room .admin-section-head {
+ flex-wrap: wrap;
+ min-width: 0;
+ }
+ .admin-control-room .admin-header-row > * { max-width: 100%; }
+ .admin-control-room .admin-toolbar :is(.admin-input, .admin-select) {
+ flex: 1 1 10rem;
+ width: auto;
+ min-width: 0;
+ max-width: 100%;
+ }
+ .admin-control-room .admin-search-trigger { width: min(100%, 29rem); }
+}
 @media (max-width:620px) { .admin-cr-header { min-height:4.7rem; padding-block:.75rem; }.admin-cr-title h1 { font-size:1rem; }.admin-cr-search span,.admin-cr-search kbd { display:none; }.admin-cr-search { width:2.5rem; justify-content:center; padding:0; }.admin-cr-header-actions { gap:.25rem; }.admin-control-room .admin-page-content { padding:1rem; }.admin-control-room .admin-dashboard-intro { min-height:11rem; align-items:flex-start; flex-direction:column; }.admin-control-room .admin-dashboard-intro-actions { width:100%; justify-content:space-between; } }
 @media (prefers-reduced-motion:reduce) { .admin-control-room *, .admin-control-room *::before,.admin-control-room *::after { scroll-behavior:auto!important; transition-duration:1ms!important; } }

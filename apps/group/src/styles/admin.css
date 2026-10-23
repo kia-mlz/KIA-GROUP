@@ -2420,7 +2420,7 @@ a.admin-stat-card:focus-visible .admin-stat-hint {
   padding: 0.7rem 1rem;
   border-radius: 0.7rem;
   background: var(--admin-text);
-  color: #0b1020;
+  color: var(--admin-bg, #0b1020);
   font-weight: 800;
   text-decoration: none;
   transition: transform 160ms ease-out;
@@ -2428,6 +2428,14 @@ a.admin-stat-card:focus-visible .admin-stat-hint {
 
 .admin-skip-link:focus {
   transform: translateY(0);
+}
+
+/* On light admin skins (--admin-text is dark ink) the chip must flip:
+   ink background, white text — readable in both shell skins. */
+.admin-control-room .admin-skip-link,
+.admin-shell--redesigned .admin-skip-link {
+  background: #1b1d1f;
+  color: #ffffff;
 }
 
 .admin-shell--redesigned .admin-sidebar {
