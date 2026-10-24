@@ -50,6 +50,21 @@
     direction: rtl;
   }
 
+  /* The account cluster owns grid column 1 — the bar's *physical* left edge,
+     whatever the locale (`direction: ltr` above fixes the grid). A logical
+     `inset-inline-end` anchor resolves to the pill's trailing edge, which in
+     English (LTR) is its right edge near the screen's left — the dropdown then
+     opened leftward and `overflow-x: clip` cut it to a sliver. Anchor
+     physically to the pill's left instead: column 1 always hugs the viewport's
+     start border, so the panels always open inward to the right. Geometry is
+     identical to today's behaviour in RTL, where `inset-inline-end` already
+     resolved to the pill's physical left. */
+  .topbar .user-dropdown,
+  .topbar .mini-cart {
+    left: 0;
+    right: auto;
+  }
+
   /* Brand dead centre of the pill, on both axes. It is pinned to the bar's own
      centre rather than laid into it: `justify-self`/`align-self: center` line
      the *row box* up with the row, which the 56px min-height and the 40px
