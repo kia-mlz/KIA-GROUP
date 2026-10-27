@@ -1,9 +1,13 @@
 import { Controller, Get } from '@nestjs/common';
+import { isProductionEnv } from '@kia./platform';
 
 @Controller()
 export class AppController {
   @Get()
   root() {
+    if (isProductionEnv()) {
+      return { name: 'Kia API', status: 'ok' };
+    }
     return {
       name: 'Kia API',
       status: 'ok',

@@ -54,7 +54,7 @@ describe('Kia brand tokens', () => {
     for (const token of BRAND_TOKENS) {
       // One name for both locales: departments are named in English even in
       // the Persian UI, so no Persian spelling is stored anywhere.
-      expect(token.name).toMatch(/^KIA\. /);
+      expect(token.name).toMatch(/^Kia /);
       expect(token.cssVariable).toBe(`--dept-${token.slug}`);
     }
   });

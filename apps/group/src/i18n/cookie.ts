@@ -15,5 +15,7 @@ export function readLocaleCookie(cookieHeader?: string | null): Locale {
 
 export function writeLocaleCookie(locale: Locale): void {
   if (typeof document === 'undefined') return;
-  document.cookie = `${LOCALE_COOKIE}=${encodeURIComponent(locale)};path=/;max-age=${MAX_AGE_SECONDS};SameSite=Lax`;
+  const secure =
+    typeof location !== 'undefined' && location.protocol === 'https:' ? ';Secure' : '';
+  document.cookie = `${LOCALE_COOKIE}=${encodeURIComponent(locale)};path=/;max-age=${MAX_AGE_SECONDS};SameSite=Lax${secure}`;
 }

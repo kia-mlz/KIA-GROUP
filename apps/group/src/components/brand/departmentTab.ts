@@ -24,7 +24,7 @@ const LATIN_BRAND = 'Kia';
 
 /** Parent brand suffixes the layout or Latin fallback may append. */
 const TITLE_SEPARATORS = Array.from(
-  new Set([` | ${SITE_NAME}`, ` | ${BRAND_WORDMARK}`]),
+  new Set([` | ${SITE_NAME}`, ` | ${LATIN_BRAND}`]),
 );
 
 /**

@@ -62,7 +62,7 @@ async function bootstrap() {
     .map((origin) => origin.trim())
     .filter(Boolean);
   if (isProductionEnv() && corsOrigins.some((o) => /localhost|127\.0\.0\.1/i.test(o))) {
-    console.warn(
+    throw new Error(
       '[security] CORS_ORIGIN still points at localhost in production — set it to your public web origin.',
     );
   }

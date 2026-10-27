@@ -94,11 +94,7 @@ describe('i18n usage coverage (admin + auth)', () => {
     'auth.login.emailPlaceholder',
     'auth.login.passwordPlaceholder',
     'dashboard.doors.academyTitle',
-    'dashboard.doors.communityTitle',
     'dashboard.doors.eventsTitle',
-    'dashboard.doors.labsTitle',
-    'dashboard.doors.materialTitle',
-    'dashboard.doors.workTitle',
   ]);
 
   it('keeps a shrinking allowlist of language-neutral values', () => {
