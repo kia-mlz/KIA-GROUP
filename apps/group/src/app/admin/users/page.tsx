@@ -75,6 +75,13 @@ export default function AdminUsersPage() {
   const [statusReason, setStatusReason] = useState('');
   const [statusBusy, setStatusBusy] = useState(false);
   const [statusDialogError, setStatusDialogError] = useState('');
+  const [expandedDetailsId, setExpandedDetailsId] = useState<string | null>(null);
+
+  const detailValue = (value: string | null | undefined) =>
+    value && value.trim() ? value : t('admin.users.detail.empty');
+
+  const detailYesNo = (value: boolean | undefined) =>
+    value ? t('admin.users.detail.yes') : t('admin.users.detail.no');
 
   const load = useCallback(
     async (targetPage: number) => {
@@ -364,6 +371,7 @@ export default function AdminUsersPage() {
             <tr>
               <th>{t('admin.users.col.name')}</th>
               <th>{t('admin.users.col.email')}</th>
+              <th>{t('admin.users.col.phone')}</th>
               <th>{t('admin.users.col.role')}</th>
               <th>{t('admin.users.col.status')}</th>
               <th>{t('admin.users.col.joined')}</th>
@@ -375,7 +383,7 @@ export default function AdminUsersPage() {
                 say so instead of rendering a blank table. */}
             {users.length === 0 ? (
               <tr>
-                <td colSpan={6}>{t('admin.users.empty')}</td>
+                <td colSpan={7}>{t('admin.users.empty')}</td>
               </tr>
             ) : null}
             {users.map((user) => {
@@ -386,12 +394,18 @@ export default function AdminUsersPage() {
               const isDeleted = Boolean(user.deleted);
               const showAccess =
                 isSuper && isModerator && user.role !== 'SUPER_ADMIN' && !isDeleted;
+              const detailsOpen = expandedDetailsId === user.id;
 
               return (
                 <Fragment key={user.id}>
                   <tr>
                     <td>{user.name}</td>
-                    <td>{user.email}</td>
+                    <td>
+                      <span className="ltr-isolate">{detailValue(user.email)}</span>
+                    </td>
+                    <td>
+                      <span className="ltr-isolate">{detailValue(user.phone)}</span>
+                    </td>
                     <td>
                       <span
                         className={`admin-badge${
@@ -401,7 +415,6 @@ export default function AdminUsersPage() {
                         {roleLabel(user.role, t, customRoleNames)}
                       </span>
                     </td>
-                    <td>{format.date(user.createdAt)}</td>
                     <td>
                       {isDeleted ? (
                         <span className="admin-badge danger">
@@ -413,8 +426,21 @@ export default function AdminUsersPage() {
                         </span>
                       )}
                     </td>
+                    <td>{format.date(user.createdAt)}</td>
                     <td>
                       <div className="admin-role-save-row">
+                        <button
+                          type="button"
+                          className="btn-next admin-btn"
+                          aria-expanded={detailsOpen}
+                          onClick={() =>
+                            setExpandedDetailsId((prev) => (prev === user.id ? null : user.id))
+                          }
+                        >
+                          {detailsOpen
+                            ? t('admin.users.hideDetails')
+                            : t('admin.users.viewDetails')}
+                        </button>
                         <label className="admin-role-picker">
                           <span className="sr-only">{t('admin.users.changeRole')}</span>
                           <select
@@ -552,9 +578,116 @@ export default function AdminUsersPage() {
                       </div>
                     </td>
                   </tr>
+                  {detailsOpen && (
+                    <tr key={`${user.id}-details`}>
+                      <td colSpan={7}>
+                        <div className="admin-user-details">
+                          <h3>{t('admin.users.detailsTitle')}</h3>
+                          <dl className="admin-user-details__grid">
+                            <div>
+                              <dt>{t('admin.users.detail.id')}</dt>
+                              <dd className="ltr-isolate">{user.id}</dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.name')}</dt>
+                              <dd>{detailValue(user.name)}</dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.firstName')}</dt>
+                              <dd>{detailValue(user.firstName)}</dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.lastName')}</dt>
+                              <dd>{detailValue(user.lastName)}</dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.email')}</dt>
+                              <dd className="ltr-isolate">{detailValue(user.email)}</dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.emailVerified')}</dt>
+                              <dd>{detailYesNo(user.emailVerified)}</dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.phone')}</dt>
+                              <dd className="ltr-isolate">{detailValue(user.phone)}</dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.phoneVerified')}</dt>
+                              <dd>{detailYesNo(user.phoneVerified)}</dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.province')}</dt>
+                              <dd>{detailValue(user.province)}</dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.city')}</dt>
+                              <dd>{detailValue(user.city)}</dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.role')}</dt>
+                              <dd>{roleLabel(user.role, t, customRoleNames)}</dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.status')}</dt>
+                              <dd>
+                                {isDeleted
+                                  ? t('admin.users.deletedBadge')
+                                  : t(`admin.users.status.${user.status}`)}
+                              </dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.profileComplete')}</dt>
+                              <dd>{detailYesNo(user.profileComplete)}</dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.twoFactorEnabled')}</dt>
+                              <dd>{detailYesNo(user.twoFactorEnabled)}</dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.suspendedAt')}</dt>
+                              <dd>
+                                {user.suspendedAt
+                                  ? format.date(user.suspendedAt)
+                                  : t('admin.users.detail.empty')}
+                              </dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.suspendedReason')}</dt>
+                              <dd>{detailValue(user.suspendedReason)}</dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.createdAt')}</dt>
+                              <dd>{format.date(user.createdAt)}</dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.updatedAt')}</dt>
+                              <dd>
+                                {user.updatedAt
+                                  ? format.date(user.updatedAt)
+                                  : t('admin.users.detail.empty')}
+                              </dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.deleted')}</dt>
+                              <dd>{detailYesNo(user.deleted)}</dd>
+                            </div>
+                            <div>
+                              <dt>{t('admin.users.detail.avatarUrl')}</dt>
+                              <dd className="ltr-isolate">{detailValue(user.avatarUrl)}</dd>
+                            </div>
+                            <div className="admin-user-details__bio">
+                              <dt>{t('admin.users.detail.bio')}</dt>
+                              <dd>{detailValue(user.bio)}</dd>
+                            </div>
+                          </dl>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
                   {showAccess && (
                     <tr key={`${user.id}-access`}>
-                      <td colSpan={6}>
+                      <td colSpan={7}>
                         <div className="admin-moderator-access">
                           <h3 className="admin-sub" style={{ marginTop: 0 }}>
                             {t('admin.users.accessFor', { name: user.name })}

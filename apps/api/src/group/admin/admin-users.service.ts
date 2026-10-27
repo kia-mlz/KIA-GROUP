@@ -48,6 +48,34 @@ function toJsonAccess(value: SiteAdminAccessSettings): Prisma.InputJsonValue {
   return JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue;
 }
 
+/** Safe user projection for admin — never includes passwordHash / 2FA secret. */
+const ADMIN_USER_SELECT = {
+  id: true,
+  name: true,
+  firstName: true,
+  lastName: true,
+  province: true,
+  city: true,
+  bio: true,
+  avatarUrl: true,
+  phone: true,
+  phoneVerified: true,
+  email: true,
+  emailVerified: true,
+  role: true,
+  profileComplete: true,
+  status: true,
+  suspendedAt: true,
+  suspendedReason: true,
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
+  twoFactorEnabled: true,
+  adminPanelAccess: true,
+} as const;
+
+type AdminUserRow = Prisma.UserGetPayload<{ select: typeof ADMIN_USER_SELECT }>;
+
 /**
  * Platform people department — learner/staff accounts, roles and moderator
  * panel access. Moved verbatim out of the former god-service; behaviour is
@@ -79,8 +107,12 @@ export class AdminUsersService {
     if (search) {
       where.OR = [
         { name: { contains: search, mode: 'insensitive' } },
+        { firstName: { contains: search, mode: 'insensitive' } },
+        { lastName: { contains: search, mode: 'insensitive' } },
         { email: { contains: search, mode: 'insensitive' } },
         { phone: { contains: search, mode: 'insensitive' } },
+        { province: { contains: search, mode: 'insensitive' } },
+        { city: { contains: search, mode: 'insensitive' } },
       ];
     }
     if (params.role) {
@@ -94,17 +126,7 @@ export class AdminUsersService {
       this.prisma.user.count({ where }),
       this.prisma.user.findMany({
         where,
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          phone: true,
-          role: true,
-          status: true,
-          createdAt: true,
-          deletedAt: true,
-          adminPanelAccess: true,
-        },
+        select: ADMIN_USER_SELECT,
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * limit,
         take: limit,
@@ -173,17 +195,7 @@ export class AdminUsersService {
                 suspendedAt: new Date(),
                 suspendedReason: reason,
               },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          phone: true,
-          role: true,
-          status: true,
-          createdAt: true,
-          adminPanelAccess: true,
-          suspendedReason: true,
-        },
+        select: ADMIN_USER_SELECT,
       });
       // Force logout: suspended/banned users lose every active session immediately.
       if (target !== 'ACTIVE') {
@@ -281,16 +293,7 @@ export class AdminUsersService {
           twoFactorSecret: null,
           profileComplete: false,
         },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          phone: true,
-          role: true,
-          status: true,
-          createdAt: true,
-          adminPanelAccess: true,
-        },
+        select: ADMIN_USER_SELECT,
       });
     });
 
@@ -344,16 +347,7 @@ export class AdminUsersService {
         suspendedAt: null,
         suspendedReason: null,
       },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        phone: true,
-        role: true,
-        status: true,
-        createdAt: true,
-        adminPanelAccess: true,
-      },
+      select: ADMIN_USER_SELECT,
     });
 
     await this.audit.record({
@@ -444,16 +438,7 @@ export class AdminUsersService {
           },
         },
       },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        phone: true,
-        role: true,
-        status: true,
-        createdAt: true,
-        adminPanelAccess: true,
-      },
+      select: ADMIN_USER_SELECT,
     });
 
     await this.audit.record({
@@ -686,16 +671,7 @@ export class AdminUsersService {
       const u = await tx.user.update({
         where: { id },
         data: roleData,
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          phone: true,
-          role: true,
-          status: true,
-          createdAt: true,
-          adminPanelAccess: true,
-        },
+        select: ADMIN_USER_SELECT,
       });
       if (roleChanged) {
         await tx.refreshToken.deleteMany({ where: { userId: id } });
@@ -741,16 +717,7 @@ export class AdminUsersService {
     const updated = await this.prisma.user.update({
       where: { id },
       data: { adminPanelAccess: toJsonAccess(adminPanelAccess) },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        phone: true,
-        role: true,
-        status: true,
-        createdAt: true,
-        adminPanelAccess: true,
-      },
+      select: ADMIN_USER_SELECT,
     });
 
     await this.audit.record({
@@ -768,28 +735,44 @@ export class AdminUsersService {
     return this.toAdminUser(updated);
   }
 
-  private toAdminUser(user: {
-    id: string;
-    name: string;
-    email: string | null;
-    phone?: string | null;
-    role: string;
-    status: string;
-    createdAt: Date;
-    deletedAt?: Date | null;
-    adminPanelAccess: unknown;
-  }): AdminUser {
+  private toAdminUser(
+    user: Pick<
+      AdminUserRow,
+      | 'id'
+      | 'name'
+      | 'email'
+      | 'phone'
+      | 'role'
+      | 'status'
+      | 'createdAt'
+      | 'adminPanelAccess'
+    > &
+      Partial<AdminUserRow>,
+  ): AdminUser {
     return {
       id: user.id,
       name: user.name,
+      firstName: user.firstName ?? null,
+      lastName: user.lastName ?? null,
+      province: user.province ?? null,
+      city: user.city ?? null,
+      bio: user.bio ?? null,
+      avatarUrl: user.avatarUrl ?? null,
       email: user.email,
+      emailVerified: user.emailVerified ?? false,
       phone: user.phone ?? null,
+      phoneVerified: user.phoneVerified ?? false,
       deleted: user.deletedAt != null,
       role: user.role as AdminUser['role'],
+      profileComplete: user.profileComplete ?? false,
       status: (USER_STATUSES as readonly string[]).includes(user.status)
         ? (user.status as AdminUser['status'])
         : 'ACTIVE',
+      suspendedAt: user.suspendedAt ? user.suspendedAt.toISOString() : null,
+      suspendedReason: user.suspendedReason ?? null,
       createdAt: user.createdAt.toISOString(),
+      updatedAt: user.updatedAt ? user.updatedAt.toISOString() : undefined,
+      twoFactorEnabled: user.twoFactorEnabled ?? false,
       adminPanelAccess:
         isStaffRole(user.role) && user.role !== 'SUPER_ADMIN'
           ? normalizeAdminAccess(user.adminPanelAccess)

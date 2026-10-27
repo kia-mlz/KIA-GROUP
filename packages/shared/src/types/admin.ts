@@ -56,15 +56,30 @@ export interface AdminChallenge {
 export interface AdminUser {
   id: string;
   name: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  province?: string | null;
+  city?: string | null;
+  bio?: string | null;
+  avatarUrl?: string | null;
   email: string | null;
+  emailVerified?: boolean;
   phone?: string | null;
+  phoneVerified?: boolean;
   role: UserRole;
+  profileComplete?: boolean;
   createdAt: string;
+  updatedAt?: string;
   /** Account status: ACTIVE by default; SUSPENDED/BANNED users cannot sign in. */
   status: AdminUserStatus;
+  suspendedAt?: string | null;
+  /** Admin-provided reason when suspended or banned. */
+  suspendedReason?: string | null;
   adminPanelAccess?: SiteAdminAccessSettings | null;
   /** DB-4 soft delete: true when the account is deleted but still restorable. */
   deleted?: boolean;
+  /** Whether staff 2FA is enabled (secret never exposed). */
+  twoFactorEnabled?: boolean;
 }
 
 /** Learner/staff account status managed from the admin panel. */

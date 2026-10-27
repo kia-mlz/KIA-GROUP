@@ -1180,10 +1180,62 @@
 
 .admin-track-card,
 .admin-video-block,
-.admin-moderator-access {
+.admin-moderator-access,
+.admin-user-details {
   border: 1px solid var(--admin-line);
   border-radius: var(--admin-radius);
   background: var(--admin-surface);
+}
+
+.admin-user-details {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.admin-user-details h3 {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--admin-text);
+}
+
+.admin-user-details__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: var(--space-3) var(--space-4);
+  margin: 0;
+}
+
+.admin-user-details__grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.admin-user-details__grid dt {
+  margin: 0;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--admin-muted, var(--text-dim));
+}
+
+.admin-user-details__grid dd {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--admin-text);
+  word-break: break-word;
+}
+
+.admin-user-details__grid dd.ltr-isolate {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: start;
+}
+
+.admin-user-details__bio {
+  grid-column: 1 / -1;
 }
 
 .admin-track-card {
