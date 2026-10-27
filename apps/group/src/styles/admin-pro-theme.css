@@ -60,7 +60,8 @@
    ========================================================================== */
 
 .admin-shell--redesigned,
-.admin-control-room {
+.admin-control-room,
+.am-shell {
   --apro-bg: #f5f5f2;
   --apro-surface: #ffffff;
   --apro-surface-2: #fafaf8;

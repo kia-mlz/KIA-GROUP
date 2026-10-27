@@ -2,14 +2,17 @@
    Quiet surfaces, hairline rules, department accent only as a marker. */
 
 .am-shell {
-  --am-bg: #f7f7f5;
+  /* Force a readable light admin surface regardless of site data-theme. */
+  color-scheme: light;
+
+  --am-bg: #f4f4f1;
   --am-surface: #ffffff;
-  --am-ink: #141414;
-  --am-muted: #6a6a66;
-  --am-line: #e6e6e2;
-  --am-hover: #f0f0ec;
+  --am-ink: #141416;
+  --am-muted: #5c5c58;
+  --am-line: #dddcd6;
+  --am-hover: #ecece7;
   --am-accent: #1a1a1a;
-  --am-warn: #b45309;
+  --am-warn: #9a3412;
   --am-ok: #0f766e;
   --am-danger: #b91c1c;
   --am-radius: 0.4rem;
@@ -29,6 +32,75 @@
   --cr-radius: var(--am-radius);
   --cr-shadow: none;
   --cr-focus: var(--am-focus);
+
+  /*
+   * Remap dark-theme --admin-* / --apro-* (from admin.css + admin-pro.css)
+   * onto light-canvas values. Without this, badges/links/forms keep pale ink
+   * meant for charcoal panels and become unreadable on white cards.
+   */
+  --apro-bg: var(--am-bg);
+  --apro-surface: var(--am-surface);
+  --apro-surface-2: #f7f7f4;
+  --apro-surface-3: #efefe9;
+  --apro-glass: rgba(255, 255, 255, 0.92);
+  --apro-overlay: rgba(20, 20, 18, 0.45);
+  --apro-text: #141416;
+  --apro-text-secondary: #3f3f3c;
+  --apro-text-muted: #5c5c58;
+  --apro-text-faint: #6f6f6a;
+  --apro-accent: #1d4ed8;
+  --apro-accent-hover: #1e40af;
+  --apro-accent-active: #1e3a8a;
+  --apro-accent-soft: #1d4ed8;
+  --apro-accent-dim: rgba(29, 78, 216, 0.08);
+  --apro-accent-line: rgba(29, 78, 216, 0.28);
+  --apro-success: #0f766e;
+  --apro-success-dim: rgba(15, 118, 110, 0.1);
+  --apro-success-line: rgba(15, 118, 110, 0.35);
+  --apro-warning: #9a3412;
+  --apro-warning-dim: rgba(154, 52, 18, 0.1);
+  --apro-warning-line: rgba(154, 52, 18, 0.35);
+  --apro-danger: #b91c1c;
+  --apro-danger-dim: rgba(185, 28, 28, 0.1);
+  --apro-danger-line: rgba(185, 28, 28, 0.35);
+  --apro-info: #1d4ed8;
+  --apro-info-dim: rgba(29, 78, 216, 0.08);
+  --apro-info-line: rgba(29, 78, 216, 0.3);
+  --apro-money: #9a3412;
+  --apro-money-dim: rgba(154, 52, 18, 0.08);
+  --apro-money-line: rgba(154, 52, 18, 0.3);
+  --apro-line: var(--am-line);
+  --apro-line-strong: #c9c8c1;
+  --apro-line-faint: #ebebe6;
+
+  --admin-bg: var(--am-bg);
+  --admin-surface: var(--am-surface);
+  --admin-surface-2: #f7f7f4;
+  --admin-accent: #1d4ed8;
+  --admin-accent-soft: #1d4ed8;
+  --admin-accent-dark: #1e3a8a;
+  --admin-value: #9a3412;
+  --admin-text: #141416;
+  --admin-muted: #5c5c58;
+  --admin-faint: #6f6f6a;
+  --admin-line: var(--am-line);
+  --admin-line-strong: #c9c8c1;
+  --admin-danger: #b91c1c;
+  --admin-success: #0f766e;
+  --admin-info: #1d4ed8;
+  --admin-warning: #9a3412;
+  --admin-glass: rgba(255, 255, 255, 0.92);
+  --admin-focus-ring: var(--am-focus);
+  --admin-shadow: none;
+  --admin-shadow-lg: 0 12px 28px rgba(20, 20, 18, 0.08);
+
+  /* Site chrome tokens that some shared widgets still read */
+  --text: var(--am-ink);
+  --text-muted: var(--am-muted);
+  --text-inverse: #ffffff;
+  --bg: var(--am-bg);
+  --bg-elevated: var(--am-surface);
+  --border: var(--am-line);
 
   min-height: 100dvh;
   display: grid;
@@ -518,16 +590,28 @@
   padding: clamp(1.1rem, 2.2vw, 1.85rem);
 }
 
-/* Content bridge */
+/* Content bridge + contrast lock for legacy admin widgets */
 .am-shell .admin-content {
   padding: 0;
+  color: var(--am-ink);
+}
+.am-shell :is(h1, h2, h3, h4, h5, h6, .admin-section-head h2, .page-intro h1, .page-intro h2) {
+  color: var(--am-ink);
+}
+.am-shell :is(.admin-sub, .admin-meta, .admin-cell-meta, .admin-section-head p, .page-intro p) {
+  color: var(--am-muted);
 }
 .am-shell .admin-card,
 .am-shell .admin-table-wrap,
-.am-shell .page-intro {
+.am-shell .page-intro,
+.am-shell .admin-stat-card,
+.am-shell .admin-empty-state,
+.am-shell .admin-error-state,
+.am-shell .admin-notice {
   border: 1px solid var(--am-line);
   border-radius: var(--am-radius);
   background: var(--am-surface);
+  color: var(--am-ink);
   box-shadow: none;
 }
 .am-shell .admin-card {
@@ -549,33 +633,145 @@
 .am-shell .admin-sub {
   color: var(--am-muted);
 }
+.am-shell .admin-table {
+  color: var(--am-ink);
+}
 .am-shell .admin-table thead th {
-  color: var(--am-muted);
+  color: #3f3f3c;
   border-bottom-color: var(--am-line);
-  background: #fafaf8;
+  background: #f3f3ef;
   font-size: 0.68rem;
   font-weight: 700;
 }
 .am-shell .admin-table td {
-  color: #2a2a28;
-  border-bottom-color: #f0f0ec;
+  color: #1f1f1d;
+  border-bottom-color: #ecece7;
 }
 .am-shell .admin-table tbody tr:hover {
-  background: #fafaf8;
+  background: #f7f7f4;
 }
-.am-shell :is(.admin-btn, .btn-next) {
+.am-shell .admin-table :is(small, code, .admin-meta, .admin-cell-meta) {
+  color: #4a4a46;
+}
+.am-shell :is(.admin-link, .admin-link-btn, .admin-dropdown-footer a, .admin-quick-links a) {
+  color: #1d4ed8;
+}
+.am-shell :is(.admin-link:hover, .admin-link-btn:hover) {
+  color: #1e40af;
+}
+.am-shell .admin-link.danger,
+.am-shell .admin-link-btn.danger {
+  color: #b91c1c;
+}
+.am-shell :is(.admin-btn, .btn-next, .btn--primary, .cta-primary) {
   border-radius: var(--am-radius);
   box-shadow: none;
 }
 .am-shell .admin-btn.primary,
-.am-shell .btn-next {
-  color: #fff;
-  background: var(--am-accent);
+.am-shell .btn-next,
+.am-shell .btn--primary,
+.am-shell .cta-primary {
+  color: #fff !important;
+  background: #1a1a1a;
+  border-color: #1a1a1a;
 }
 .am-shell .admin-btn.primary:hover,
 .am-shell .btn-next:hover {
-  filter: brightness(1.08);
+  filter: brightness(1.12);
   transform: none;
+}
+.am-shell :is(.admin-btn:not(.primary), .btn--secondary, .cta-secondary) {
+  color: var(--am-ink);
+  background: #fff;
+  border: 1px solid var(--am-line);
+}
+.am-shell :is(.btn--ghost, .btn-ghost, .admin-btn.ghost) {
+  color: var(--am-ink);
+  background: transparent;
+}
+.am-shell .admin-badge {
+  color: #3f3f3c;
+  background: #efefe9;
+  border: 1px solid var(--am-line);
+}
+.am-shell .admin-badge.ok,
+.am-shell .admin-badge.success {
+  color: #0b5e44;
+  background: #e0f4ec;
+  border-color: rgba(15, 118, 110, 0.35);
+}
+.am-shell .admin-badge.warning,
+.am-shell .admin-badge.soon {
+  color: #9a3412;
+  background: #ffedd5;
+  border-color: rgba(154, 52, 18, 0.35);
+}
+.am-shell .admin-badge.info {
+  color: #1e40af;
+  background: #dbeafe;
+  border-color: rgba(29, 78, 216, 0.35);
+}
+.am-shell .admin-badge.danger {
+  color: #991b1b;
+  background: #fee2e2;
+  border-color: rgba(185, 28, 28, 0.35);
+}
+.am-shell
+  :is(input, select, textarea, .admin-input, .admin-select, .admin-textarea, .admin-search-input) {
+  color: var(--am-ink);
+  caret-color: var(--am-ink);
+  border-color: var(--am-line);
+  background: #ffffff;
+}
+.am-shell
+  :is(input, select, textarea, .admin-input, .admin-select, .admin-textarea)::placeholder {
+  color: #7a7a74;
+  opacity: 1;
+}
+.am-shell select option,
+.am-shell select optgroup {
+  color: #141416;
+  background: #ffffff;
+}
+.am-shell :is(input, select, textarea):disabled,
+.am-shell :is(button, a)[aria-disabled='true'] {
+  color: #7a7a74;
+  background: #efefe9;
+  opacity: 1;
+}
+.am-shell :is(.form-error, .admin-error-state, .apro-alert) {
+  color: #991b1b;
+  background: #fee2e2;
+  border-color: rgba(185, 28, 28, 0.4);
+}
+.am-shell :is(.form-success, .admin-notice[role='status']) {
+  color: #0b5e44;
+  background: #e0f4ec;
+  border-color: rgba(15, 118, 110, 0.4);
+}
+.am-shell .admin-stat-label {
+  color: var(--am-muted);
+}
+.am-shell .admin-stat-value {
+  color: var(--am-ink);
+}
+.am-shell .admin-stat-card.highlight {
+  color: #fff;
+  background: #1a1a1a;
+  border-color: #1a1a1a;
+}
+.am-shell .admin-stat-card.highlight :is(.admin-stat-label, .admin-stat-value, .admin-stat-hint) {
+  color: #fff;
+}
+.am-shell .admin-modal,
+.am-shell .admin-dialog,
+.am-shell [role='dialog'] {
+  color: var(--am-ink);
+  background: #fff;
+}
+.am-shell .admin-toolbar,
+.am-shell .admin-header-row {
+  color: var(--am-ink);
 }
 
 /* Minimal dashboard */
@@ -945,22 +1141,27 @@
   }
 }
 
+/*
+ * Admin stays on the light readable palette even when the OS/site prefers dark.
+ * A half-mapped dark skin previously produced white-on-white primary buttons
+ * and pale badge text on light cards.
+ */
 @media (prefers-color-scheme: dark) {
   .am-shell {
-    --am-bg: #101010;
-    --am-surface: #171717;
-    --am-ink: #f2f2f0;
-    --am-muted: #9a9a94;
-    --am-line: #2a2a28;
-    --am-hover: #20201e;
-    --am-accent: #f2f2f0;
+    color-scheme: light;
   }
-  .am-shell .admin-table thead th {
-    background: #1c1c1a;
-  }
-  .am-actions a {
-    background: #1c1c1a;
-  }
+}
+
+/* When the rest of the site is in dark mode, keep admin ink dark on light cards. */
+:root[data-theme='dark'] .am-shell,
+[data-theme='dark'] .am-shell {
+  --text: #141416;
+  --text-muted: #5c5c58;
+  --bg: #f4f4f1;
+  --bg-elevated: #ffffff;
+  --border: #dddcd6;
+  color: #141416;
+  background: #f4f4f1;
 }
 
 @media (prefers-reduced-motion: reduce) {
