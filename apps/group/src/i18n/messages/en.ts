@@ -843,6 +843,11 @@ export const en = {
         statusTitle: 'Learning workspace',
         statusBody: 'Roadmap, courses, and exam results gather here.',
         hubCta: 'Academy tracks',
+        myCoursesHint: 'Enrolled courses and continue learning',
+        progressHint: 'Progress chart for your path and lessons',
+        resultsHint: 'Quiz and final exam results',
+        roadmapHint: 'Your personalized learning roadmap',
+        tracksHint: 'Academy learning tracks and paths',
       },
       events: {
         title: 'Kia Event panel',

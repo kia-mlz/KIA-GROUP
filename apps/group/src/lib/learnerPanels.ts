@@ -47,7 +47,13 @@ export type LearnerPanelDefinition = {
   titleKey: string;
   /** Public department hub (platform has /home). */
   hubHref: string;
+  /** Items rendered in the top-nav / learner rail. */
   nav: readonly LearnerNavItem[];
+  /**
+   * Destination tiles for the department overview page. When set, these are
+   * the former rail tools — kept off the menu so the overview owns navigation.
+   */
+  overviewTiles?: readonly LearnerNavItem[];
 };
 
 /** Academy-owned routes that still live under the legacy `/dashboard/*` tree. */
@@ -80,8 +86,11 @@ export const LEARNER_PANELS: Record<LearnerPanelScope, LearnerPanelDefinition> =
     href: '/dashboard',
     titleKey: 'panel.departments.academy',
     hubHref: '/tracks',
+    // Only the overview stays in the rail — tools live as boxes on /dashboard.
     nav: [
       { id: 'overview', href: '/dashboard', labelKey: 'panel.nav.academyOverview', exact: true },
+    ],
+    overviewTiles: [
       { id: 'my-courses', href: '/dashboard/my-courses', labelKey: 'panel.nav.myCourses' },
       { id: 'progress', href: '/dashboard/progress', labelKey: 'panel.nav.progress' },
       { id: 'results', href: '/dashboard/results', labelKey: 'panel.nav.results' },
