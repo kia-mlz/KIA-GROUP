@@ -36,10 +36,21 @@ export const envValidationSchema = Joi.object({
   JWT_ACCESS_SECRET: Joi.string().min(32).optional(),
   NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
   /**
-   * CI-2: optional Redis connection for distributed rate limiting. When unset,
-   * throttling falls back to per-process in-memory storage (single instance).
+   * CI-2: Redis for distributed rate limiting. Optional for a single API
+   * process; strongly recommended (and required by the full-redis compose
+   * profile) whenever more than one API replica is behind a load balancer.
+   * When unset, throttling falls back to per-process in-memory storage.
    */
-  REDIS_URL: Joi.string().uri({ scheme: ['redis', 'rediss'] }).optional(),
+  REDIS_URL: Joi.string().uri({ scheme: ['redis', 'rediss'] }).optional().allow(''),
+  /**
+   * Must be "true" when the API sits behind a reverse proxy (Caddy/nginx) so
+   * rate limits and secure cookies see the real client IP / proto.
+   */
+  TRUST_PROXY: Joi.when('NODE_ENV', {
+    is: 'production',
+    then: Joi.string().valid('true', 'false').default('true'),
+    otherwise: Joi.string().valid('true', 'false').optional(),
+  }),
   /**
    * When true (and NODE_ENV is not production), OTP codes are returned as `devCode`
    * and logged. Forbidden in production. Defaults to true in non-production for local DX.
@@ -49,7 +60,6 @@ export const envValidationSchema = Joi.object({
     then: Joi.string().valid('false', '').optional(),
     otherwise: Joi.string().valid('true', 'false').default('true'),
   }),
-  TRUST_PROXY: Joi.string().valid('true', 'false').optional(),
   /** Force cookie SameSite override ('none' required when API+Web sit on different sites). */
   COOKIE_SAMESITE: Joi.string().valid('none', 'lax', 'strict').optional(),
   STRIPE_SECRET_KEY: Joi.string().optional(),

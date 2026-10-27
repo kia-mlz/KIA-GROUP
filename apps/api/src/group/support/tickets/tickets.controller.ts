@@ -2,13 +2,18 @@ import {
   Body,
   Controller,
   Get,
+  NotFoundException,
   Param,
   Post,
+  Res,
+  StreamableFile,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { createReadStream, existsSync } from 'fs';
+import type { Response } from 'express';
 import { memoryStorage } from 'multer';
 import type {
   AuthUser,
@@ -29,6 +34,31 @@ export class TicketsController {
   @Get()
   list(@CurrentUser() user: AuthUser): Promise<SupportTicketSummary[]> {
     return this.ticketsService.listMine(user.id);
+  }
+
+  @Get(':id/attachments/:storedName')
+  async downloadAttachment(
+    @CurrentUser() user: AuthUser,
+    @Param('id') id: string,
+    @Param('storedName') storedName: string,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<StreamableFile> {
+    const file = await this.ticketsService.resolveDownload(
+      user.id,
+      user.role,
+      id,
+      storedName,
+    );
+    if (!existsSync(file.absolutePath)) {
+      throw new NotFoundException('Attachment not found');
+    }
+    res.setHeader('Content-Type', file.mimeType);
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename*=UTF-8''${encodeURIComponent(file.fileName)}`,
+    );
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    return new StreamableFile(createReadStream(file.absolutePath));
   }
 
   @Get(':id')

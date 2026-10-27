@@ -58,6 +58,8 @@ export function privatePageMetadata(title: string): Metadata {
   return {
     title,
     robots: noIndexRobots,
+    // Clear any inherited homepage canonical from the root layout.
+    alternates: { canonical: null },
   };
 }
 
@@ -67,6 +69,10 @@ export const PUBLIC_SITEMAP_PATHS = [
   '/material',
   '/courses',
   '/education',
+  '/events',
+  '/freelance',
+  '/labs',
+  '/community',
   '/contact',
   '/privacy',
   '/terms',

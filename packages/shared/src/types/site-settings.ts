@@ -228,6 +228,42 @@ export function toPublicSiteSettings(settings: SiteSettings): SiteSettings {
   };
 }
 
+/**
+ * Admin settings payload. Payment/SMS secrets are only revealed to
+ * SUPER_ADMIN; other moderators with `settings:view` see empty secrets plus
+ * `*Set` flags so the UI can show "configured" without leaking credentials.
+ */
+export function toAdminSiteSettings(
+  settings: SiteSettings,
+  opts: { revealSecrets: boolean },
+): SiteSettings & {
+  paymentApiKeySet: boolean;
+  paymentMerchantIdSet: boolean;
+  smsApiKeySet: boolean;
+} {
+  const paymentApiKeySet = Boolean(settings.payment.apiKey?.trim());
+  const paymentMerchantIdSet = Boolean(settings.payment.merchantId?.trim());
+  const smsApiKeySet = Boolean(settings.sms.apiKey?.trim());
+  if (opts.revealSecrets) {
+    return { ...settings, paymentApiKeySet, paymentMerchantIdSet, smsApiKeySet };
+  }
+  return {
+    ...settings,
+    payment: {
+      ...settings.payment,
+      merchantId: '',
+      apiKey: '',
+    },
+    sms: {
+      ...settings.sms,
+      apiKey: '',
+    },
+    paymentApiKeySet,
+    paymentMerchantIdSet,
+    smsApiKeySet,
+  };
+}
+
 export type SiteSettingsSection = keyof SiteSettings;
 
 /**

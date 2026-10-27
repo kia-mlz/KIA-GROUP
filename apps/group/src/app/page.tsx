@@ -59,7 +59,7 @@ export default function HomePage() {
             <BrandMark className="landing-brand-mark" title="" />
             {t('common.brand')}
           </h1>
-          <h3 className="landing-title">{t('common.tagline')}</h3>
+          <p className="landing-title">{t('common.tagline')}</p>
           <p className="landing-body">{t('landing.heroBody')}</p>
 
           <div className="hero-actions landing-min-actions">

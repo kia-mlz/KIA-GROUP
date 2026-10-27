@@ -23,7 +23,7 @@ export default function LabsPage() {
             <span className="door-icon" aria-hidden="true">
               <FlaskConical size={20} />
             </span>
-            <h2 className="door-title">{t('labs.title')}</h2>
+            <h1 className="door-title">{t('labs.title')}</h1>
             <p className="door-desc">{t('labs.soon')}</p>
           </div>
         </div>

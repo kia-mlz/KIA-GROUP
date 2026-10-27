@@ -204,8 +204,45 @@ export class TicketsService {
       fileName: item.fileName,
       mimeType: item.mimeType,
       sizeBytes: item.sizeBytes,
-      url: `/api/uploads/tickets/${ticketId}/${item.storedName}`,
+      url: `/api/tickets/${ticketId}/attachments/${item.storedName}`,
       createdAt: item.createdAt.toISOString(),
+    };
+  }
+
+  /**
+   * Resolve a ticket attachment for download. Owners and staff may read;
+   * everyone else gets a not-found (no existence oracle for other users' files).
+   */
+  async resolveDownload(
+    userId: string,
+    userRole: string,
+    ticketId: string,
+    storedName: string,
+  ): Promise<{ absolutePath: string; fileName: string; mimeType: string }> {
+    const ticket = await this.prisma.supportTicket.findUnique({
+      where: { id: ticketId },
+      select: {
+        userId: true,
+        attachments: {
+          where: { storedName },
+          select: { fileName: true, mimeType: true, storedName: true },
+          take: 1,
+        },
+      },
+    });
+    const isStaff = userRole !== 'LEARNER';
+    if (!ticket || (ticket.userId !== userId && !isStaff)) {
+      throw new NotFoundException('Attachment not found');
+    }
+    const meta = ticket.attachments[0];
+    if (!meta) {
+      throw new NotFoundException('Attachment not found');
+    }
+    const absolutePath = this.attachments.resolveStoredFile(ticketId, meta.storedName);
+    return {
+      absolutePath,
+      fileName: meta.fileName,
+      mimeType: meta.mimeType || 'application/octet-stream',
     };
   }
 

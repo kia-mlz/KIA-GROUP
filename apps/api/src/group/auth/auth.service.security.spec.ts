@@ -42,12 +42,20 @@ function buildService(overrides?: {
   const configGet = jest.fn((key: string) => {
     if (key === 'NODE_ENV') return overrides?.nodeEnv ?? 'test';
     if (key === 'OTP_DEV_EXPOSE') return overrides?.otpDevExpose;
+    if (key === 'JWT_SECRET') return 'test-jwt-secret-for-otp-pepper-32chars';
     return undefined;
+  });
+  const configGetOrThrow = jest.fn((key: string) => {
+    const value = configGet(key);
+    if (value === undefined || value === null) {
+      throw new Error(`Missing config ${key}`);
+    }
+    return value;
   });
   const service = new AuthService(
     prisma as never,
     { sign: jest.fn(), verify: jest.fn() } as never,
-    { get: configGet } as never,
+    { get: configGet, getOrThrow: configGetOrThrow } as never,
     {} as never,
     { get: jest.fn().mockResolvedValue({}) } as never,
     { sendOtp: jest.fn().mockResolvedValue(undefined) } as never,

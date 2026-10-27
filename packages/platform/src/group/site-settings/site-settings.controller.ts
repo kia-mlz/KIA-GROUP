@@ -1,5 +1,6 @@
 import { Body, Controller, ForbiddenException, Get, Put, UseGuards } from '@nestjs/common';
 import {
+  toAdminSiteSettings,
   toPublicSiteSettings,
   type AuthUser,
   type SiteSettings,
@@ -28,8 +29,11 @@ export class SiteSettingsController {
   @UseGuards(JwtAuthGuard, RolesGuard, AdminAccessGuard)
   @Roles('ADMIN')
   @AdminAccess('settings', 'view')
-  getAdmin(): Promise<SiteSettings> {
-    return this.siteSettings.get();
+  async getAdmin(@CurrentUser() user: AuthUser): Promise<SiteSettings> {
+    const settings = await this.siteSettings.get();
+    return toAdminSiteSettings(settings, {
+      revealSecrets: user.role === 'SUPER_ADMIN',
+    });
   }
 
   @Put('admin/settings')

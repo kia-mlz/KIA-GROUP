@@ -9,30 +9,21 @@ describe('AuthController refresh cookie', () => {
         expiresIn: 900,
         refreshToken: 'refresh-token',
       }),
-    };
-    const configService = {
-      get: jest.fn((key: string, fallback?: string) => {
-        if (key === 'JWT_REFRESH_EXPIRES_IN') return '7d';
-        if (key === 'NODE_ENV') return 'development';
-        return fallback;
+      attachRefreshCookie: jest.fn(),
+      omitRefreshToken: jest.fn((result: { refreshToken: string }) => {
+        const { refreshToken: _r, ...rest } = result;
+        return rest;
       }),
     };
 
-    const controller = new AuthController(authService as never, configService as never);
+    const controller = new AuthController(authService as never);
 
     const cookie = jest.fn();
     const res = { cookie } as never;
 
     await controller.login({ email: 'a@b.c', password: 'secret' }, res);
 
-    expect(cookie).toHaveBeenCalledWith(
-      'refreshToken',
-      'refresh-token',
-      expect.objectContaining({
-        httpOnly: true,
-        path: '/',
-        sameSite: 'lax',
-      }),
-    );
+    expect(authService.attachRefreshCookie).toHaveBeenCalledWith(res, 'refresh-token');
+    expect(authService.omitRefreshToken).toHaveBeenCalled();
   });
 });

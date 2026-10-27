@@ -131,6 +131,7 @@ export class PaymentsController {
 
   @Post('callback')
   @UseGuards(OptionalJwtAuthGuard)
+  @Throttle({ default: { limit: 30, ttl: 60_000 } })
   async callbackPost(
     @Res() res: Response,
     @Req() req: Request,

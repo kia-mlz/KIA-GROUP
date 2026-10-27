@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { buildEnamadBadgeUrls, toPublicSiteSettings } from './site-settings';
+import {
+  buildEnamadBadgeUrls,
+  toAdminSiteSettings,
+  toPublicSiteSettings,
+} from './site-settings';
 import { createDefaultSiteSettings } from '../constants/default-site-settings';
 
 describe('toPublicSiteSettings', () => {
@@ -24,6 +28,27 @@ describe('toPublicSiteSettings', () => {
     expect(pub.enamad).toEqual(full.enamad);
     expect(pub.adminAccess.settings.view).toBe(false);
     expect(pub.general.siteName).toBe(full.general.siteName);
+  });
+});
+
+describe('toAdminSiteSettings', () => {
+  it('keeps secrets for SUPER_ADMIN and redacts them for moderators', () => {
+    const full = createDefaultSiteSettings();
+    full.payment.apiKey = 'secret-api-key';
+    full.payment.merchantId = 'merchant-123';
+    full.sms.apiKey = 'kavenegar-secret';
+
+    const revealed = toAdminSiteSettings(full, { revealSecrets: true });
+    expect(revealed.payment.apiKey).toBe('secret-api-key');
+    expect(revealed.smsApiKeySet).toBe(true);
+
+    const redacted = toAdminSiteSettings(full, { revealSecrets: false });
+    expect(redacted.payment.apiKey).toBe('');
+    expect(redacted.payment.merchantId).toBe('');
+    expect(redacted.sms.apiKey).toBe('');
+    expect(redacted.paymentApiKeySet).toBe(true);
+    expect(redacted.paymentMerchantIdSet).toBe(true);
+    expect(redacted.smsApiKeySet).toBe(true);
   });
 });
 

@@ -23,7 +23,7 @@ export default function CommunityPage() {
             <span className="door-icon" aria-hidden="true">
               <UsersRound size={20} />
             </span>
-            <h2 className="door-title">{t('community.title')}</h2>
+            <h1 className="door-title">{t('community.title')}</h1>
             <p className="door-desc">{t('community.soon')}</p>
           </div>
         </div>

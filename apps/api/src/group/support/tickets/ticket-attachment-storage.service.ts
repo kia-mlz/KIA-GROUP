@@ -83,9 +83,16 @@ export class TicketAttachmentStorageService {
         storedName,
         mimeType: file.mimetype || 'application/octet-stream',
         sizeBytes: file.size,
-        url: `/api/uploads/tickets/${ticketId}/${storedName}`,
+        url: `/api/tickets/${ticketId}/attachments/${storedName}`,
       };
     });
+  }
+
+  /** Absolute path for an attachment after ownership has already been checked. */
+  resolveStoredFile(ticketId: string, storedName: string): string {
+    assertSafePathSegment(ticketId, 'ticket id');
+    assertSafePathSegment(storedName, 'attachment name');
+    return resolveUnderRoot(this.uploadsRoot, 'tickets', ticketId, storedName);
   }
 
   private matchesMagic(buffer: Buffer, mimeType: string, ext: string): boolean {

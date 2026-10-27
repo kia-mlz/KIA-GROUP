@@ -58,6 +58,8 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  // Homepage canonical; public child routes override via `publicPageMetadata`,
+  // and private routes clear it via `privatePageMetadata`.
   alternates: {
     canonical: absoluteUrl('/'),
   },

@@ -26,6 +26,10 @@ async function bootstrap() {
   app.use('/api/uploads/lessons', (_req: Request, res: Response) => {
     res.status(401).json({ message: 'Use authenticated media URLs for lesson videos' });
   });
+  // Ticket attachments are private — download only via authenticated ticket routes.
+  app.use('/api/uploads/tickets', (_req: Request, res: Response) => {
+    res.status(401).json({ message: 'Use authenticated ticket attachment URLs' });
+  });
   app.useStaticAssets(uploadsRoot, { prefix: '/api/uploads/' });
 
   app.use(

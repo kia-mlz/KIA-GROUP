@@ -31,15 +31,10 @@ import { LoginDto } from './dto/login.dto';
 
 import { CompleteProfileDto, RequestOtpDto, VerifyOtpDto } from './dto/otp.dto';
 import { ChangePasswordDto, ForgotPasswordDto, ResetPasswordDto } from './dto/password.dto';
-import { ConfigService } from '@nestjs/config';
-import { parseExpiresInSeconds } from './auth.utils';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('login')
   @Throttle({ default: { limit: 5, ttl: 60_000 } })
@@ -52,8 +47,8 @@ export class AuthController {
       // No session exists yet — the client must complete POST /auth/2fa/verify.
       return result;
     }
-    this.setRefreshCookie(res, result.refreshToken);
-    return this.stripRefreshToken(result);
+    this.authService.attachRefreshCookie(res, result.refreshToken);
+    return this.authService.omitRefreshToken(result);
   }
 
   @Post('otp/request')
@@ -69,8 +64,8 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ): Promise<AuthResponse> {
     const result = await this.authService.verifyOtp(dto.phone, dto.code);
-    this.setRefreshCookie(res, result.refreshToken);
-    return this.stripRefreshToken(result);
+    this.authService.attachRefreshCookie(res, result.refreshToken);
+    return this.authService.omitRefreshToken(result);
   }
 
   /**
@@ -116,8 +111,8 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ): Promise<AuthResponse> {
     const result = await this.authService.completeProfile(user.id, dto);
-    this.setRefreshCookie(res, result.refreshToken);
-    return this.stripRefreshToken(result);
+    this.authService.attachRefreshCookie(res, result.refreshToken);
+    return this.authService.omitRefreshToken(result);
   }
 
   @Get('profile')
@@ -134,8 +129,8 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ): Promise<AuthResponse> {
     const result = await this.authService.updateProfile(user.id, dto);
-    this.setRefreshCookie(res, result.refreshToken);
-    return this.stripRefreshToken(result);
+    this.authService.attachRefreshCookie(res, result.refreshToken);
+    return this.authService.omitRefreshToken(result);
   }
 
   @Post('profile/avatar')
@@ -165,8 +160,8 @@ export class AuthController {
     }
 
     const result = await this.authService.refresh(user, user.refreshToken);
-    this.setRefreshCookie(res, result.refreshToken);
-    return this.stripRefreshToken(result);
+    this.authService.attachRefreshCookie(res, result.refreshToken);
+    return this.authService.omitRefreshToken(result);
   }
 
   @Post('logout')
@@ -178,7 +173,7 @@ export class AuthController {
   ): Promise<{ success: true }> {
     const refreshToken = req.cookies?.refreshToken as string | undefined;
     await this.authService.logout(user.id, refreshToken);
-    this.clearRefreshCookie(res);
+    this.authService.clearRefreshCookie(res);
     return { success: true };
   }
 
@@ -186,41 +181,5 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   getMe(@CurrentUser() user: AuthUser): Promise<LearnerState> {
     return this.authService.getLearnerState(user.id);
-  }
-
-  private refreshCookieOptions(): {
-    httpOnly: boolean;
-    secure: boolean;
-    sameSite: 'none' | 'strict' | 'lax';
-    path: string;
-  } {
-    const isProduction = this.configService.get<string>('NODE_ENV') === 'production';
-    const corsOrigin = this.configService.get<string>('CORS_ORIGIN', 'http://localhost:3000');
-    const crossSite = /github\.io/i.test(corsOrigin) || process.env.COOKIE_SAMESITE === 'none';
-    return {
-      httpOnly: true,
-      secure: isProduction || crossSite,
-      sameSite: crossSite ? 'none' : isProduction ? 'strict' : 'lax',
-      path: '/',
-    };
-  }
-
-  private setRefreshCookie(res: Response, refreshToken: string): void {
-    const refreshExpiresIn = this.configService.get<string>('JWT_REFRESH_EXPIRES_IN', '7d');
-    const maxAge = parseExpiresInSeconds(refreshExpiresIn) * 1000;
-    res.cookie('refreshToken', refreshToken, {
-      ...this.refreshCookieOptions(),
-      maxAge,
-    });
-  }
-
-  private clearRefreshCookie(res: Response): void {
-    // clearCookie must mirror set options or browsers keep the refresh cookie.
-    res.clearCookie('refreshToken', this.refreshCookieOptions());
-  }
-
-  private stripRefreshToken(result: AuthResponse & { refreshToken: string }): AuthResponse {
-    const { refreshToken: _refreshToken, ...response } = result;
-    return response;
   }
 }

@@ -32,7 +32,7 @@ import {
   sanitizeProfileText,
 } from '@kia./shared';
 import * as bcrypt from 'bcrypt';
-import { createHash, randomBytes, randomInt, randomUUID } from 'crypto';
+import { createHash, createHmac, randomBytes, randomInt, randomUUID, timingSafeEqual } from 'crypto';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { EmailService } from '@kia./platform';
@@ -210,7 +210,7 @@ export class AuthService {
       throw new UnauthorizedException('Too many attempts. Request a new code.');
     }
 
-    const ok = otp.codeHash === this.hashOtp(phone, code);
+    const ok = this.otpMatches(phone, code, otp.codeHash);
     if (!ok) {
       await this.prisma.phoneOtp.update({
         where: { id: otp.id },
@@ -669,8 +669,17 @@ export class AuthService {
     };
   }
 
+  /** HMAC-SHA256 with JWT_SECRET as pepper so a DB leak alone is not enough. */
   private hashOtp(phone: string, code: string): string {
-    return createHash('sha256').update(`${phone}:${code}`).digest('hex');
+    const pepper = this.configService.getOrThrow<string>('JWT_SECRET');
+    return createHmac('sha256', pepper).update(`${phone}:${code}`).digest('hex');
+  }
+
+  private otpMatches(phone: string, code: string, codeHash: string): boolean {
+    const computed = Buffer.from(this.hashOtp(phone, code), 'utf8');
+    const stored = Buffer.from(codeHash, 'utf8');
+    if (computed.length !== stored.length) return false;
+    return timingSafeEqual(computed, stored);
   }
 
   /** Refresh tokens are high-value credentials — persist only their digest. */
@@ -690,6 +699,48 @@ export class AuthService {
     return {
       user,
       ...tokens,
+    };
+  }
+
+  /** Drop the refresh JWT from the JSON body — it belongs only in the httpOnly cookie. */
+  omitRefreshToken(result: AuthResponse & { refreshToken: string }): AuthResponse {
+    const { refreshToken: _refreshToken, ...response } = result;
+    return response;
+  }
+
+  /** Persist the refresh session as an httpOnly cookie (mirrors AuthController login/OTP). */
+  attachRefreshCookie(
+    res: { cookie: (name: string, value: string, options: Record<string, unknown>) => void },
+    refreshToken: string,
+  ): void {
+    const refreshExpiresIn = this.configService.get<string>('JWT_REFRESH_EXPIRES_IN', '7d');
+    const maxAge = parseExpiresInSeconds(refreshExpiresIn) * 1000;
+    res.cookie('refreshToken', refreshToken, {
+      ...this.refreshCookieOptions(),
+      maxAge,
+    });
+  }
+
+  clearRefreshCookie(res: {
+    clearCookie: (name: string, options: Record<string, unknown>) => void;
+  }): void {
+    res.clearCookie('refreshToken', this.refreshCookieOptions());
+  }
+
+  private refreshCookieOptions(): {
+    httpOnly: boolean;
+    secure: boolean;
+    sameSite: 'none' | 'strict' | 'lax';
+    path: string;
+  } {
+    const isProduction = this.configService.get<string>('NODE_ENV') === 'production';
+    const corsOrigin = this.configService.get<string>('CORS_ORIGIN', 'http://localhost:3000');
+    const crossSite = /github\.io/i.test(corsOrigin) || process.env.COOKIE_SAMESITE === 'none';
+    return {
+      httpOnly: true,
+      secure: isProduction || crossSite,
+      sameSite: crossSite ? 'none' : isProduction ? 'strict' : 'lax',
+      path: '/',
     };
   }
 

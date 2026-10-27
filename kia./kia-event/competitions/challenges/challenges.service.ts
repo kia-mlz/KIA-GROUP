@@ -81,6 +81,11 @@ export class ChallengesService {
     // Leaderboard trust chain: rank/points are recomputed server-side from the
     // DB (never from a client-supplied score) inside a transaction so an
     // in-flight submission can never corrupt the leaderboard for other users.
+    //
+    // Course entitlement is intentionally NOT granted here. Scoring today is a
+    // client-visible regex heuristic (`buildChallengeResult`) that is trivial
+    // to game; unlocking paid catalog access from it would be a privilege
+    // bypass. Re-enable entitlement only behind a real sandboxed judge.
     if (result.topScore) {
       await this.prisma.$transaction(async (tx) => {
         const best = await tx.challengeSubmission.aggregate({
@@ -88,33 +93,10 @@ export class ChallengesService {
           _max: { score: true },
         });
 
-        // Prize: top score + unlock course. Both are (idempotent) upserts.
         await tx.bootcampProfile.updateMany({
           where: { userId },
           data: { rank: 1, points: best._max.score ?? result.score },
         });
-
-        const course = await tx.course.findUnique({
-          where: { slug: settings.bootcamp.unlockCourseSlug },
-        });
-        if (course) {
-          await tx.entitlement.upsert({
-            where: {
-              userId_resourceType_resourceId: {
-                userId,
-                resourceType: 'course',
-                resourceId: course.slug,
-              },
-            },
-            create: {
-              userId,
-              resourceType: 'course',
-              resourceId: course.slug,
-              source: 'CHALLENGE',
-            },
-            update: {},
-          });
-        }
       });
     }
 

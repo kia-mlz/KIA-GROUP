@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import type { AuthResponse, AuthUser } from '@kia./shared';
+import type { Response } from 'express';
 import { CurrentUser } from '@kia./platform';
 import { JwtAuthGuard } from '@kia./platform';
 import { AuthService } from '../auth.service';
@@ -60,11 +61,17 @@ export class TwoFactorController {
   /**
    * Second login step for 2FA-enabled staff accounts: exchanges the
    * single-purpose challenge from `POST /auth/login` plus a TOTP or recovery
-   * code for a real session.
+   * code for a real session. Refresh token is httpOnly-cookie only (same as
+   * password / OTP login) — never returned in the JSON body.
    */
   @Post('auth/2fa/verify')
   @Throttle({ default: { limit: 5, ttl: 60_000 } })
-  verify(@Body() dto: TwoFactorChallengeDto): Promise<AuthResponse> {
-    return this.authService.completeTwoFactorLogin(dto.challenge, dto.code);
+  async verify(
+    @Body() dto: TwoFactorChallengeDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<AuthResponse> {
+    const result = await this.authService.completeTwoFactorLogin(dto.challenge, dto.code);
+    this.authService.attachRefreshCookie(res, result.refreshToken);
+    return this.authService.omitRefreshToken(result);
   }
 }

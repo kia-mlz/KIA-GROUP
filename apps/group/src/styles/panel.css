@@ -334,6 +334,25 @@
   justify-content: flex-start;
 }
 
+.ticket-attachments__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--brand-700, var(--brand));
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ticket-attachments__link:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
 .message-card.unread {
   border-color: var(--brand-hairline, var(--brand));
 }
