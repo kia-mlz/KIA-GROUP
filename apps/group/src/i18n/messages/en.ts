@@ -1745,9 +1745,9 @@ export const en = {
       view: 'View',
     },
     dashboard: {
-      eyebrow: 'Kia command center',
-      title: 'Platform command view',
-      sub: 'See users, revenue, orders, and items that need action at a glance.',
+      eyebrow: 'Admin panel',
+      title: 'Platform overview',
+      sub: 'See users, revenue, and items that need action at a glance.',
       refresh: 'Refresh',
       healthTitle: 'Payment health',
       healthSub: 'Current state of recent platform transactions',
