@@ -697,21 +697,33 @@
   border-radius: var(--am-radius);
   box-shadow: none;
 }
-.am-shell .admin-btn.primary,
-.am-shell .btn-next,
-.am-shell .btn--primary,
-.am-shell .cta-primary {
+/* Primary actions (incl. dual-class `btn-next admin-btn` in role rows).
+   Keep ink-on-fill; a later secondary `.admin-btn:not(.primary)` rule must
+   never bleach these to white-on-white. */
+.am-shell :is(.admin-btn.primary, .btn-next, .btn--primary, .cta-primary),
+.am-shell .admin-role-save-row :is(.btn-next, .admin-btn.btn-next, .cta-primary) {
   color: #fff !important;
-  background: #0f172a;
+  background: #0f172a !important;
   border-color: #0f172a;
   font-weight: 650;
 }
 .am-shell .admin-btn.primary:hover,
-.am-shell .btn-next:hover {
+.am-shell .btn-next:hover:not(:disabled),
+.am-shell .admin-role-save-row :is(.btn-next, .cta-primary):hover:not(:disabled) {
   filter: brightness(1.12);
   transform: none;
 }
-.am-shell :is(.admin-btn:not(.primary), .btn--secondary, .cta-secondary) {
+.am-shell :is(.btn-next, .btn--primary, .cta-primary, .admin-btn.primary):disabled,
+.am-shell .admin-role-save-row :is(.btn-next, .cta-primary):disabled {
+  color: #475569 !important;
+  background: #e2e8f0 !important;
+  border-color: #cbd5e1;
+  opacity: 1;
+  filter: none;
+}
+/* Secondary admin buttons only — exclude primary / btn-next dual classes. */
+.am-shell .admin-btn:not(.primary):not(.btn-next):not(.btn--primary):not(.cta-primary),
+.am-shell :is(.btn--secondary, .cta-secondary) {
   color: var(--am-ink);
   background: #fff;
   border: 1px solid var(--am-line);
@@ -719,6 +731,23 @@
 .am-shell :is(.btn--ghost, .btn-ghost, .admin-btn.ghost) {
   color: var(--am-ink);
   background: transparent;
+}
+.am-shell .admin-role-save-row {
+  color: var(--am-ink);
+}
+.am-shell .admin-role-save-row .admin-role-picker select {
+  color: var(--am-ink);
+  background: #ffffff;
+  border-color: var(--am-line);
+}
+.am-shell .admin-role-save-row :is(.form-success, .form-error, .admin-inline-status) {
+  color: inherit;
+}
+.am-shell .admin-role-save-row .form-success {
+  color: #0f766e;
+}
+.am-shell .admin-role-save-row .form-error {
+  color: #b91c1c;
 }
 .am-shell .admin-badge {
   color: #1e293b;
