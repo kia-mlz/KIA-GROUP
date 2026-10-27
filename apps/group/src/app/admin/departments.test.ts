@@ -6,29 +6,26 @@ import {
   departmentEntryPoints,
   hasDepartmentMetrics,
 } from '@/lib/adminDepartments';
+import {
+  ADMIN_ROOT,
+  DEPARTMENT_WORKSPACES,
+  PLATFORM_NAV_GROUPS,
+  flattenAdminNavLeaves,
+} from '@/lib/adminNav';
 import { en, fa } from '@/i18n/messages';
 import { createTranslator } from '@/i18n/translate';
 
 /**
- * Departments hub + admin navigation wiring.
+ * Departments hub + Ops Center navigation wiring.
  *
- * Three failure modes this pins down:
- *
- * 1. A sidebar entry that points at a route nobody built. Every `href` the
- *    panel offers is resolved against the real `page.tsx` files on disk, so a
- *    renamed or deleted page cannot leave a dead destination behind.
- * 2. A department that exists in the brand registry but has no copy or no
- *    management entry point, so the hub would render a nameless card or a
- *    generic label.
- * 3. An admin fetch on the hub that is not gated by the same permission the
- *    API guards it with. The page must ask `can('<section>')` before calling a
- *    section's endpoint — UI gating is not authorization, but an ungated call
- *    turns a 403 into an empty card that looks like real data.
+ * Pins: every nav href resolves to a real page; hub cards come from DEPARTMENTS;
+ * endpoint calls stay permission-gated; empty departments stay honest.
  */
 
 const ADMIN_DIR = __dirname;
-const SIDEBAR = readFileSync(path.join(ADMIN_DIR, 'AdminLayoutClient.tsx'), 'utf8');
+const NAV = readFileSync(path.join(ADMIN_DIR, '../../lib/adminNav.ts'), 'utf8');
 const HUB = readFileSync(path.join(ADMIN_DIR, 'departments', 'page.tsx'), 'utf8');
+const SHELL = readFileSync(path.join(ADMIN_DIR, 'AdminLayoutClient.tsx'), 'utf8');
 
 const tEn = createTranslator(en, en);
 const tFa = createTranslator(fa, fa);
@@ -38,9 +35,7 @@ function collectRoutes(dir: string, route = '/admin'): string[] {
   const routes: string[] = [];
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     if (entry.isDirectory()) {
-      // Dynamic segments (`[slug]`) are detail pages, never nav destinations.
       if (entry.name.startsWith('[')) continue;
-      // Route groups `(name)` do not appear in the URL.
       const next = entry.name.startsWith('(') ? route : `${route}/${entry.name}`;
       routes.push(...collectRoutes(path.join(dir, entry.name), next));
       continue;
@@ -51,7 +46,15 @@ function collectRoutes(dir: string, route = '/admin'): string[] {
 }
 
 const routes = new Set(collectRoutes(ADMIN_DIR));
-const navHrefs = [...SIDEBAR.matchAll(/href: '(\/admin[^']*)'/g)].map((match) => match[1]);
+const allowAll = () => true;
+const navHrefs = [
+  ADMIN_ROOT.overview.href,
+  ADMIN_ROOT.departments.href,
+  ...flattenAdminNavLeaves(PLATFORM_NAV_GROUPS, allowAll).map((item) => item.href),
+  ...Object.values(DEPARTMENT_WORKSPACES).flatMap((workspace) =>
+    flattenAdminNavLeaves(workspace.groups, allowAll).map((item) => item.href),
+  ),
+];
 
 /** Which section guards each admin endpoint the hub is allowed to call. */
 const ENDPOINT_SECTIONS: Record<string, string> = {
@@ -73,10 +76,12 @@ describe('admin navigation destinations', () => {
 
   it('puts the departments hub in the navigation, right after the overview', () => {
     expect(navHrefs).toContain('/admin/departments');
-    const dashboard = SIDEBAR.indexOf("href: '/admin',");
-    const departments = SIDEBAR.indexOf("href: '/admin/departments',");
-    expect(dashboard).toBeGreaterThan(-1);
-    expect(departments).toBeGreaterThan(dashboard);
+    expect(SHELL).toContain('ADMIN_ROOT');
+    expect(SHELL).toContain('from \'@/lib/adminNav\'');
+    const overviewIdx = NAV.indexOf("overview: { href: '/admin'");
+    const departmentsIdx = NAV.indexOf("departments: { href: '/admin/departments'");
+    expect(overviewIdx).toBeGreaterThan(-1);
+    expect(departmentsIdx).toBeGreaterThan(overviewIdx);
   });
 });
 
@@ -84,13 +89,10 @@ describe('departments hub', () => {
   it('builds its cards from the one department registry', () => {
     expect(HUB).toContain("from '@/components/brand/departments'");
     expect(HUB).toContain('DEPARTMENTS.map');
-    // One card per registered department, wearing the department's own token.
     expect(HUB).toContain('dept--${department.slug}');
   });
 
   it('does not hard-code a department name of its own', () => {
-    // Names come from `dashboard.doors.*Title`; a second spelling here is how
-    // the rail and the hub start disagreeing.
     expect(HUB).not.toMatch(/KIA\.? (Academy|Work|Material|Labs|Events|Community)/);
     expect(HUB).toContain('t(department.titleKey)');
   });
@@ -119,7 +121,6 @@ describe('departments hub', () => {
 
     const ungated = called.filter((method) => {
       const section = ENDPOINT_SECTIONS[method];
-      // A new endpoint must be added to the table above, with its real section.
       if (!section) return true;
       return !HUB.includes(`can('${section}')`);
     });
@@ -127,21 +128,18 @@ describe('departments hub', () => {
   });
 
   it('keeps the empty state honest for departments without an admin module', () => {
-    // Work / Material / Community / Labs have no admin module yet; the hub says
-    // so instead of showing zeros that read as "no data".
     expect(HUB).toContain('admin.departments.noModule');
     expect(HUB).toContain('admin.departments.noModuleHint');
   });
+
+  it('routes into department workspaces from the hub', () => {
+    expect(HUB).toContain('DEPARTMENT_WORKSPACES');
+    expect(HUB).toContain('admin.departments.enterWorkspace');
+  });
 });
 
-/**
- * Restricted-moderator card behaviour, asserted against the real gating
- * functions the page ships with — not against the source text.
- */
 describe('departments hub gating for a restricted moderator', () => {
-  /** A moderator who may only touch courses: no competitions, no challenges. */
   const onlyCourses = (section: string) => section === 'courses';
-  /** A moderator with a single unrelated section open. */
   const onlyTickets = (section: string) => section === 'tickets';
 
   it('offers Academy its courses module when only courses is open', () => {
@@ -155,7 +153,6 @@ describe('departments hub gating for a restricted moderator', () => {
 
   it('never invents an entry point for a department that owns no module', () => {
     for (const slug of ['work', 'material', 'community', 'labs'] as DepartmentSlug[]) {
-      // A permissive `can` still yields nothing: the modules genuinely do not exist.
       expect(departmentEntryPoints(slug, () => true)).toEqual([]);
       expect(hasDepartmentMetrics(slug)).toBe(false);
     }

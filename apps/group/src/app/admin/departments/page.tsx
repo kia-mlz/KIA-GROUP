@@ -18,32 +18,15 @@ import {
   DEPARTMENT_MODULES,
   departmentEntryPoints,
   departmentModCount,
-  departmentTags,
   hasDepartmentMetrics,
 } from '@/lib/adminDepartments';
-import { ChevronRight } from 'lucide-react';
-
+import { DEPARTMENT_WORKSPACES } from '@/lib/adminNav';
+import { ArrowLeft, ExternalLink } from 'lucide-react';
 
 /**
- * One place to answer "where do I manage this department?".
- *
- * The six departments are already written down once (`DEPARTMENTS`), and so are
- * the admin modules that manage them, so this page invents no second list: it
- * walks the registry, attaches the real modules a department owns, and prints
- * counts that come from those modules' own endpoints.
- *
- * Honesty rules the page follows (an admin panel that lies is worse than one
- * that is incomplete):
- *  - A count is only shown when the endpoint that owns it answered. Nothing is
- *    estimated, and a department with no admin module says so instead of
- *    showing zeros that look like empty data.
- *  - Modules the current admin cannot open are never rendered (UI gating; the
- *    API enforces the same sections on every route).
- *  - Work / Material / Community / Labs have no admin module yet. Their cards
- *    offer the public page and say plainly that there is nothing to manage.
+ * Ops Center departments hub — six branded workspaces.
+ * Counts only render when a real endpoint answered; empty departments stay honest.
  */
-
-
 
 type DepartmentMetrics = {
   stats: AdminStats | null;
@@ -59,7 +42,6 @@ const EMPTY_METRICS: DepartmentMetrics = {
   competitions: null,
 };
 
-/** A single live number: where its label comes from and what the endpoint said. */
 type Metric = { labelKey: string; value: number | null };
 type LiveMetric = { labelKey: string; value: number };
 
@@ -123,8 +105,6 @@ export default function AdminDepartmentsPage() {
 
   useEffect(() => {
     let cancelled = false;
-    // Each call is permission-gated on the same section its route guards, and
-    // isolated: one failing endpoint must not blank the whole page.
     const calls: Promise<unknown>[] = [];
     const next: DepartmentMetrics = { ...EMPTY_METRICS };
     let attempts = 0;
@@ -164,28 +144,20 @@ export default function AdminDepartmentsPage() {
   const departments = useMemo(
     () =>
       DEPARTMENTS.map((department) => {
-        // Only numbers an endpoint actually returned are rendered.
+        const workspace = DEPARTMENT_WORKSPACES[department.slug];
         const metrics = METRICS_BY_DEPARTMENT[department.slug](data).filter(
           (metric): metric is LiveMetric => metric.value !== null,
         );
         const entryPoints = departmentEntryPoints(department.slug, can);
-        // Tags show the module areas a department owns. When every module is
-        // also rendered as an entry-point button, the tag row only repeats the
-        // buttons' own labels — suppress it there so the card reads once.
-        const entryPointKeys = new Set(
-          entryPoints.map((entry) => t(entry.labelKey)),
-        );
-        const tags = departmentTags(department.slug)
-          .map((labelKey) => t(labelKey))
-          .filter((label) => !entryPointKeys.has(label));
         return {
           ...department,
           name: t(department.titleKey),
           description: t(`admin.departments.${department.slug}.desc`),
           metrics,
           entryPoints,
-          tags,
           modCount: departmentModCount(department.slug),
+          live: workspace.live,
+          manageHref: workspace.href,
         };
       }),
     [data, can, t],
@@ -193,8 +165,6 @@ export default function AdminDepartmentsPage() {
 
   if (loading) return <AdminLoading label={t('admin.departments.loading')} />;
 
-  // Every endpoint we were allowed to ask failed: that is a page-level error,
-  // not six quiet em-dashes.
   if (attempted > 0 && failed === attempted) {
     return (
       <div className="admin-content">
@@ -204,127 +174,98 @@ export default function AdminDepartmentsPage() {
   }
 
   return (
-    <div className="app-shell">
-      <div className="workspace">
-        <div className="content">
-          <div className="breadcrumbs" aria-label={t('admin.breadcrumb')}>
-            <Link href="/admin">{t('admin.breadcrumbRoot')}</Link>
-            <ChevronRight size={10} className="admin-breadcrumb-sep" aria-hidden />
-            <strong>{t('admin.nav.departments')}</strong>
-          </div>
-
-          <section className="page-intro">
-            <div>
-              <span className="section-kicker">{t('admin.departments.what')}</span>
-              <h1>{t('admin.nav.departments')}</h1>
-              <p>{t('admin.departments.onePlatform')}</p>
-            </div>
-            <Link href="/admin/users/roles" className="btn-next admin-btn">
-              {t('admin.departments.accessAction')}
-            </Link>
-          </section>
-
-          {failed > 0 ? (
-            <p className="admin-departments-note" role="status">
-              {t('admin.departments.partialError')}
-            </p>
-          ) : null}
-
-          <div className="admin-department-grid">
-            {departments.map((department) => (
-              <article
-                key={department.slug}
-                className={`admin-card admin-department dept--${department.slug}`}
-                aria-labelledby={`admin-dept-${department.slug}`}
-              >
-                <div className="admin-department-head">
-                  <span className="department-icon admin-department-icon" aria-hidden>
-                    <BrandMark size={22} title="" />
-                  </span>
-                  <div className="admin-department-copy">
-                    <h3 id={`admin-dept-${department.slug}`}>{department.name}</h3>
-                    <p>{department.description}</p>
-                  </div>
-                  {department.tags.length ? (
-                    <div className="admin-department-tags">
-                      {department.tags.map((tag) => (
-                        <span key={tag}>{tag}</span>
-                      ))}
-                    </div>
-                  ) : null}
-                  {department.modCount != null ? (
-                    <span className="admin-badge control-badge">
-                      {department.modCount}
-                    </span>
-                  ) : null}
-                </div>
-
-                {department.metrics.length ? (
-                  <dl className="admin-department-metrics">
-                    {department.metrics.map((metric) => (
-                      <div key={metric.labelKey}>
-                        <dt>{t(metric.labelKey)}</dt>
-                        <dd>{format.number(metric.value)}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                ) : null}
-
-                {department.tags.length ? (
-                  <div className="admin-department-tags">
-                    {department.tags.map((tag) => (
-                      <span key={tag}>{tag}</span>
-                    ))}
-                  </div>
-                ) : null}
-
-                {department.entryPoints.length ? (
-                  <div className="admin-department-actions">
-                    {department.entryPoints.map((entry) => (
-                      <Link key={entry.href} href={entry.href} className="btn-next admin-btn">
-                        {t(entry.labelKey)}
-                      </Link>
-                    ))}
-                  </div>
-                ) : null}
-
-                {!DEPARTMENT_MODULES[department.slug].length ? (
-                  <p className="admin-department-status">
-                    <span className="admin-badge">{t('admin.departments.noModule')}</span>
-                    <span>{t('admin.departments.noModuleHint')}</span>
-                  </p>
-                ) : null}
-
-                {DEPARTMENT_MODULES[department.slug].length && !department.entryPoints.length ? (
-                  <p className="admin-department-status">
-                    <span>{t('admin.departments.noAccess')}</span>
-                  </p>
-                ) : null}
-
-                {hasDepartmentMetrics(department.slug) && !department.entryPoints.length ? (
-                  <p className="admin-department-status admin-department-status--muted">
-                    <span>{t('admin.departments.metricsHidden')}</span>
-                  </p>
-                ) : null}
-
-                <footer className="admin-department-footer">
-                  <Link
-                    href={department.href}
-                    className="admin-link"
-                    aria-label={t('admin.departments.publicAria', { name: department.name })}
-                  >
-                    {t('admin.departments.publicLabel')}
-                  </Link>
-                </footer>
-              </article>
-            ))}
-          </div>
-
-          <footer className="site-footer">
-            <span>{t('admin.departments.footerLine')}</span>
-            <span>{t('admin.departments.footerNote')}</span>
-          </footer>
+    <div className="ops-dept-hub">
+      <section className="ops-dept-hub__intro" aria-labelledby="ops-dept-hub-title">
+        <div>
+          <span className="ops-dept-hub__kicker">{t('admin.departments.what')}</span>
+          <h2 id="ops-dept-hub-title">{t('admin.nav.departments')}</h2>
+          <p>{t('admin.departments.onePlatform')}</p>
         </div>
+        <Link href="/admin/users/roles" className="btn-next admin-btn">
+          {t('admin.departments.accessAction')}
+        </Link>
+      </section>
+
+      {failed > 0 ? (
+        <p className="admin-departments-note" role="status">
+          {t('admin.departments.partialError')}
+        </p>
+      ) : null}
+
+      <div className="ops-dept-grid">
+        {departments.map((department) => (
+          <article
+            key={department.slug}
+            className={`ops-dept-card ops-dept-card--${department.slug} dept--${department.slug}`}
+            aria-labelledby={`admin-dept-${department.slug}`}
+          >
+            <div className="ops-dept-card__head">
+              <span className="ops-dept-card__mark" aria-hidden>
+                <BrandMark size={20} title="" />
+              </span>
+              <div className="ops-dept-card__copy">
+                <h3 id={`admin-dept-${department.slug}`}>{department.name}</h3>
+                <p>{department.description}</p>
+              </div>
+              <span
+                className={`ops-dept-card__status ${department.live ? 'is-live' : 'is-soon'}`}
+              >
+                {department.live
+                  ? t('admin.departments.status.live')
+                  : t('admin.departments.noModule')}
+              </span>
+            </div>
+
+            {department.metrics.length ? (
+              <dl className="ops-dept-card__metrics">
+                {department.metrics.map((metric) => (
+                  <div key={metric.labelKey}>
+                    <dt>{t(metric.labelKey)}</dt>
+                    <dd>{format.number(metric.value)}</dd>
+                  </div>
+                ))}
+              </dl>
+            ) : null}
+
+            {!DEPARTMENT_MODULES[department.slug].length ? (
+              <div className="ops-dept-card__empty">
+                <span>{t('admin.departments.noModuleHint')}</span>
+              </div>
+            ) : null}
+
+            {DEPARTMENT_MODULES[department.slug].length && !department.entryPoints.length ? (
+              <div className="ops-dept-card__empty">
+                <span>{t('admin.departments.noAccess')}</span>
+              </div>
+            ) : null}
+
+            {hasDepartmentMetrics(department.slug) && !department.entryPoints.length ? (
+              <div className="ops-dept-card__empty">
+                <span>{t('admin.departments.metricsHidden')}</span>
+              </div>
+            ) : null}
+
+            <div className="ops-dept-card__actions">
+              <Link href={department.manageHref} className="ops-dept-card__cta">
+                {t('admin.departments.enterWorkspace')}
+                <ArrowLeft size={14} aria-hidden />
+              </Link>
+              {department.entryPoints.slice(0, 2).map((entry) => (
+                <Link key={entry.href} href={entry.href} className="ops-dept-card__ghost">
+                  {t(entry.labelKey)}
+                </Link>
+              ))}
+              <Link
+                href={department.href}
+                className="ops-dept-card__ghost"
+                aria-label={t('admin.departments.publicAria', { name: department.name })}
+              >
+                <ExternalLink size={13} aria-hidden />
+                {t('admin.departments.publicLabel')}
+              </Link>
+            </div>
+          </article>
+        ))}
       </div>
     </div>
   );

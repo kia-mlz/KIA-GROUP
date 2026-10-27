@@ -288,6 +288,47 @@ export default function AdminStatsPage() {
         })}
       </div>
 
+      <section className="admin-card" aria-labelledby="ops-action-center-title">
+        <div className="admin-section-head">
+          <div>
+            <h2 id="ops-action-center-title">{t('admin.dashboard.actionCenter')}</h2>
+            <p className="admin-sub" style={{ marginBottom: 0 }}>
+              {t('admin.dashboard.actionCenterSub')}
+            </p>
+          </div>
+        </div>
+        <div className="ops-action-center">
+          {can('tickets', 'view') ? (
+            <Link
+              href="/admin/tickets"
+              className={`ops-action-tile${data.openTickets > 0 ? ' is-urgent' : ''}`}
+            >
+              <strong>{format.number(data.openTickets)}</strong>
+              <span>{t('admin.dashboard.openTickets')}</span>
+            </Link>
+          ) : null}
+          {can('payments', 'view') ? (
+            <Link
+              href="/admin/payments"
+              className={`ops-action-tile${statusCounts.failed > 0 ? ' is-urgent' : ''}`}
+            >
+              <strong>{format.number(statusCounts.failed)}</strong>
+              <span>{t('admin.dashboard.failedPayments')}</span>
+            </Link>
+          ) : null}
+          {can('payments', 'view') ? (
+            <Link href="/admin/payments" className="ops-action-tile">
+              <strong>{format.number(statusCounts.pending)}</strong>
+              <span>{t('admin.dashboard.pendingPayments')}</span>
+            </Link>
+          ) : null}
+          <Link href="/admin/departments" className="ops-action-tile">
+            <strong>{format.number(6)}</strong>
+            <span>{t('admin.dashboard.departmentsHubHint')}</span>
+          </Link>
+        </div>
+      </section>
+
       <div className="admin-dashboard-overview">
         <article className="admin-card admin-dashboard-health">
           <div className="admin-section-head">

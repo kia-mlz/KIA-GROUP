@@ -1,21 +1,21 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronRight, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageProvider';
 import type { DepartmentSlug } from '@/components/brand/departments';
+import { DEPARTMENT_WORKSPACES } from '@/lib/adminNav';
 
 /**
- * The honest empty panel: Work / Material / Community / Labs have no admin
- * module yet, so the panel says exactly that and offers the department's
- * public page — instead of inventing zeros that look like empty data.
+ * Honest empty workspace for departments without live admin modules yet.
+ * Never invents zeros that look like empty data.
  */
 export function EmptyDepartmentPanel({ slug }: { slug: DepartmentSlug }) {
   const { t } = useLanguage();
   if (slug !== 'work' && slug !== 'material' && slug !== 'community' && slug !== 'labs') {
     return null;
   }
-  /** Each department's own public route root. */
+
   const publicHrefs: Record<
     Extract<DepartmentSlug, 'work' | 'material' | 'community' | 'labs'>,
     string
@@ -26,36 +26,23 @@ export function EmptyDepartmentPanel({ slug }: { slug: DepartmentSlug }) {
     labs: '/labs',
   };
   const publicHref = publicHrefs[slug];
+  const workspace = DEPARTMENT_WORKSPACES[slug];
 
   return (
-    <div className="admin-content">
-      <div className="breadcrumbs" aria-label={t('admin.breadcrumb')}>
-        <Link href="/admin">{t('admin.breadcrumbRoot')}</Link>
-        <ChevronRight size={10} className="admin-breadcrumb-sep" aria-hidden />
-        <Link href="/admin/departments">{t('admin.nav.departments')}</Link>
-        <ChevronRight size={10} className="admin-breadcrumb-sep" aria-hidden />
-        <strong>{t(`dashboard.doors.${slug}Title`)}</strong>
-      </div>
-
-      <section className="page-intro">
-        <div>
-          <span className="section-kicker">{t('admin.departments.what')}</span>
-          <h1>{t(`dashboard.doors.${slug}Title`)}</h1>
-          <p>{t(`admin.departments.${slug}.desc`)}</p>
-        </div>
-      </section>
-
-      <article className="admin-card">
-        <div className="admin-department-status">
-          <span className="admin-badge">{t('admin.departments.noModule')}</span>
-          <span>{t('admin.departments.noModuleHint')}</span>
-        </div>
+    <div className="ops-empty-workspace">
+      <section className="ops-empty-workspace__card" aria-labelledby={`empty-ws-${slug}`}>
+        <span className="admin-badge">{t('admin.departments.noModule')}</span>
+        <h2 id={`empty-ws-${slug}`}>
+          {t('admin.departments.workspaceTitle', { name: workspace.label })}
+        </h2>
+        <p>{t(`admin.departments.${slug}.desc`)}</p>
+        <p>{t('admin.departments.noModuleHint')}</p>
         {publicHref ? (
-          <Link href={publicHref} className="admin-link" style={{ marginTop: 'var(--space-4)' }}>
+          <Link href={publicHref} className="admin-link">
             <ExternalLink size={14} aria-hidden /> {t('admin.departments.publicLabel')}
           </Link>
         ) : null}
-      </article>
+      </section>
     </div>
   );
 }
