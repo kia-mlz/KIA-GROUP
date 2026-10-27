@@ -774,6 +774,10 @@ const liveApi = {
     return request<AdminCourseExam[]>(`/admin/courses/${courseSlug}/exams`);
   },
 
+  adminListAllCourseExams(): Promise<AdminCourseExam[]> {
+    return request<AdminCourseExam[]>('/admin/exams');
+  },
+
   adminCreateCourseExam(courseSlug: string, dto: {
     title: string;
     kind?: CourseExamKind;
@@ -781,6 +785,7 @@ const liveApi = {
     description?: string;
     passScore?: number;
     durationMin?: number;
+    maxAttempts?: number;
     published?: boolean;
     questions: CourseExamQuestion[];
   }): Promise<AdminCourseExam> {
@@ -797,6 +802,7 @@ const liveApi = {
     description?: string;
     passScore?: number;
     durationMin?: number;
+    maxAttempts?: number;
     published?: boolean;
     questions?: CourseExamQuestion[];
   }): Promise<AdminCourseExam> {

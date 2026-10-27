@@ -7,6 +7,7 @@ import type { AdminCourse, AdminLesson } from '@kia./shared';
 import { AdminErrorState, AdminSkeleton } from '@/components/admin/AdminStates';
 import { api, ApiError } from '@/lib/api';
 import { useLanguage } from '@/context/LanguageProvider';
+import AdminCourseExams from './AdminCourseExams';
 
 type LessonDraft = {
   slug: string;
@@ -187,7 +188,9 @@ export default function AdminEditCoursePage() {
       <div className="admin-header-row">
         <div>
           <h1>ویرایش دوره</h1>
-          <p className="admin-sub">اطلاعات دوره، وضعیت انتشار و جلسات را از اینجا مدیریت کنید.</p>
+          <p className="admin-sub">
+            اطلاعات دوره، جلسات، و آزمون‌های میان‌ترم / پایان‌ترم را از اینجا مدیریت کنید.
+          </p>
         </div>
       </div>
 
@@ -270,6 +273,8 @@ export default function AdminEditCoursePage() {
           <div className="admin-form-actions"><label className="admin-checkbox"><input type="checkbox" checked={newLesson.comingSoon} onChange={(e) => setNewLesson((value) => ({ ...value, comingSoon: e.target.checked }))} /> به‌زودی</label><button type="submit" className="cta-primary" disabled={addingLesson}>{addingLesson ? <Loader2 className="spin" size={16} /> : <Plus size={16} />} {addingLesson ? 'در حال افزودن…' : 'افزودن جلسه'}</button></div>
         </form>
       </section>
+
+      <AdminCourseExams courseSlug={course.slug} lessons={course.lessons ?? []} />
     </div>
   );
 }

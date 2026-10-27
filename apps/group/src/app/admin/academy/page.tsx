@@ -103,6 +103,13 @@ export default function AdminAcademyDashboardPage() {
           icon: Layers,
         }
       : null,
+    can('courses')
+      ? {
+          href: '/admin/academy/course-exams',
+          label: t('admin.nav.courseExams'),
+          icon: ClipboardList,
+        }
+      : null,
     can('tests')
       ? {
           href: '/admin/academy/tests',

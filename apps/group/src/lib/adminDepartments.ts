@@ -35,6 +35,7 @@ export function departmentTags(slug: DepartmentSlug): string[] {
 export const DEPARTMENT_MODULES: Record<DepartmentSlug, DepartmentModule[]> = {
   academy: [
     { href: '/admin/academy/courses', labelKey: 'admin.nav.courses', key: 'courses' },
+    { href: '/admin/academy/course-exams', labelKey: 'admin.nav.courseExams', key: 'courses' },
     { href: '/admin/academy/tests', labelKey: 'admin.nav.tests', key: 'tests' },
   ],
   // Bootcamps, challenges and competitions all live in the event department.

@@ -146,8 +146,14 @@ export const DEPARTMENT_WORKSPACES: Record<DepartmentSlug, DepartmentWorkspace> 
             quickCreate: true,
           },
           {
+            id: 'course-exams',
+            label: 'آزمون‌های میان‌ترم و پایان‌ترم',
+            href: '/admin/academy/course-exams',
+            section: 'courses',
+          },
+          {
             id: 'tests',
-            label: 'آزمون‌ها و بانک سؤال',
+            label: 'بانک سؤال ارزیابی',
             href: '/admin/academy/tests',
             section: 'tests',
           },
