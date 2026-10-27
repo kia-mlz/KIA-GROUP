@@ -258,3 +258,39 @@ export function filterAdminNavGroups(
     }))
     .filter((group) => group.items.length > 0);
 }
+
+/**
+ * Leaves visible in chrome for the current workspace.
+ * Inside a department → only that department. On the platform shell →
+ * platform ops only (department entry stays on the hub / dept rail).
+ */
+export function scopedAdminNavLeaves(
+  department: DepartmentSlug | null,
+  can: (section: AdminAccessSection, level?: 'view' | 'manage' | 'edit') => boolean,
+): AdminNavLeaf[] {
+  if (department) {
+    return flattenAdminNavLeaves(DEPARTMENT_WORKSPACES[department].groups, can);
+  }
+  return flattenAdminNavLeaves(PLATFORM_NAV_GROUPS, can);
+}
+
+/** Every leaf the signed-in admin may open (platform + all live depts). */
+export function allAccessibleAdminNavLeaves(
+  can: (section: AdminAccessSection, level?: 'view' | 'manage' | 'edit') => boolean,
+): AdminNavLeaf[] {
+  const platform = flattenAdminNavLeaves(PLATFORM_NAV_GROUPS, can);
+  const depts = DEPARTMENT_ORDER.flatMap((slug) =>
+    flattenAdminNavLeaves(DEPARTMENT_WORKSPACES[slug].groups, can),
+  );
+  return [...platform, ...depts];
+}
+
+/** «ایجاد سریع» entries for the current workspace only. */
+export function scopedQuickCreateLeaves(
+  department: DepartmentSlug | null,
+  can: (section: AdminAccessSection, level?: 'view' | 'manage' | 'edit') => boolean,
+): AdminNavLeaf[] {
+  return scopedAdminNavLeaves(department, can).filter(
+    (item) => item.quickCreate && /\/(create|new)$/.test(item.href),
+  );
+}

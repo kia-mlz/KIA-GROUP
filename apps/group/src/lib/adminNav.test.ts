@@ -4,10 +4,13 @@ import {
   DEPARTMENT_ORDER,
   DEPARTMENT_WORKSPACES,
   PLATFORM_NAV_GROUPS,
+  allAccessibleAdminNavLeaves,
   departmentFromAdminPath,
   filterAdminNavGroups,
   flattenAdminNavLeaves,
   isAdminNavActive,
+  scopedAdminNavLeaves,
+  scopedQuickCreateLeaves,
 } from './adminNav';
 
 const allowAll = () => true;
@@ -77,5 +80,35 @@ describe('adminNav registry', () => {
     expect(flattenAdminNavLeaves(DEPARTMENT_WORKSPACES.academy.groups, allowAll).length).toBeGreaterThan(
       0,
     );
+  });
+
+  it('scopes chrome leaves to the active department only', () => {
+    const academy = scopedAdminNavLeaves('academy', allowAll);
+    const events = scopedAdminNavLeaves('events', allowAll);
+    const platform = scopedAdminNavLeaves(null, allowAll);
+
+    expect(academy.every((item) => item.href.startsWith('/admin/academy'))).toBe(true);
+    expect(academy.some((item) => item.href.startsWith('/admin/events'))).toBe(false);
+    expect(events.every((item) => item.href.startsWith('/admin/events'))).toBe(true);
+    expect(events.some((item) => item.href.startsWith('/admin/academy'))).toBe(false);
+    expect(platform.every((item) => !item.href.startsWith('/admin/academy'))).toBe(true);
+    expect(platform.every((item) => !item.href.startsWith('/admin/events'))).toBe(true);
+    expect(platform.some((item) => item.href === '/admin/users')).toBe(true);
+  });
+
+  it('scopes quick-create to the active workspace', () => {
+    const academyCreates = scopedQuickCreateLeaves('academy', allowAll);
+    const platformCreates = scopedQuickCreateLeaves(null, allowAll);
+
+    expect(academyCreates.map((item) => item.id)).toEqual(['courses-new']);
+    expect(platformCreates.map((item) => item.id)).toContain('users-create');
+    expect(platformCreates.some((item) => item.id === 'courses-new')).toBe(false);
+  });
+
+  it('still lists every accessible leaf for access guards', () => {
+    const all = allAccessibleAdminNavLeaves(allowAll);
+    expect(all.some((item) => item.href.startsWith('/admin/academy'))).toBe(true);
+    expect(all.some((item) => item.href.startsWith('/admin/events'))).toBe(true);
+    expect(all.some((item) => item.href === '/admin/users')).toBe(true);
   });
 });

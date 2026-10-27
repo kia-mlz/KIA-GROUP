@@ -48,10 +48,13 @@ import {
   DEPARTMENT_ORDER,
   DEPARTMENT_WORKSPACES,
   PLATFORM_NAV_GROUPS,
+  allAccessibleAdminNavLeaves,
   departmentFromAdminPath,
   filterAdminNavGroups,
   flattenAdminNavLeaves,
   isAdminNavActive,
+  scopedAdminNavLeaves,
+  scopedQuickCreateLeaves,
   type AdminNavGroup,
   type AdminNavLeaf,
 } from '@/lib/adminNav';
@@ -232,17 +235,21 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
     [workspace, can],
   );
 
-  const allLeaves = useMemo(() => {
-    const platform = flattenAdminNavLeaves(PLATFORM_NAV_GROUPS, can);
-    const depts = DEPARTMENT_ORDER.flatMap((slug) =>
-      flattenAdminNavLeaves(DEPARTMENT_WORKSPACES[slug].groups, can),
-    );
-    return [...platform, ...depts];
-  }, [can]);
+  /** Access guard: every leaf this admin may open across the panel. */
+  const accessibleLeaves = useMemo(() => allAccessibleAdminNavLeaves(can), [can]);
+
+  /**
+   * Chrome context: sidebar / quick-create / palette / page title stay inside
+   * the current department workspace (or platform shell when outside one).
+   */
+  const contextLeaves = useMemo(
+    () => scopedAdminNavLeaves(department, can),
+    [department, can],
+  );
 
   const quickCreates = useMemo(
-    () => allLeaves.filter((item) => item.quickCreate && /\/(create|new)$/.test(item.href)),
-    [allLeaves],
+    () => scopedQuickCreateLeaves(department, can),
+    [department, can],
   );
 
   const availableDepartments = useMemo(
@@ -258,12 +265,12 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
   useEffect(() => {
     if (isSuper || loading || !user) return;
     const allowed =
-      allLeaves.some((item) => isAdminNavActive(pathname, item.href, item.exact)) ||
+      accessibleLeaves.some((item) => isAdminNavActive(pathname, item.href, item.exact)) ||
       pathname === '/admin/departments' ||
       pathname === '/admin' ||
       Boolean(department && !DEPARTMENT_WORKSPACES[department].live);
-    if (!allowed) router.replace(allLeaves[0]?.href ?? '/');
-  }, [isSuper, loading, user, allLeaves, pathname, router, department]);
+    if (!allowed) router.replace(accessibleLeaves[0]?.href ?? '/');
+  }, [isSuper, loading, user, accessibleLeaves, pathname, router, department]);
 
   const toggleCollapsed = useCallback(() => {
     setCollapsed((previous) => {
@@ -283,7 +290,7 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
     router.replace('/');
   };
 
-  const page = allLeaves.find((item) => isAdminNavActive(pathname, item.href, item.exact));
+  const page = contextLeaves.find((item) => isAdminNavActive(pathname, item.href, item.exact));
   const pageTitle =
     page?.label ??
     (department
@@ -301,13 +308,13 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
 
   const paletteCommands = useMemo<PaletteCommand[]>(
     () =>
-      allLeaves.map((item) => ({
+      contextLeaves.map((item) => ({
         id: item.id,
         label: item.label,
         href: item.href,
         icon: leafIcon(item),
       })),
-    [allLeaves],
+    [contextLeaves],
   );
 
   if (loading || !user || !isStaff) {

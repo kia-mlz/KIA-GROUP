@@ -83,6 +83,16 @@ describe('admin navigation destinations', () => {
     expect(overviewIdx).toBeGreaterThan(-1);
     expect(departmentsIdx).toBeGreaterThan(overviewIdx);
   });
+
+  it('scopes shell chrome (palette / quick-create / title) to the active workspace', () => {
+    expect(SHELL).toContain('scopedAdminNavLeaves');
+    expect(SHELL).toContain('scopedQuickCreateLeaves');
+    expect(SHELL).toContain('contextLeaves');
+    expect(SHELL).toContain('accessibleLeaves');
+    // Department rail stays hidden inside a workspace.
+    expect(SHELL).toContain('{!workspace ? (');
+    expect(SHELL).toContain('am-depts');
+  });
 });
 
 describe('departments hub', () => {
