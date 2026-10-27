@@ -18,7 +18,7 @@ import { PrismaModule } from '@kia./platform';
  *                   admin, settings via packages/platform, SMS, support,
  *                   billing/commerce, health) — packages/platform also holds
  *                   the Prisma kernel + shared guards/decorators/events
- *   @kia./kia-academy — KIA Academy learning domain  (kia./kia-academy)
+ *   @kia./kia-academy — Kia Academy learning domain  (kia./kia-academy)
  *   @kia./kia-event   — competitions, challenges & bootcamps
  *                            (kia./kia-event)
  *
@@ -92,7 +92,7 @@ ConfigModule.forRoot({
     PaymentsModule,
     StripeModule,
     SearchModule,
-    // ── KIA Academy (learning domain) ──────────────────────────────────────
+    // ── Kia Academy (learning domain) ──────────────────────────────────────
     CoursesModule,
     CourseExamsModule,
     AssessmentsModule,

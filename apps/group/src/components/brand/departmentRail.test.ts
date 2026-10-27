@@ -162,15 +162,15 @@ describe('department rail in TopBar', () => {
     expect(topBar.match(/<BrandMark /g)).toHaveLength(1);
     expect(topBar).toContain('<BrandMark className="logo-mark" size={26} title="" />');
     expect(topBar).not.toContain('logo-dept-emblem');
-    expect(topBar).toContain('<span className="logo-text">{dept ? t(dept.titleKey) : BRAND_WORDMARK}</span>');
+    expect(topBar).toContain("<span className=\"logo-text\">{dept ? t(dept.titleKey) : t('common.brand')}</span>");
     // Inside a department the supporting line becomes the parent name.
     expect(topBar).toContain(
-      "<span className=\"brand-tagline\">{dept ? BRAND_WORDMARK : t('common.tagline')}</span>",
+      "<span className=\"brand-tagline\">{dept ? t('common.brand') : t('common.tagline')}</span>",
     );
   });
 
   it('names the button after whichever brand it is showing', () => {
-    expect(topBar).toContain('aria-label={dept ? t(dept.titleKey) : BRAND_WORDMARK}');
+    expect(topBar).toContain("aria-label={dept ? t(dept.titleKey) : t('common.brand')}");
   });
 });
 

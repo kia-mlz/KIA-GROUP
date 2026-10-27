@@ -1,4 +1,4 @@
-# kia. — Final Audit & Production-Readiness Report
+# Kia — Final Audit & Production-Readiness Report
 
 **Date:** 2026-10-06 · **Repo:** local `main` @ `1e8d2a1` (+ working-tree changes below)
 **Scope:** full-stack master audit (architecture, auth, authorization, database,
@@ -140,12 +140,12 @@ forbidNonWhitelisted }`; DTOs on every body; multer limits + magic-byte
 
 | Department        | Status                      | Notes                                                                                                                                                       |
 | ----------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **KIA Academy**   | **Implemented**             | courses/lessons/exams/entitlements/roadmaps/readiness/bootcamp, server-authoritative scoring & attempt caps                                                 |
-| **KIA Work**      | **Implemented (hub scope)** | `/work` → `/freelance` hub with two honest doors (contact for employers, learning path for freelancers); no job-posting backend yet — UI does not claim one |
-| **KIA Material**  | **Implemented**             | Material Studio fully ported (`features/material`), no-signup free tier                                                                                     |
-| **KIA Events**    | **Implemented**             | competitions + challenges backend, registrations race-safe (this session), events hub; webinar tile honestly marked «به‌زودی» (no dead link)                |
-| **KIA Community** | **Future scope (honest)**   | department page states scope + contact CTA; no fake feed                                                                                                    |
-| **KIA Labs**      | **Future scope (honest)**   | department page states scope + contact CTA; no dead navigation                                                                                              |
+| **Kia Academy**   | **Implemented**             | courses/lessons/exams/entitlements/roadmaps/readiness/bootcamp, server-authoritative scoring & attempt caps                                                 |
+| **Kia Work**      | **Implemented (hub scope)** | `/work` → `/freelance` hub with two honest doors (contact for employers, learning path for freelancers); no job-posting backend yet — UI does not claim one |
+| **Kia Material**  | **Implemented**             | Material Studio fully ported (`features/material`), no-signup free tier                                                                                     |
+| **Kia Event**    | **Implemented**             | competitions + challenges backend, registrations race-safe (this session), events hub; webinar tile honestly marked «به‌زودی» (no dead link)                |
+| **Kia Community** | **Future scope (honest)**   | department page states scope + contact CTA; no fake feed                                                                                                    |
+| **Kia Lab**      | **Future scope (honest)**   | department page states scope + contact CTA; no dead navigation                                                                                              |
 
 No fake functionality found: every CTA routes to a working destination or an
 explicitly-labelled coming-soon state.

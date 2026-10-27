@@ -1,4 +1,4 @@
-# kia. — Testing Strategy
+# Kia — Testing Strategy
 
 ## Layers
 

@@ -1,4 +1,4 @@
-# kia. — Development Setup
+# Kia — Development Setup
 
 ## Prerequisites
 

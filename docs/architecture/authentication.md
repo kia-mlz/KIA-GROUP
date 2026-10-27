@@ -1,4 +1,4 @@
-# kia. — Authentication
+# Kia — Authentication
 
 One identity spans all seven brands. A user registers once (phone OTP) and is
 the same `User` row across Academy, Work, Material, Labs, Events and Community.

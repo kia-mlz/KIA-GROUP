@@ -35,7 +35,7 @@ const TRACK_DESCRIPTIONS: Record<string, string> = {
 export function createDefaultSiteSettings(): SiteSettings {
   return {
     general: {
-      siteName: 'KIA.',
+      siteName: 'Kia',
       tagline: 'Adaptive learning that maps to your goals',
       heroMinutes: 6,
       heroRoadmapsCount: 12400,

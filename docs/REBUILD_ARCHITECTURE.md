@@ -1,6 +1,6 @@
-# Kia Academy rebuild — architecture (Step 0)
+# Kia rebuild — architecture (Step 0)
 
-Kia Academy is being rebuilt as **کیا آکادمی (Kia Academy)**: a Persian-first learning platform for Iran.
+Kia is being rebuilt as **کیا (Kia)**: a Persian-first learning platform for Iran.
 
 ## Product shape
 

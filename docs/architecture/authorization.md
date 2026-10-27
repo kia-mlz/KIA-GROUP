@@ -1,4 +1,4 @@
-# kia. — Authorization
+# Kia — Authorization
 
 ## Model
 

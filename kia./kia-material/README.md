@@ -1,6 +1,6 @@
-# @kia./kia-material — KIA Material
+# @kia./kia-material — Kia Material
 
-**کیا. — دپارتمان متریال** — «Material Studio» اینجاست؛ مثل یک **پروژهٔ جدا** ولی
+**کیا — دپارتمان متریال** — «Material Studio» اینجاست؛ مثل یک **پروژهٔ جدا** ولی
 **منبعِ مستقیم** (بدون build): `apps/group` آن را با `transpilePackages` باندل می‌کند.
 
 ## نقشهٔ پوشه‌ها

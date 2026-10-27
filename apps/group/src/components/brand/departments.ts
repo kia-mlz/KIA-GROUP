@@ -33,7 +33,7 @@ export interface Department {
    * the events hub hands off to the `/bootcamp` arena. Each root matches
    * itself and everything below it on a slash boundary, so the rail wears the
    * department's identity anywhere inside its pages instead of falling back
-   * to the parent KIA. lockup.
+   * to the parent Kia lockup.
    */
   paths?: readonly string[];
   /**

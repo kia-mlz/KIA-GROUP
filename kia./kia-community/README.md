@@ -1,6 +1,6 @@
-# @kia./kia-community — KIA Community
+# @kia./kia-community — Kia Community
 
-**کیا. — جامعه** (KIA Community)
+**کیا — جامعه** (Kia Community)
 
 این دپارتمان مثل یک **پروژهٔ جدا** توسعه می‌یابد؛ پوشه‌های حوزه:
 

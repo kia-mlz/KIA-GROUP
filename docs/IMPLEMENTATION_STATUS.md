@@ -1,4 +1,4 @@
-# Implementation Status — Kia Academy
+# Implementation Status — Kia
 
 > Persistent project memory (per master build contract §7). The repository is the source
 > of truth; this file tracks phase state, gates, and pending work. Updated 2026-10-11.

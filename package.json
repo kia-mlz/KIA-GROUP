@@ -1,9 +1,9 @@
 {
-  "name": "kia.",
+  "name": "kia",
   "version": "1.0.0",
   "private": true,
   "packageManager": "pnpm@11.19.0",
-  "description": "kia. — one ecosystem, six departments",
+  "description": "Kia — one ecosystem, six departments",
   "license": "MIT",
   "repository": {
     "type": "git",

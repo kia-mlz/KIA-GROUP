@@ -12,9 +12,9 @@ export function TitleUpdater() {
   useEffect(() => {
     if (!pathname) return;
 
-    // For /home, just "KIA."
+    // For /home, just the locale brand (Kia / کیا)
     if (pathname === '/' || pathname === '/home') {
-      document.title = 'KIA.';
+      document.title = t('common.brand');
       return;
     }
 
@@ -27,7 +27,7 @@ export function TitleUpdater() {
     }
 
     // Default fallback - use the brand name
-    document.title = 'KIA.';
+    document.title = t('common.brand');
   }, [pathname, t]);
 
   return null;

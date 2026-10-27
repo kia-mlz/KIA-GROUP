@@ -5,7 +5,7 @@ import { MessageSquare, UsersRound } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageProvider';
 
 /**
- * KIA Community — the fifth department of kia.: users, specialists,
+ * Kia Community — the fifth department of kia.: users, specialists,
  * students, mentors and employers in one place.
  *
  * Nothing to browse yet, so the page states its scope and offers the contact

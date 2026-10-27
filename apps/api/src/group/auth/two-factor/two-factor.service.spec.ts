@@ -118,7 +118,7 @@ describe('TwoFactorService — enrollment', () => {
     // The issuer is what an authenticator app shows next to the account, so it
     // carries the current brand name.
     expect(result.otpauthUrl).toMatch(/^otpauth:\/\/totp\/KIA\.%3Aa%40b\.c\?/);
-    expect(result.otpauthUrl).toContain('issuer=KIA.');
+    expect(result.otpauthUrl).toContain('issuer=Kia');
     expect(result.qrDataUrl).toMatch(/^data:image\//);
     expect(result.secret).toMatch(/^[A-Z2-7]{32}$/);
     // Only the ciphertext is persisted — never the plaintext secret.

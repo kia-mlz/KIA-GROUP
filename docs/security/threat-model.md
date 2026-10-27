@@ -1,4 +1,4 @@
-# kia. — Threat Model
+# Kia — Threat Model
 
 Scope: the kia. modular monolith (web + API + PostgreSQL) as deployed for
 self-hosting. Assets: user identity data, OTP/email secrets, payment records,

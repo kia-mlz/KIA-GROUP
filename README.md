@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="apps/group/public/brand/logo.svg" alt="kia. — کیا." width="140" />
+<img src="apps/group/public/brand/logo.svg" alt="Kia — کیا" width="140" />
 
-# kia. · کیا.
+# Kia · کیا
 
 **Learn · Work · Create · Connect · Grow **
 
@@ -23,10 +23,10 @@
 
 ---
 
-kia. is a production-grade platform for Iranian talent, built around six
-departments: KIA Academy (learning), KIA Work (freelancing and hiring), KIA Material
-(design assets), KIA Event (contests, bootcamps, webinars), KIA Community (people)
-and KIA Lab (research and product).
+Kia is a production-grade platform for Iranian talent, built around six
+departments: Kia Academy (learning), Kia Work (freelancing and hiring), Kia Material
+(design assets), Kia Event (contests, bootcamps, webinars), Kia Community (people)
+and Kia Lab (research and product).
 Guests land on a minimal Persian hero, explore **Material Studio**, then follow a guided
 journey: phone OTP → profile → free goal assessment → free readiness test → personalized
 roadmap → paid bundle checkout → lesson player. The learner experience is entirely
@@ -134,13 +134,13 @@ KIA-GROUP-APP/
 
 | Brand | Colour | Token | Department code |
 | --- | --- | --- | --- |
-| kia. | `#FFC864` | `--group-gold` (reserved) | platform |
-| KIA Academy | `#6464FF` | `--dept-academy` | `kia./kia-academy/` · `app/(academy)` |
-| KIA Work | `#6492FF` | `--dept-work` | `kia./kia-work/` (scaffold) · `app/(work)` → `/freelance` |
-| KIA Material | `#148165` | `--dept-material` | `kia./kia-material/` (Material Studio) · `app/(material)` |
-| KIA Lab | `#28C793` | `--dept-labs` | `kia./kia-lab/` (scaffold) · `app/(labs)` |
-| KIA Event | `#E32B1B` | `--dept-events` | `kia./kia-event/` · `app/(events)` |
-| KIA Community | `#FF7344` | `--dept-community` | `kia./kia-community/` (scaffold) · `app/(community)` |
+| Kia | `#FFC864` | `--group-gold` (reserved) | platform |
+| Kia Academy | `#6464FF` | `--dept-academy` | `kia./kia-academy/` · `app/(academy)` |
+| Kia Work | `#6492FF` | `--dept-work` | `kia./kia-work/` (scaffold) · `app/(work)` → `/freelance` |
+| Kia Material | `#148165` | `--dept-material` | `kia./kia-material/` (Material Studio) · `app/(material)` |
+| Kia Lab | `#28C793` | `--dept-labs` | `kia./kia-lab/` (scaffold) · `app/(labs)` |
+| Kia Event | `#E32B1B` | `--dept-events` | `kia./kia-event/` · `app/(events)` |
+| Kia Community | `#FF7344` | `--dept-community` | `kia./kia-community/` (scaffold) · `app/(community)` |
 
 Colours are defined **once** in [`packages/brand`](packages/brand) and pinned by
 tests on both sides (TypeScript tokens *and* the stylesheet that consumes them).

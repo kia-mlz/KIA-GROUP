@@ -2,7 +2,7 @@
   "name": "@kia./kia-academy",
   "version": "1.0.0",
   "private": true,
-  "description": "KIA Academy — learning department package (courses, course exams, learning paths, learner state). One of the six kia. departments; isolated from the others by lint rule.",
+  "description": "Kia Academy — learning department package (courses, course exams, learning paths, learner state). One of the six kia. departments; isolated from the others by lint rule.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {

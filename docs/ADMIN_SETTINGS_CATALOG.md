@@ -1,6 +1,6 @@
 # Admin Site Settings Catalog
 
-Complete inventory of everything controllable from the Kia Academy admin panel.
+Complete inventory of everything controllable from the Kia admin panel.
 Every listed item is implemented with a **full kit** (create + read + update + delete / add + remove where applicable). No one-sided controls.
 
 ---

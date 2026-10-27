@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = course?.title ?? 'دوره';
   const description =
     course?.description?.trim() ||
-    `جزئیات دوره ${title} در KIA. — پیش‌نمایش سرفصل‌ها و مسیر یادگیری.`;
+    `جزئیات دوره ${title} در Kia — پیش‌نمایش سرفصل‌ها و مسیر یادگیری.`;
 
   return publicPageMetadata({
     title,
