@@ -1690,7 +1690,7 @@ export const en = {
     checking: 'Checking admin access…',
     sidebar: 'Admin',
     brand: 'Kia Admin',
-    brandSub: 'Control center',
+    brandSub: 'Admin panel',
     menu: 'Open menu',
     backToSite: 'Back to site',
     breadcrumb: 'Breadcrumb',

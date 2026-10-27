@@ -1687,7 +1687,7 @@ export const fa = {
     checking: 'در حال بررسی دسترسی مدیر…',
     sidebar: 'مدیر',
     brand: 'پنل کیا',
-    brandSub: 'مرکز کنترل',
+    brandSub: 'پنل مدیریت',
     menu: 'باز کردن منو',
     backToSite: 'بازگشت به سایت',
     breadcrumb: 'مسیر صفحه',

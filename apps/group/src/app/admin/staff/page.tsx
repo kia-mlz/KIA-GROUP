@@ -85,23 +85,23 @@ export default function AdminStaffPage() {
   }
 
   return (
-    <div className="admin-content" style={{ display: 'grid', gap: '1rem' }}>
-      <section className="ops-dept-hub__intro">
-        <div>
-          <span className="ops-dept-hub__kicker">{t('admin.staff.kicker')}</span>
-          <h2>{t('admin.staff.title')}</h2>
-          <p>{t('admin.staff.sub')}</p>
-        </div>
-        <div className="ops-dept-card__actions">
+    <div className="am-hub">
+      <section className="am-hub__head">
+        <span className="am-dash__kicker">{t('admin.staff.kicker')}</span>
+        <h2>{t('admin.staff.title')}</h2>
+        <p>{t('admin.staff.sub')}</p>
+        <div className="am-hub__foot" style={{ marginTop: '0.85rem' }}>
           {can('users', 'manage') || can('users', 'edit') ? (
-            <Link href="/admin/users/create" className="ops-dept-card__cta">
-              <Users size={14} aria-hidden /> {t('admin.staff.create')}
+            <Link href="/admin/users/create" className="am-hub__cta">
+              <Users size={13} aria-hidden style={{ marginInlineEnd: '0.3rem' }} />
+              {t('admin.staff.create')}
             </Link>
           ) : null}
-          <Link href="/admin/users/roles" className="ops-dept-card__ghost">
-            <ShieldCheck size={14} aria-hidden /> {t('admin.nav.roles')}
+          <Link href="/admin/users/roles" className="am-hub__ghost">
+            <ShieldCheck size={13} aria-hidden style={{ marginInlineEnd: '0.3rem' }} />
+            {t('admin.nav.roles')}
           </Link>
-          <Link href="/admin/users" className="ops-dept-card__ghost">
+          <Link href="/admin/users" className="am-hub__ghost">
             {t('admin.nav.users')}
           </Link>
         </div>

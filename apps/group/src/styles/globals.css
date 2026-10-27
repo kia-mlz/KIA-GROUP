@@ -19,10 +19,8 @@
 @import './admin-pro.css';
 @import './admin-pro-theme.css';
 @import './admin-content-polish.css';
-@import './admin-dashboard.css';
 @import './admin-contrast.css';
-@import './admin-control-room.css';
-@import './admin-ops-center.css';
+@import './admin-minimal.css';
 @import './checkout-result.css';
 @import './contact.css';
 @import './tests.css';

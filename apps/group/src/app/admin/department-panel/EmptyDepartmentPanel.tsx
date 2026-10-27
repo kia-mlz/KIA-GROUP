@@ -29,20 +29,19 @@ export function EmptyDepartmentPanel({ slug }: { slug: DepartmentSlug }) {
   const workspace = DEPARTMENT_WORKSPACES[slug];
 
   return (
-    <div className="ops-empty-workspace">
-      <section className="ops-empty-workspace__card" aria-labelledby={`empty-ws-${slug}`}>
-        <span className="admin-badge">{t('admin.departments.noModule')}</span>
-        <h2 id={`empty-ws-${slug}`}>
-          {t('admin.departments.workspaceTitle', { name: workspace.label })}
-        </h2>
-        <p>{t(`admin.departments.${slug}.desc`)}</p>
-        <p>{t('admin.departments.noModuleHint')}</p>
-        {publicHref ? (
-          <Link href={publicHref} className="admin-link">
-            <ExternalLink size={14} aria-hidden /> {t('admin.departments.publicLabel')}
-          </Link>
-        ) : null}
-      </section>
+    <div className="am-empty" aria-labelledby={`empty-ws-${slug}`}>
+      <span className="am-hub__status">{t('admin.departments.noModule')}</span>
+      <h2 id={`empty-ws-${slug}`}>
+        {t('admin.departments.workspaceTitle', { name: workspace.label })}
+      </h2>
+      <p>{t(`admin.departments.${slug}.desc`)}</p>
+      <p>{t('admin.departments.noModuleHint')}</p>
+      {publicHref ? (
+        <Link href={publicHref} className="am-hub__ghost" style={{ width: 'fit-content' }}>
+          <ExternalLink size={13} aria-hidden style={{ marginInlineEnd: '0.3rem' }} />
+          {t('admin.departments.publicLabel')}
+        </Link>
+      ) : null}
     </div>
   );
 }

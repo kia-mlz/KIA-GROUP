@@ -7,7 +7,6 @@ import {
   BookOpen,
   Briefcase,
   Building2,
-  ChevronDown,
   ChevronLeft,
   CircleHelp,
   ClipboardList,
@@ -37,7 +36,6 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
-import type { AdminAccessSection } from '@kia./shared';
 import { BrandMark } from '@/components/brand/BrandMark';
 import type { DepartmentSlug } from '@/components/brand/departments';
 import AdminCommandPalette, { type PaletteCommand } from '@/components/admin/AdminCommandPalette';
@@ -54,6 +52,7 @@ import {
   filterAdminNavGroups,
   flattenAdminNavLeaves,
   isAdminNavActive,
+  type AdminNavGroup,
   type AdminNavLeaf,
 } from '@/lib/adminNav';
 
@@ -97,63 +96,60 @@ function leafIcon(item: AdminNavLeaf): LucideIcon {
   return ICON_BY_ID[item.id] ?? LayoutDashboard;
 }
 
-function NavGroupBlock({
-  group,
+function NavSection({
+  label,
+  groups,
   pathname,
-  expanded,
-  onToggle,
   countFor,
+  showGroupLabels = false,
 }: {
-  group: { id: string; label: string; items: AdminNavLeaf[] };
+  label: string;
+  groups: AdminNavGroup[];
   pathname: string;
-  expanded: boolean;
-  onToggle: () => void;
   countFor: (item: AdminNavLeaf) => number;
+  showGroupLabels?: boolean;
 }) {
-  const groupActive = group.items.some((item) =>
-    isAdminNavActive(pathname, item.href, item.exact),
-  );
+  if (!groups.length) return null;
   return (
-    <section className={`ops-nav-group${groupActive ? ' is-active' : ''}`}>
-      <button
-        type="button"
-        className="ops-nav-group__trigger"
-        aria-expanded={expanded}
-        onClick={onToggle}
-      >
-        <span>{group.label}</span>
-        <ChevronDown size={14} className="ops-nav-group__chevron" aria-hidden />
-      </button>
-      <div className="ops-nav-group__items" hidden={!expanded}>
-        {group.items.map((item) => {
-          const Icon = leafIcon(item);
-          const active = isAdminNavActive(pathname, item.href, item.exact);
-          const count = countFor(item);
-          return (
-            <Link
-              key={item.id}
-              href={item.href}
-              className={`ops-nav-link${active ? ' is-active' : ''}`}
-              aria-current={active ? 'page' : undefined}
-            >
-              <Icon size={16} aria-hidden />
-              <span>{item.label}</span>
-              {count ? (
-                <b className="ops-nav-badge" aria-label={`${count} مورد نیازمند توجه`}>
-                  {count > 99 ? '۹۹+' : count}
-                </b>
-              ) : null}
-            </Link>
-          );
-        })}
-      </div>
-    </section>
+    <div className="am-nav__items">
+      <p className="am-nav__label">{label}</p>
+      {groups.map((group) => (
+        <div key={group.id}>
+          {showGroupLabels && groups.length > 1 ? (
+            <p className="am-nav__label" style={{ marginTop: '0.45rem', fontWeight: 550 }}>
+              {group.label}
+            </p>
+          ) : null}
+          {group.items.map((item) => {
+            const Icon = leafIcon(item);
+            const active = isAdminNavActive(pathname, item.href, item.exact);
+            const count = countFor(item);
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                className={`am-nav__item${active ? ' is-active' : ''}`}
+                aria-current={active ? 'page' : undefined}
+              >
+                <Icon size={15} aria-hidden />
+                <span>{item.label}</span>
+                {count ? (
+                  <b className="am-nav__badge" aria-label={`${count} مورد نیازمند توجه`}>
+                    {count > 99 ? '۹۹+' : count}
+                  </b>
+                ) : null}
+              </Link>
+            );
+          })}
+        </div>
+      ))}
+    </div>
   );
 }
 
 /**
- * Kia Admin Ops Center shell — redesigned from scratch.
- * Platform chrome vs department workspaces; permissions from server matrix.
+ * Kia Admin — minimal professional shell.
+ * Platform ops vs department workspaces; permissions from server matrix.
  */
 export default function AdminLayoutClient({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -166,7 +162,6 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [quickOpen, setQuickOpen] = useState(false);
-  const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
 
   const department = departmentFromAdminPath(pathname);
   const workspace = department ? DEPARTMENT_WORKSPACES[department] : null;
@@ -177,13 +172,7 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
 
   useEffect(() => {
     try {
-      setCollapsed(window.localStorage.getItem('kia.admin.ops.collapsed') === '1');
-      setOpenSections(
-        JSON.parse(window.localStorage.getItem('kia.admin.ops.open') ?? '{}') as Record<
-          string,
-          boolean
-        >,
-      );
+      setCollapsed(window.localStorage.getItem('kia.admin.am.collapsed') === '1');
     } catch {
       /* optional */
     }
@@ -230,11 +219,18 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
     () => filterAdminNavGroups(PLATFORM_NAV_GROUPS, can),
     [can],
   );
+  const generalGroups = useMemo(
+    () => platformGroups.filter((group) => group.id !== 'system'),
+    [platformGroups],
+  );
+  const systemGroups = useMemo(
+    () => platformGroups.filter((group) => group.id === 'system'),
+    [platformGroups],
+  );
   const workspaceGroups = useMemo(
     () => (workspace ? filterAdminNavGroups(workspace.groups, can) : []),
     [workspace, can],
   );
-  const navigableGroups = workspace ? workspaceGroups : platformGroups;
 
   const allLeaves = useMemo(() => {
     const platform = flattenAdminNavLeaves(PLATFORM_NAV_GROUPS, can);
@@ -269,28 +265,17 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
     if (!allowed) router.replace(allLeaves[0]?.href ?? '/');
   }, [isSuper, loading, user, allLeaves, pathname, router, department]);
 
-  const toggleSection = useCallback((id: string) => {
-    setOpenSections((previous) => {
-      const next = { ...previous, [id]: !(previous[id] ?? true) };
+  const toggleCollapsed = useCallback(() => {
+    setCollapsed((previous) => {
+      const next = !previous;
       try {
-        window.localStorage.setItem('kia.admin.ops.open', JSON.stringify(next));
+        window.localStorage.setItem('kia.admin.am.collapsed', next ? '1' : '0');
       } catch {
         /* ignore */
       }
       return next;
     });
   }, []);
-
-  const toggleCollapsed = () =>
-    setCollapsed((previous) => {
-      const next = !previous;
-      try {
-        window.localStorage.setItem('kia.admin.ops.collapsed', next ? '1' : '0');
-      } catch {
-        /* ignore */
-      }
-      return next;
-    });
 
   const countFor = (item: AdminNavLeaf) => (item.badge ? counts[item.badge] : 0);
   const signOut = async () => {
@@ -331,54 +316,54 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
 
   return (
     <div
-      className={`ops-shell${mobileOpen ? ' is-drawer-open' : ''}${collapsed ? ' is-collapsed' : ''}${
+      className={`am-shell${mobileOpen ? ' is-drawer-open' : ''}${collapsed ? ' is-collapsed' : ''}${
         department ? ` is-workspace is-workspace--${department}` : ''
       }`}
     >
-      <a className="ops-skip" href="#admin-main">
+      <a className="am-skip" href="#admin-main">
         پرش به محتوای اصلی
       </a>
 
       <button
         type="button"
-        className="ops-mobile-menu"
+        className="am-mobile"
         aria-label="باز کردن منو"
         aria-expanded={mobileOpen}
         onClick={() => setMobileOpen((open) => !open)}
       >
-        {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+        {mobileOpen ? <X size={18} /> : <Menu size={18} />}
       </button>
-      <button type="button" className="ops-scrim" aria-label="بستن منو" onClick={() => setMobileOpen(false)} />
+      <button type="button" className="am-scrim" aria-label="بستن منو" onClick={() => setMobileOpen(false)} />
 
-      <aside className="ops-sidebar" aria-label="ناوبری مرکز کنترل">
-        <Link href={ADMIN_ROOT.overview.href} className="ops-brand" aria-label="مرکز کنترل کیا">
-          <span className="ops-brand__mark">
-            <BrandMark size={22} title="" />
+      <aside className="am-side" aria-label="ناوبری پنل مدیریت">
+        <Link href={ADMIN_ROOT.overview.href} className="am-brand" aria-label="پنل مدیریت کیا">
+          <span className="am-brand__mark">
+            <BrandMark size={18} title="" />
           </span>
-          <span className="ops-brand__copy">
+          <span className="am-brand__copy">
             <strong>کیا</strong>
-            <small>{department ? `فضای کاری ${DEPARTMENT_WORKSPACES[department].label}` : 'مرکز کنترل'}</small>
+            <small>{department ? `فضای کاری ${DEPARTMENT_WORKSPACES[department].label}` : 'پنل مدیریت'}</small>
           </span>
         </Link>
 
         {workspace ? (
-          <Link className="ops-return" href={ADMIN_ROOT.departments.href}>
-            <ChevronLeft size={15} aria-hidden /> بازگشت به دپارتمان‌ها
+          <Link className="am-back" href={ADMIN_ROOT.departments.href}>
+            <ChevronLeft size={14} aria-hidden /> بازگشت به دپارتمان‌ها
           </Link>
         ) : (
           <>
             <Link
-              className={`ops-root-link${pathname === ADMIN_ROOT.overview.href ? ' is-active' : ''}`}
+              className={`am-link${pathname === ADMIN_ROOT.overview.href ? ' is-active' : ''}`}
               href={ADMIN_ROOT.overview.href}
             >
-              <LayoutDashboard size={17} aria-hidden />
+              <LayoutDashboard size={15} aria-hidden />
               <span>{ADMIN_ROOT.overview.label}</span>
             </Link>
             <Link
-              className={`ops-root-link${pathname.startsWith(ADMIN_ROOT.departments.href) ? ' is-active' : ''}`}
+              className={`am-link${pathname.startsWith(ADMIN_ROOT.departments.href) ? ' is-active' : ''}`}
               href={ADMIN_ROOT.departments.href}
             >
-              <Building2 size={17} aria-hidden />
+              <Building2 size={15} aria-hidden />
               <span>{ADMIN_ROOT.departments.label}</span>
               <b>{availableDepartments.length}</b>
             </Link>
@@ -386,37 +371,51 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
         )}
 
         <nav
-          className="ops-nav"
+          className="am-nav"
           aria-label={department ? `ابزارهای ${DEPARTMENT_WORKSPACES[department].label}` : 'بخش‌های مدیریت'}
         >
-          {navigableGroups.length ? (
-            navigableGroups.map((group) => (
-              <NavGroupBlock
-                key={group.id}
-                group={group}
+          {workspace ? (
+            workspaceGroups.length ? (
+              <NavSection
+                label="ابزارها"
+                groups={workspaceGroups}
                 pathname={pathname}
-                expanded={openSections[group.id] ?? true}
-                onToggle={() => toggleSection(group.id)}
                 countFor={countFor}
               />
-            ))
-          ) : workspace && !workspace.live ? (
-            <p className="ops-nav-empty">
-              هنوز ماژول مدیریتی برای این دپارتمان فعال نشده است. از صفحهٔ فضای کاری برای جزئیات استفاده کنید.
-            </p>
-          ) : null}
+            ) : !workspace.live ? (
+              <p className="am-nav__empty">
+                هنوز ماژول مدیریتی برای این دپارتمان فعال نشده است.
+              </p>
+            ) : null
+          ) : (
+            <>
+              <NavSection
+                label="عمومی"
+                groups={generalGroups}
+                pathname={pathname}
+                countFor={countFor}
+                showGroupLabels
+              />
+              <NavSection
+                label="سیستم"
+                groups={systemGroups}
+                pathname={pathname}
+                countFor={countFor}
+              />
+            </>
+          )}
         </nav>
 
         {!workspace ? (
-          <div className="ops-dept-rail" aria-label="میانبر دپارتمان‌ها">
+          <div className="am-depts" aria-label="دپارتمان‌ها">
             <span>دپارتمان‌ها</span>
             {DEPARTMENT_ORDER.map((slug) => {
               const Icon = DEPT_ICON[slug];
               const ws = DEPARTMENT_WORKSPACES[slug];
               return (
                 <Link key={slug} href={ws.href} aria-label={`مدیریت ${ws.label}`}>
-                  <i className={`ops-dept-dot ops-dept-dot--${slug}`} aria-hidden />
-                  <Icon size={13} aria-hidden />
+                  <i className={`am-dot am-dot--${slug}`} aria-hidden />
+                  <Icon size={12} aria-hidden />
                   {ws.label}
                 </Link>
               );
@@ -424,8 +423,8 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
           </div>
         ) : null}
 
-        <div className="ops-account">
-          <span className="ops-avatar" aria-hidden>
+        <div className="am-account">
+          <span className="am-avatar" aria-hidden>
             {initials}
           </span>
           <span>
@@ -433,51 +432,51 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
             <small>{isSuper ? 'مدیر ارشد' : 'مدیر سامانه'}</small>
           </span>
           <button type="button" aria-label="خروج از حساب" onClick={() => void signOut()}>
-            <LogOut size={16} />
+            <LogOut size={15} />
           </button>
         </div>
 
         <button
           type="button"
-          className="ops-collapse"
+          className="am-collapse"
           aria-label={collapsed ? 'باز کردن نوار کناری' : 'جمع کردن نوار کناری'}
           onClick={toggleCollapsed}
         >
-          {collapsed ? <PanelRightOpen size={16} /> : <PanelRightClose size={16} />}
+          {collapsed ? <PanelRightOpen size={14} /> : <PanelRightClose size={14} />}
         </button>
       </aside>
 
-      <main id="admin-main" className="ops-main" tabIndex={-1}>
-        <header className="ops-header">
-          <div className="ops-header__title">
-            <nav className="ops-breadcrumb" aria-label="مسیر صفحه">
+      <main id="admin-main" className="am-main" tabIndex={-1}>
+        <header className="am-top">
+          <div className="am-top__title">
+            <nav className="am-crumb" aria-label="مسیر صفحه">
               <Link href="/admin">مدیریت</Link>
               {department ? (
                 <>
-                  <ChevronLeft size={13} aria-hidden />
+                  <ChevronLeft size={12} aria-hidden />
                   <Link href={`/admin/${department}`}>{DEPARTMENT_WORKSPACES[department].label}</Link>
                 </>
               ) : null}
-              <ChevronLeft size={13} aria-hidden />
+              <ChevronLeft size={12} aria-hidden />
               <span aria-current="page">{pageTitle}</span>
             </nav>
             <h1>{pageTitle}</h1>
           </div>
 
-          <div className="ops-header__actions">
-            <div className="ops-quick">
+          <div className="am-top__actions">
+            <div style={{ position: 'relative' }}>
               <button
                 type="button"
-                className="ops-quick__btn"
+                className="am-icon-btn"
                 aria-expanded={quickOpen}
                 aria-haspopup="menu"
                 onClick={() => setQuickOpen((open) => !open)}
               >
-                <Plus size={16} aria-hidden />
-                <span>ایجاد سریع</span>
+                <Plus size={15} aria-hidden />
+                <span className="am-search-label">ایجاد</span>
               </button>
               {quickOpen ? (
-                <div className="ops-quick__menu" role="menu">
+                <div className="am-menu" role="menu">
                   {quickCreates.length ? (
                     quickCreates.map((item) => (
                       <Link
@@ -490,7 +489,7 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
                       </Link>
                     ))
                   ) : (
-                    <span className="ops-quick__empty">دسترسی ایجاد سریع ندارید</span>
+                    <span className="am-menu__empty">دسترسی ایجاد سریع ندارید</span>
                   )}
                 </div>
               ) : null}
@@ -498,48 +497,50 @@ export default function AdminLayoutClient({ children }: { children: ReactNode })
 
             <button
               type="button"
-              className="ops-search"
+              className="am-icon-btn"
               onClick={() => setPaletteOpen(true)}
               aria-haspopup="dialog"
             >
-              <Search size={17} aria-hidden />
-              <span>جستجو در پنل</span>
-              <kbd>⌘ K</kbd>
+              <Search size={15} aria-hidden />
+              <span className="am-search-label">جستجو</span>
+              <kbd>⌘K</kbd>
             </button>
 
             <AdminNotifications tickets={attention.tickets} messages={attention.messages} />
 
             <button
               type="button"
-              className="ops-profile"
+              className="am-icon-btn am-icon-btn--ghost"
               aria-label="باز کردن منوی حساب"
               aria-expanded={profileOpen}
               onClick={() => setProfileOpen((open) => !open)}
             >
-              <span>{initials}</span>
+              <span className="am-avatar" style={{ width: '1.65rem', height: '1.65rem' }}>
+                {initials}
+              </span>
             </button>
             {profileOpen ? (
-              <div className="ops-profile-menu" role="menu">
+              <div className="am-menu" role="menu">
                 <strong>{user.name || 'مدیر کیا'}</strong>
                 <small>{user.email}</small>
                 <Link href="/admin/settings" role="menuitem" onClick={() => setProfileOpen(false)}>
-                  <Settings size={15} /> تنظیمات
+                  <Settings size={14} /> تنظیمات
                 </Link>
                 <Link href="/admin/security" role="menuitem" onClick={() => setProfileOpen(false)}>
-                  <ShieldCheck size={15} /> امنیت
+                  <ShieldCheck size={14} /> امنیت
                 </Link>
                 <Link href="/" role="menuitem">
-                  <CircleHelp size={15} /> مشاهده سایت
+                  <CircleHelp size={14} /> مشاهده سایت
                 </Link>
                 <button type="button" role="menuitem" onClick={() => void signOut()}>
-                  <LogOut size={15} /> خروج
+                  <LogOut size={14} /> خروج
                 </button>
               </div>
             ) : null}
           </div>
         </header>
 
-        <div className="ops-page">{children}</div>
+        <div className="am-body">{children}</div>
       </main>
 
       <AdminCommandPalette

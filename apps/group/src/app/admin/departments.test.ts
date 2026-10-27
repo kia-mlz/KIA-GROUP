@@ -16,7 +16,7 @@ import { en, fa } from '@/i18n/messages';
 import { createTranslator } from '@/i18n/translate';
 
 /**
- * Departments hub + Ops Center navigation wiring.
+ * Departments hub + admin navigation wiring.
  *
  * Pins: every nav href resolves to a real page; hub cards come from DEPARTMENTS;
  * endpoint calls stay permission-gated; empty departments stay honest.
