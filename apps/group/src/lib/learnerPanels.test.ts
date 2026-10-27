@@ -87,4 +87,13 @@ describe('learner department panels', () => {
     expect(nav).toContain('DEPARTMENT_LEARNER_PANELS');
     expect(nav).toContain('panel.departments.switcher');
   });
+
+  it('keeps other departments out of a department learner menu', () => {
+    const nav = read('components/layout/LearnerNav.tsx');
+    // Inside a dept: exit to hub only — no switcher listing every panel.
+    expect(nav).toContain('panel.departments.backHome');
+    expect(nav).toContain('insideDepartment');
+    // Switcher of all departments remains on the platform account surface.
+    expect(nav).toMatch(/insideDepartment \? \([\s\S]*backHome[\s\S]*\) : \([\s\S]*DEPARTMENT_LEARNER_PANELS/);
+  });
 });

@@ -70,17 +70,17 @@ function pathActive(pathname: string, href: string, exact?: boolean) {
 /**
  * Sidebar of the learner chrome — path-aware per department.
  *
- * Inside Academy (or `/dashboard` learning routes) the rail lists courses /
- * progress / exams; inside Events it lists bootcamps & competitions; other
- * departments get their own short menu. Platform account routes
- * (finance, tickets, …) show the cross-department account items, with a
- * switcher back into each department panel.
+ * Inside a department the rail lists only that department’s tools (plus
+ * tickets/messages and a single exit back to the departments hub). Platform
+ * account routes (finance, tickets, …) show account items and a switcher into
+ * each department panel — never mix other departments into a department menu.
  */
 export function LearnerNav({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname() || '/dashboard';
   const { t } = useLanguage();
   const scope = learnerPanelScopeForPathname(pathname);
   const panel = LEARNER_PANELS[scope];
+  const insideDepartment = scope !== 'platform';
 
   const nav = useMemo(
     () =>
@@ -116,7 +116,7 @@ export function LearnerNav({ onNavigate }: { onNavigate?: () => void }) {
         );
       })}
 
-      {scope !== 'platform' ? (
+      {insideDepartment ? (
         <>
           <div className="learner-nav__sep" role="separator" />
           <Link
@@ -139,41 +139,51 @@ export function LearnerNav({ onNavigate }: { onNavigate?: () => void }) {
             <MessageSquare size={16} aria-hidden="true" />
             <span className="learner-nav-text">{t('panel.nav.messages')}</span>
           </Link>
+          <div className="learner-nav__sep" role="separator" />
+          <Link
+            href="/home"
+            className="top-nav-link learner-nav-link"
+            title={t('panel.departments.backHome')}
+            onClick={onNavigate}
+          >
+            <LayoutGrid size={16} aria-hidden="true" />
+            <span className="learner-nav-text">{t('panel.departments.backHome')}</span>
+          </Link>
         </>
-      ) : null}
-
-      <div className="learner-nav__sep" role="separator" />
-      <div className="learner-nav__switcher" aria-label={t('panel.departments.switcher')}>
-        <span className="learner-nav__switcher-label learner-nav-text">
-          {t('panel.departments.switcher')}
-        </span>
-        {DEPARTMENT_LEARNER_PANELS.map((deptPanel) => {
-          const Icon = SCOPE_ICONS[deptPanel.scope as Exclude<LearnerPanelScope, 'platform'>];
-          const active = scope === deptPanel.scope;
-          return (
+      ) : (
+        <>
+          <div className="learner-nav__sep" role="separator" />
+          <div className="learner-nav__switcher" aria-label={t('panel.departments.switcher')}>
+            <span className="learner-nav__switcher-label learner-nav-text">
+              {t('panel.departments.switcher')}
+            </span>
+            {DEPARTMENT_LEARNER_PANELS.map((deptPanel) => {
+              const Icon = SCOPE_ICONS[deptPanel.scope as Exclude<LearnerPanelScope, 'platform'>];
+              return (
+                <Link
+                  key={deptPanel.scope}
+                  href={deptPanel.href}
+                  className="top-nav-link learner-nav-link learner-nav-link--dept"
+                  title={t(deptPanel.titleKey)}
+                  onClick={onNavigate}
+                >
+                  <Icon size={16} aria-hidden="true" />
+                  <span className="learner-nav-text">{t(deptPanel.titleKey)}</span>
+                </Link>
+              );
+            })}
             <Link
-              key={deptPanel.scope}
-              href={deptPanel.href}
-              className={`top-nav-link learner-nav-link learner-nav-link--dept${active ? ' is-active' : ''}`}
-              title={t(deptPanel.titleKey)}
-              aria-current={active ? 'page' : undefined}
+              href="/home"
+              className="top-nav-link learner-nav-link"
+              title={t('nav.departments')}
               onClick={onNavigate}
             >
-              <Icon size={16} aria-hidden="true" />
-              <span className="learner-nav-text">{t(deptPanel.titleKey)}</span>
+              <LayoutGrid size={16} aria-hidden="true" />
+              <span className="learner-nav-text">{t('nav.departments')}</span>
             </Link>
-          );
-        })}
-        <Link
-          href="/home"
-          className="top-nav-link learner-nav-link"
-          title={t('nav.departments')}
-          onClick={onNavigate}
-        >
-          <LayoutGrid size={16} aria-hidden="true" />
-          <span className="learner-nav-text">{t('nav.departments')}</span>
-        </Link>
-      </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
