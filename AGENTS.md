@@ -50,8 +50,10 @@ CSS side — never hard-code a department hex.
 | `/readiness` / `/readiness/test` | Free preparations (readiness) test — no purchase required |
 | `/readiness/results` | Scorecard → continue to `/roadmap` |
 | `/roadmap` | Personalized roadmap + bundle checkout (`roadmapId` required) |
-| `/dashboard` | Learner panel home — 9 live sections (wallet, progress, exams, courses, bootcamps, todos, tickets, messages, profile) |
-| `/dashboard/*` | Detail pages: finance, purchases, results, bootcamps, competitions, events, progress, todos, my-courses, tickets, messages, profile |
+| `/dashboard` | **Academy** learner panel — progress, exams, enrolled courses (alias `/academy/panel`) |
+| `/events/panel` | **Event** learner panel — bootcamps, competitions, rewards |
+| `/material/panel` `/work/panel` `/community/panel` `/labs/panel` | Per-department learner panels (Material studio entry; others honest empty → public hub) |
+| `/dashboard/*` | Detail pages owned by Academy / Events / platform account (finance, tickets, messages, profile, …); sidebar menu switches with the active department |
 | `/learn/...` | Lesson player + video + notes + HTML/CSS/JS playground |
 
 Site `TopBar` / `Footer` render only after `profileComplete` (successful registration). Guests use landing CTAs only.

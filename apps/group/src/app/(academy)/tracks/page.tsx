@@ -42,6 +42,12 @@ function TracksGate() {
             <span className="door-cta">{t('tracks.language.cta')}</span>
           </Link>
         </div>
+
+        <div className="hub-actions">
+          <Link href="/dashboard" className="btn btn--primary btn--lg">
+            {t('panel.departments.academy')}
+          </Link>
+        </div>
       </div>
     </div>
   );

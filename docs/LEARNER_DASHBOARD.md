@@ -1,41 +1,56 @@
 # Learner dashboard
 
-The learner panel is the authenticated home for Kia students.
+Learners get **one panel per department**, plus a thin platform account surface
+for wallet / support / profile. Menus switch with the active department (same
+idea as the admin workspaces).
 
-## Overview (`/dashboard`)
+## Department panels
 
-After a learner owns a roadmap, `/dashboard` shows a single-page redesign with nine live cards:
+| Panel | Route | Contents |
+| --- | --- | --- |
+| **Kia Academy** | `/dashboard` (alias `/academy/panel`) | Progress, exam results, enrolled courses |
+| **Kia Event** | `/events/panel` | Bootcamp card, enrolled bootcamps, competitions, rewards |
+| **Kia Material** | `/material/panel` | Studio entry + coming collections |
+| **Kia Work** | `/work/panel` | Honest empty shell → `/freelance` hub |
+| **Kia Community** | `/community/panel` | Honest empty shell → `/community` hub |
+| **Kia Lab** | `/labs/panel` | Honest empty shell → `/labs` hub |
 
-1. **Wallet & transactions** — digital card balance (IRR stored, تومان shown) + recent ledger/payment rows
-2. **Bootcamps & challenges** — rank/points and challenge status with countdown
-3. **Overall progress** — doughnut %, course/exam/certificate counts, activity feed
-4. **Latest exam results** — readiness history + module skill bars
-5. **Daily todos** — create / toggle / delete (server `LearnerTodo` API)
-6. **Courses & paths** — enrolled courses with progress
-7. **Support tickets** — list + in-panel create modal (category + subject + body)
-8. **Admin messages** — latest inbox preview
-9. **Profile** — inline edit, bio, avatar upload
+Registry + path → menu ownership: `apps/group/src/lib/learnerPanels.ts`.
 
-Empty / loading / error (+ retry) states are handled per card. Toast feedback covers ticket create and profile save.
+The sidebar (`LearnerNav`) shows that department’s tools, keeps tickets/messages
+reachable from every department rail, and ends with a department-panel switcher
+(plus `/home`).
+
+## Academy overview (`/dashboard`)
+
+After a learner owns a roadmap, `/dashboard` shows the Academy panel:
+
+1. **Overall progress** — doughnut %, course/exam/certificate counts, activity feed
+2. **Latest exam results** — readiness history + module skill bars
+3. **Courses & paths** — enrolled courses with progress
 
 Learners without a roadmap still see the assessment CTA empty state.
 
+Wallet, bootcamps, todos, tickets, messages and profile were moved out of this
+grid: bootcamps live under the Event panel; account/support under the platform
+menu on `/dashboard/finance|tickets|messages|profile|todos|purchases`.
+
 ## Detail routes
 
-| Route | Purpose |
-| --- | --- |
-| `/dashboard/finance` | Orders, invoices, retry payment |
-| `/dashboard/purchases` | Purchased roadmaps / courses |
-| `/dashboard/results` | Full exam history |
-| `/dashboard/bootcamps` | Bootcamp arena entry |
-| `/dashboard/competitions` | Registered competitions |
-| `/dashboard/events` | Events hub |
-| `/dashboard/progress` | Detailed progress bars |
-| `/dashboard/todos` | Full todo list |
-| `/dashboard/my-courses` | Course detail + attachments |
-| `/dashboard/tickets` | Ticket list / thread / new |
-| `/dashboard/messages` | Full admin inbox |
-| `/dashboard/profile` | Profile form (includes bio) |
+| Route | Owner | Purpose |
+| --- | --- | --- |
+| `/dashboard/my-courses` | Academy | Course detail + attachments |
+| `/dashboard/progress` | Academy | Detailed progress bars |
+| `/dashboard/results` | Academy | Full exam history |
+| `/dashboard/bootcamps` | Events | Bootcamp arena entry |
+| `/dashboard/competitions` | Events | Registered competitions |
+| `/dashboard/events` | Events | Events hub |
+| `/dashboard/finance` | Platform | Orders, invoices, retry payment |
+| `/dashboard/purchases` | Platform | Purchased roadmaps / courses |
+| `/dashboard/todos` | Platform | Full todo list |
+| `/dashboard/tickets` | Platform | Ticket list / thread / new |
+| `/dashboard/messages` | Platform | Full admin inbox |
+| `/dashboard/profile` | Platform | Profile form (includes bio) |
 
 ## APIs added/extended for the redesign
 
@@ -56,3 +71,4 @@ Wallet seed for `alex@kia.academy` includes a 1,250,000 IRR balance and sample l
 Visual/UX structure source of truth: `dashboard.zip`. Colour and visual language follow
 `docs/design-system/MASTER.md` / `apps/group/src/styles/base.css` (periwinkle brand, mint
 progress, amber value, ink neutrals). Dashboard-specific teal overrides are not used.
+Department panels inherit `.dept--*` tokens on the rail and overview shells.

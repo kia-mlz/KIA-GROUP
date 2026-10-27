@@ -29,7 +29,10 @@ export default function LabsPage() {
         </div>
 
         <div className="hub-actions labs-page__actions">
-          <Link href="/contact" className="btn btn--primary btn--lg">
+          <Link href="/labs/panel" className="btn btn--primary btn--lg">
+            {t('panel.departments.labs')}
+          </Link>
+          <Link href="/contact" className="btn btn--ghost btn--lg">
             <MessageSquare size={16} aria-hidden="true" />
             {t('labs.tellUs')}
           </Link>

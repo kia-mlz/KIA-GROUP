@@ -35,6 +35,12 @@ export default function FreelancePage() {
           </Link>
         </div>
 
+        <div className="hub-actions">
+          <Link href="/work/panel" className="btn btn--primary btn--lg">
+            {t('panel.departments.work')}
+          </Link>
+        </div>
+
         <p className="freelance-note">{t('freelance.note')}</p>
       </div>
     </div>
