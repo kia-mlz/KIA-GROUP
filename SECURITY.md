@@ -12,7 +12,7 @@
 Please report security issues **privately** — do not open a public GitHub issue for exploitable bugs.
 
 1. Prefer GitHub **Security Advisories** / private vulnerability reporting on the repository:
-   https://github.com/kian-malekzadeh/KIA-GROUP/security/advisories/new
+   https://github.com/kia-mlz/KIA-GROUP/security/advisories/new
 2. Or email the maintainer via the contact options listed on the repository profile / `CONTACT` if available.
 
 Include:

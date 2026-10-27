@@ -6,9 +6,9 @@
 
 **Learn · Work · Create · Connect · Grow **
 
-[![CI](https://github.com/kian-malekzadeh/KIA-GROUP/actions/workflows/ci.yml/badge.svg)](https://github.com/kian-malekzadeh/KIA-GROUP/actions/workflows/ci.yml)
-[![E2E](https://github.com/kian-malekzadeh/KIA-GROUP/actions/workflows/e2e.yml/badge.svg)](https://github.com/kian-malekzadeh/KIA-GROUP/actions/workflows/e2e.yml)
-[![Security](https://github.com/kian-malekzadeh/KIA-GROUP/actions/workflows/security.yml/badge.svg)](https://github.com/kian-malekzadeh/KIA-GROUP/actions/workflows/security.yml)
+[![CI](https://github.com/kia-mlz/KIA-GROUP/actions/workflows/ci.yml/badge.svg)](https://github.com/kia-mlz/KIA-GROUP/actions/workflows/ci.yml)
+[![E2E](https://github.com/kia-mlz/KIA-GROUP/actions/workflows/e2e.yml/badge.svg)](https://github.com/kia-mlz/KIA-GROUP/actions/workflows/e2e.yml)
+[![Security](https://github.com/kia-mlz/KIA-GROUP/actions/workflows/security.yml/badge.svg)](https://github.com/kia-mlz/KIA-GROUP/actions/workflows/security.yml)
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.13-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org)
 [![pnpm](https://img.shields.io/badge/pnpm-monorepo-F69220?logo=pnpm&logoColor=white)](https://pnpm.io)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs&logoColor=white)](https://nextjs.org)
@@ -17,7 +17,7 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-**[📄 GitHub Pages mirror](https://kian-malekzadeh.github.io/KIA-GROUP/)** &nbsp;·&nbsp;
+**[📄 GitHub Pages mirror](https://kia-mlz.github.io/KIA-GROUP/)** &nbsp;·&nbsp;
 
 </div>
 
@@ -182,7 +182,7 @@ public static dump.
 **Prerequisites:** Node **≥ 22.13**, pnpm via Corepack, PostgreSQL 16 (local or Docker).
 
 ```bash
-git clone https://github.com/kian-malekzadeh/KIA-GROUP.git KIA-GROUP
+git clone https://github.com/kia-mlz/KIA-GROUP.git KIA-GROUP
 cd KIA-GROUP
 
 corepack enable && corepack prepare pnpm@11.19.0 --activate
@@ -275,7 +275,7 @@ Report vulnerabilities responsibly per [`SECURITY.md`](SECURITY.md) — please u
   no backend). To redeploy, build with `GITHUB_PAGES=true NEXT_BASE_PATH= NEXT_PUBLIC_DEMO_MODE=true pnpm --filter @kia./group build`,
   then push `apps/group/out` via the DashPloy API (`POST /api/v1/deploy`, see
   <https://dashploy.com/llms.txt>).
-- **GitHub Pages (mirror):** the `Deploy GitHub Pages` workflow builds the demo app on every push to `main` (`NEXT_PUBLIC_DEMO_MODE=true`, basePath `/KIA-GROUP/`, taken from the repository name via `PAGES_REPO_NAME`) and deploys it automatically — live at <https://kian-malekzadeh.github.io/KIA-GROUP/>. Local preview: `pnpm build:pages` → serve `apps/group/out`.
+- **GitHub Pages (mirror):** the `Deploy GitHub Pages` workflow builds the demo app on every push to `main` (`NEXT_PUBLIC_DEMO_MODE=true`, basePath `/KIA-GROUP/`, owner/repo taken from `PAGES_OWNER` + `PAGES_REPO_NAME`) and deploys it automatically — live at <https://kia-mlz.github.io/KIA-GROUP/>. Local preview: `pnpm build:pages` → serve `apps/group/out`.
 - **Self-host Docker:** hardened multi-stage images (`docker build --target api|web`) running as a non-root `node` user, OCI-labelled, with built-in healthchecks; Compose adds `init: true` and `no-new-privileges` on app containers. See run mode **C** above.
 - **CI:** every commit is validated against a live Postgres before merge
 

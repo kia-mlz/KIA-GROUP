@@ -197,7 +197,7 @@ def build():
         [
             "Full local stack: Next.js (3000) proxies /api → NestJS (3001) + PostgreSQL 16.",
             "GitHub Pages static export can run in NEXT_PUBLIC_DEMO_MODE with in-browser mocks (no hosted API).",
-            "Homepage (Pages): https://kian-malekzadeh.github.io/Kia-Academy/ (rename GitHub repo to kia-academy for /kia-academy/)",
+            "Homepage (Pages): https://kia-mlz.github.io/KIA-GROUP/",
         ],
     )
 

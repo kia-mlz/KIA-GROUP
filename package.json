@@ -7,17 +7,17 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kian-malekzadeh/KIA-GROUP.git"
+    "url": "https://github.com/kia-mlz/KIA-GROUP.git"
   },
-  "homepage": "https://github.com/kian-malekzadeh/KIA-GROUP#readme",
+  "homepage": "https://github.com/kia-mlz/KIA-GROUP#readme",
   "bugs": {
-    "url": "https://github.com/kian-malekzadeh/KIA-GROUP/issues"
+    "url": "https://github.com/kia-mlz/KIA-GROUP/issues"
   },
   "scripts": {
     "dev": "infisical run --env=dev -- concurrently -n web,api -c blue,green \"pnpm --filter @kia./group dev\" \"pnpm --filter @kia./api dev\"",
     "build:libs": "pnpm --filter @kia./permissions build && pnpm --filter @kia./brand build && pnpm --filter @kia./shared build && pnpm --filter @kia./platform build && pnpm --filter @kia./kia-academy build && pnpm --filter @kia./kia-event build",
     "build": "pnpm build:libs && pnpm --filter @kia./api build && pnpm --filter @kia./group build",
-    "build:pages": "pnpm build:libs && export GITHUB_PAGES=true && export NEXT_BASE_PATH=/${PAGES_REPO_NAME:-KIA-GROUP} && export NEXT_PUBLIC_APP_URL=https://kian-malekzadeh.github.io/${PAGES_REPO_NAME:-KIA-GROUP} && export NEXT_PUBLIC_DEMO_MODE=true && pnpm --filter @kia./group build",
+    "build:pages": "pnpm build:libs && export GITHUB_PAGES=true && export NEXT_BASE_PATH=/${PAGES_REPO_NAME:-KIA-GROUP} && export NEXT_PUBLIC_APP_URL=https://${PAGES_OWNER:-kia-mlz}.github.io/${PAGES_REPO_NAME:-KIA-GROUP} && export NEXT_PUBLIC_DEMO_MODE=true && pnpm --filter @kia./group build",
     "start": "concurrently -n web,api -c blue,green \"pnpm --filter @kia./group start\" \"pnpm --filter @kia./api start:prod\"",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
