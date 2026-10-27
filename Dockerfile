@@ -108,7 +108,7 @@ RUN pnpm --filter @kia./group build
 FROM base AS api
 LABEL org.opencontainers.image.title="Kia Academy API" \
       org.opencontainers.image.description="NestJS API for Kia Academy adaptive learning platform" \
-      org.opencontainers.image.source=https://github.com/kian-malekzadeh/Kia-Academy \
+      org.opencontainers.image.source=https://github.com/kia-mlz/KIA-GROUP \
       org.opencontainers.image.licenses=MIT
 
 ENV NODE_ENV=production
@@ -145,7 +145,7 @@ ENTRYPOINT ["api-entrypoint.sh"]
 FROM base AS web
 LABEL org.opencontainers.image.title="Kia Academy Web" \
       org.opencontainers.image.description="Next.js frontend for Kia Academy adaptive learning platform" \
-      org.opencontainers.image.source=https://github.com/kian-malekzadeh/Kia-Academy \
+      org.opencontainers.image.source=https://github.com/kia-mlz/KIA-GROUP \
       org.opencontainers.image.licenses=MIT
 
 ENV NODE_ENV=production

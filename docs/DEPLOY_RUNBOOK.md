@@ -34,7 +34,7 @@ sudo ufw allow 22/tcp && sudo ufw allow 80/tcp && sudo ufw allow 443/tcp && sudo
 
 ```bash
 sudo mkdir -p /opt/kia-academy && sudo chown $USER /opt/kia-academy
-git clone https://github.com/kian-malekzadeh/KIA-GROUP.git /opt/kia-academy
+git clone https://github.com/kia-mlz/KIA-GROUP.git /opt/kia-academy
 cd /opt/kia-academy
 pnpm docker:setup          # کپی .env.docker.example → .env.docker
 ```
@@ -163,17 +163,17 @@ crontab -e
 
 هر push به `main` ایمیج‌های api و web را بیلد و منتشر می‌کند (workflow «Docker Publish»):
 
-- `ghcr.io/kian-malekzadeh/kia./api:main` (+ تگ `sha-<commit>` برای هر کامیت)
-- `ghcr.io/kian-malekzadeh/kia./web:main`
+- `ghcr.io/kia-mlz/kia./api:main` (+ تگ `sha-<commit>` برای هر کامیت)
+- `ghcr.io/kia-mlz/kia./web:main`
 
 روی سرور یک `docker-compose.override.yml` بسازید:
 
 ```yaml
 services:
   api:
-    image: ghcr.io/kian-malekzadeh/kia./api:main
+    image: ghcr.io/kia-mlz/kia./api:main
   web:
-    image: ghcr.io/kian-malekzadeh/kia./web:main
+    image: ghcr.io/kia-mlz/kia./web:main
 ```
 
 اگر ریپو/پکیج خصوصی است، یک بار لاگین: `docker login ghcr.io -u <user> -p <PAT با read:packages>`
@@ -184,7 +184,7 @@ docker compose --profile full pull api web
 docker compose --profile full up -d
 
 # Rollback: همان دو دستور با تگ قبلی، مثلاً:
-#   image: ghcr.io/kian-malekzadeh/kia./api:sha-<کامیت قبلی>
+#   image: ghcr.io/kia-mlz/kia./api:sha-<کامیت قبلی>
 ```
 
 ### روش ب — Build روی سرور (بدون وابستگی به GHCR)

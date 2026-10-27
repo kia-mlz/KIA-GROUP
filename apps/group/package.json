@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --webpack --hostname 0.0.0.0",
     "build": "next build --webpack",
-    "build:pages": "GITHUB_PAGES=true NEXT_BASE_PATH=/${PAGES_REPO_NAME:-KIA-GROUP} NEXT_PUBLIC_APP_URL=https://kian-malekzadeh.github.io/${PAGES_REPO_NAME:-KIA-GROUP} NEXT_PUBLIC_DEMO_MODE=true next build",
+    "build:pages": "GITHUB_PAGES=true NEXT_BASE_PATH=/${PAGES_REPO_NAME:-KIA-GROUP} NEXT_PUBLIC_APP_URL=https://${PAGES_OWNER:-kia-mlz}.github.io/${PAGES_REPO_NAME:-KIA-GROUP} NEXT_PUBLIC_DEMO_MODE=true next build",
     "start": "next start",
     "lint": "eslint src --config ../../eslint.config.mjs",
     "typecheck": "tsc --noEmit",

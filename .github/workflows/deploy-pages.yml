@@ -58,10 +58,12 @@ jobs:
         run: pnpm db:generate
 
       - name: Build static demo export
-        # PAGES_REPO_NAME keeps the basePath in sync with this repository's name,
-        # so a rename (e.g. Kia-Academy → KIA-GROUP) can never stale the mirror.
+        # Owner + repo keep NEXT_PUBLIC_APP_URL / basePath in sync with the live
+        # Pages host (https://<owner>.github.io/<repo>/), so a transfer or
+        # rename cannot leave the mirror pointing at a 404 username.
         run: pnpm build:pages
         env:
+          PAGES_OWNER: ${{ github.repository_owner }}
           PAGES_REPO_NAME: ${{ github.event.repository.name }}
 
       - name: Bypass Jekyll processing
