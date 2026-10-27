@@ -51,10 +51,9 @@ export default function HomePage() {
 
       <main className="landing-intro container">
         <header className="landing-hero">
-          {/* The brand wordmark roots the heading outline; the tagline (the
-              hero promise, one canonical string shared with the site wordmark
-              and pinned by the brand suite) sits under it as a supporting
-              heading (h3, dimmed) per UX feedback. */}
+          {/* Brand wordmark is the sole hero heading; the five-pillar tagline
+              and short pitch sit under it as body copy (landing-title /
+              landing-body), not as extra headings. */}
           <h1 className="landing-brand">
             <BrandMark className="landing-brand-mark" title="" />
             {t('common.brand')}

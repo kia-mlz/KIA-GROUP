@@ -17,10 +17,10 @@ test.describe('Learner journey', () => {
 
   test('landing page shows phone and email sign-in CTAs', async ({ page }) => {
     await page.goto('/');
-    // The hero carries the canonical brand tagline (Learn · Work · Create · …)
-    // as a supporting heading — the brand wordmark is the h1 root.
-    await expect(page.getByRole('heading', { level: 3 })).toContainText(/learn|work|create/i);
+    // Minimal guest landing: brand wordmark as h1, five-pillar tagline as body
+    // copy (not a heading — see landing-title), then phone + email auth doors.
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Kia');
+    await expect(page.locator('.landing-title')).toContainText(/learn|work|create/i);
     // Phone-first auth door — the single primary CTA on the minimal guest landing.
     const authCta = page.getByRole('link', { name: /Sign in \/ Sign up/i });
     await expect(authCta).toBeVisible();
