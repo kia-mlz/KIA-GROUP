@@ -82,14 +82,15 @@ describe('i18n usage coverage (admin + auth)', () => {
   /**
    * Values that are intentionally identical in both languages: proper names —
    * department names stay Latin («Kia Academy», …) in both locales — plus
-   * masked input placeholders, an email example, the `IP` column label, an
-   * em-dash and an example slug. The parent brand (`common.brand`) is
-   * locale-aware (Kia / کیا) and must NOT be on this list.
+   * masked input placeholders, an email example, the `IP` column label,
+   * empty-field em-dashes, and an example slug. The parent brand
+   * (`common.brand`) is locale-aware (Kia / کیا) and must NOT be on this list.
    */
   const languageNeutral = new Set([
     'admin.audit.col.ip',
     'admin.audit.noReason',
     'admin.courses.placeholder.slug',
+    'admin.users.detail.empty',
     'auth.forgotPassword.emailPlaceholder',
     'auth.login.emailPlaceholder',
     'auth.login.passwordPlaceholder',
