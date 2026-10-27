@@ -6,13 +6,14 @@ import { ChevronDown, LayoutGrid, LogOut, Menu, Moon, MoveHorizontal, Shield, Su
 import { useEffect, useRef, useState } from 'react';
 import { isStaffRole } from '@kia./shared';
 import { BrandMark } from '@/components/brand/BrandMark';
-import { departmentForPathname } from '@/components/brand/departments';
+import { DEPARTMENTS, departmentForPathname } from '@/components/brand/departments';
 import { CartBadge } from '@/components/cart/CartBadge';
 import { LanguageSelector } from '@/components/layout/LanguageSelector';
 import { LearnerNav } from '@/components/layout/LearnerNav';
 import { useAuth } from '@/context/AuthProvider';
 import { useLanguage } from '@/context/LanguageProvider';
 import { useTheme } from '@/context/ThemeProvider';
+import { learnerDepartmentSlugForPathname } from '@/lib/learnerPanels';
 import { HOME_PATH } from '@/lib/postLoginPath';
 
 /** Sidebar width presets — 'default' is the 18.5rem panel, 'compact' the 4.75rem
@@ -35,7 +36,14 @@ export function TopBar() {
   // wordmark, and the parent kia. left underneath as the group it belongs
   // to. Only the colour changes — the shape stays the brand's own mark, so the
   // rail and the department page header show the same logo.
-  const dept = departmentForPathname(pathname);
+  // Learner panels under `/dashboard` (Academy / Events) and `*/panel` also
+  // resolve to a department so the rail matches the active workspace menu.
+  const dept =
+    departmentForPathname(pathname) ??
+    (() => {
+      const slug = learnerDepartmentSlugForPathname(pathname);
+      return slug ? (DEPARTMENTS.find((d) => d.slug === slug) ?? null) : null;
+    })();
   const { t } = useLanguage();
   const { toggleTheme, theme } = useTheme();
   const { user, logout, loading } = useAuth();

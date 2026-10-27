@@ -4,21 +4,19 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { BookOpen, Compass } from 'lucide-react';
-import { AdminMessages } from '@/components/dashboard/AdminMessages';
-import { BootcampCard } from '@/components/dashboard/BootcampCard';
 import { EnrolledCourses } from '@/components/dashboard/EnrolledCourses';
-import { FinancialCard } from '@/components/dashboard/FinancialCard';
-import { ProfileEditor } from '@/components/dashboard/ProfileEditor';
 import { ProgressChart } from '@/components/dashboard/ProgressChart';
 import { TestResultsCard } from '@/components/dashboard/TestResultsCard';
-import { TicketsCard } from '@/components/dashboard/TicketsCard';
-import { TodoList } from '@/components/dashboard/TodoList';
 import { ToastProvider } from '@/components/dashboard/ToastProvider';
 import { useApp } from '@/context/AppProvider';
 import { useAuth } from '@/context/AuthProvider';
 import { useLanguage } from '@/context/LanguageProvider';
 
-export default function DashboardPage() {
+/**
+ * Kia Academy learner panel — courses, progress and exam results only.
+ * Events / wallet / support live in their own department or platform menus.
+ */
+export default function AcademyDashboardPage() {
   const router = useRouter();
   const { hasRoadmap, hydrated } = useApp();
   const { user, learnerState, loading: authLoading, isAuthenticated } = useAuth();
@@ -40,10 +38,11 @@ export default function DashboardPage() {
 
   if (!ownsRoadmap) {
     return (
-      <div className="page-content">
+      <div className="page-content dept--academy">
         <div className="container hub">
           <header className="page-head">
             <div>
+              <span className="eyebrow">{t('panel.departments.academy')}</span>
               <h1>
                 {user?.name
                   ? t('dashboard.welcomeNamed', { name: user.name.split(' ')[0] })
@@ -80,23 +79,25 @@ export default function DashboardPage() {
 
   return (
     <ToastProvider>
-      <div className="page-content dash-panel">
+      <div className="page-content dash-panel dept--academy">
         <div className="dash-panel__inner">
-          <div className="dash-grid">
-            <FinancialCard />
-            <BootcampCard />
+          <header className="dept-learner-panel__head">
+            <span className="eyebrow">{t('panel.departments.academy')}</span>
+            <h1>
+              {user?.name
+                ? t('dashboard.welcomeNamed', { name: user.name.split(' ')[0] })
+                : t('panel.departmentPanel.academy.title')}
+            </h1>
+            <p>{t('panel.departmentPanel.academy.sub')}</p>
+          </header>
+
+          <div className="dash-grid dash-grid--academy">
             <ProgressChart />
             <TestResultsCard />
-            <TodoList />
             <EnrolledCourses />
-            <TicketsCard />
-            <AdminMessages />
-            <ProfileEditor />
           </div>
         </div>
       </div>
     </ToastProvider>
   );
 }
-
-

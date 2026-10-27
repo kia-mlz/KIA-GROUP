@@ -150,6 +150,8 @@ describe('department rail in TopBar', () => {
   it('resolves the department from the route it is on', () => {
     expect(topBar).toContain('usePathname');
     expect(topBar).toContain('departmentForPathname(pathname)');
+    // Learner panels under `/dashboard` and `*/panel` also paint the rail.
+    expect(topBar).toContain('learnerDepartmentSlugForPathname(pathname)');
   });
 
   it('puts the department token in scope for the whole rail', () => {

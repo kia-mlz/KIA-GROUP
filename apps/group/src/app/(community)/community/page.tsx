@@ -29,7 +29,10 @@ export default function CommunityPage() {
         </div>
 
         <div className="hub-actions community-page__actions">
-          <Link href="/contact" className="btn btn--primary btn--lg">
+          <Link href="/community/panel" className="btn btn--primary btn--lg">
+            {t('panel.departments.community')}
+          </Link>
+          <Link href="/contact" className="btn btn--ghost btn--lg">
             <MessageSquare size={16} aria-hidden="true" />
             {t('community.tellUs')}
           </Link>

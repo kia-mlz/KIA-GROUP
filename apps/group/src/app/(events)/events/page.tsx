@@ -60,7 +60,10 @@ export default function EventsPage() {
         </div>
 
         <div className="hub-actions events-page__actions">
-          <Link href="/contact" className="btn btn--primary btn--lg">
+          <Link href="/events/panel" className="btn btn--primary btn--lg">
+            {t('panel.departments.events')}
+          </Link>
+          <Link href="/contact" className="btn btn--ghost btn--lg">
             <MessageSquare size={16} aria-hidden="true" />
             {t('events.tellUs')}
           </Link>
