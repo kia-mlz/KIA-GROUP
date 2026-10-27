@@ -1792,6 +1792,8 @@ export const fa = {
       usersList: 'مدیریت کاربران',
       usersCreate: 'افزودن کاربر',
       usersRoles: 'نقش‌ها و دسترسی',
+      roles: 'نقش‌ها و دسترسی‌ها',
+      staff: 'کارکنان و مدیران',
       payments: 'پرداخت‌ها',
       discounts: 'کدهای تخفیف',
       finance: 'مالی',
@@ -1828,6 +1830,7 @@ export const fa = {
       metricsHidden: 'آمار این بخش با دسترسی فعلی شما نمایش داده نمی‌شود.',
       enterWorkspace: 'ورود به فضای کاری',
       workspaceTitle: 'فضای کاری {name}',
+      workspaceKicker: 'فضای کاری دپارتمان',
       status: {
         live: 'فعال',
       },
@@ -2242,6 +2245,13 @@ export const fa = {
         message: 'پیام',
         status: 'وضعیت',
       },
+    },
+    staff: {
+      kicker: 'مدیریت عمومی',
+      title: 'کارکنان و مدیران',
+      sub: 'حساب‌های غیر یادگیرنده: مدیران، ناظران و نقش‌های سفارشی کارکنان.',
+      create: 'افزودن کارمند',
+      empty: 'هنوز حساب کارکنانی ثبت نشده است.',
     },
     users: {
       title: 'کاربران',

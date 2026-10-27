@@ -45,6 +45,12 @@ export const PLATFORM_NAV_GROUPS: AdminNavGroup[] = [
         section: 'users',
         quickCreate: true,
       },
+      {
+        id: 'staff',
+        label: 'کارکنان و مدیران',
+        href: '/admin/staff',
+        section: 'users',
+      },
       { id: 'roles', label: 'نقش‌ها و دسترسی‌ها', href: '/admin/users/roles', section: 'users' },
     ],
   },

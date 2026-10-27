@@ -1795,6 +1795,8 @@ export const en = {
       usersList: 'Manage users',
       usersCreate: 'Add user',
       usersRoles: 'Roles & access',
+      roles: 'Roles & access',
+      staff: 'Staff & managers',
       payments: 'Payments',
       discounts: 'Discount codes',
       finance: 'Finance',
@@ -1830,6 +1832,7 @@ export const en = {
       metricsHidden: 'Numbers are hidden with your current access.',
       enterWorkspace: 'Enter workspace',
       workspaceTitle: '{name} workspace',
+      workspaceKicker: 'Department workspace',
       status: {
         live: 'Live',
       },
@@ -2248,6 +2251,13 @@ export const en = {
         message: 'Message',
         status: 'Status',
       },
+    },
+    staff: {
+      kicker: 'Platform ops',
+      title: 'Staff & managers',
+      sub: 'Non-learner accounts: admins, moderators, and custom staff roles.',
+      create: 'Add staff member',
+      empty: 'No staff accounts yet.',
     },
     users: {
       title: 'Users',

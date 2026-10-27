@@ -1,19 +1,16 @@
 'use client';
 
-import Link from 'next/link';
-import { ChevronRight, Flag, Trophy, Users } from 'lucide-react';
+import { Flag, Trophy, Users } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import type { AdminChallenge, AdminCompetition } from '@kia./shared';
+import { DepartmentWorkspaceHome } from '@/components/admin/DepartmentWorkspaceHome';
 import { AdminErrorState, AdminLoading } from '@/components/admin/AdminStates';
 import { useAdminAccess } from '@/components/admin/useAdminAccess';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api } from '@/lib/api';
-import { DEPARTMENT_MODULES, departmentEntryPoints } from '@/lib/adminDepartments';
+import { departmentEntryPoints } from '@/lib/adminDepartments';
 
-/**
- * Events department panel — competitions, challenges and registrations, all
- * from the real endpoints; a count is shown only when its endpoint answered.
- */
+/** Events Ops workspace — competitions/challenges from live admin APIs. */
 export default function AdminEventsDashboardPage() {
   const { t, format } = useLanguage();
   const { can } = useAdminAccess();
@@ -44,8 +41,12 @@ export default function AdminEventsDashboardPage() {
       );
     };
 
-    if (can('competitions')) track(api.adminListCompetitions(), (value) => setCompetitions(value as AdminCompetition[] | null));
-    if (can('challenges')) track(api.adminListChallenges(), (value) => setChallenges(value as AdminChallenge[] | null));
+    if (can('competitions')) {
+      track(api.adminListCompetitions(), (value) => setCompetitions(value));
+    }
+    if (can('challenges')) {
+      track(api.adminListChallenges(), (value) => setChallenges(value));
+    }
 
     setLoading(true);
     void Promise.all(calls).then(() => {
@@ -76,65 +77,81 @@ export default function AdminEventsDashboardPage() {
   const activeCompetitions = competitions?.filter((item) => item.active).length ?? null;
   const registrations =
     competitions?.reduce((total, item) => total + item.registrationCount, 0) ?? null;
-  const challengeCount = challenges?.length ?? null;
 
   const metrics = [
-    { labelKey: 'admin.departments.metric.competitions', value: competitions?.length ?? null, icon: Flag },
-    { labelKey: 'admin.departments.metric.activeCompetitions', value: activeCompetitions, icon: Flag },
-    { labelKey: 'admin.departments.metric.registrations', value: registrations, icon: Users },
-    { labelKey: 'admin.stats.challenges', value: challengeCount, icon: Trophy },
-  ].filter((metric) => metric.value !== null);
+    competitions != null
+      ? {
+          id: 'competitions',
+          label: t('admin.departments.metric.competitions'),
+          value: format.number(competitions.length),
+          href: '/admin/events/competitions',
+          icon: Flag,
+        }
+      : null,
+    activeCompetitions != null
+      ? {
+          id: 'active',
+          label: t('admin.departments.metric.activeCompetitions'),
+          value: format.number(activeCompetitions),
+          href: '/admin/events/competitions',
+          icon: Flag,
+        }
+      : null,
+    registrations != null
+      ? {
+          id: 'regs',
+          label: t('admin.departments.metric.registrations'),
+          value: format.number(registrations),
+          href: '/admin/events/competitions',
+          icon: Users,
+        }
+      : null,
+    challenges != null
+      ? {
+          id: 'challenges',
+          label: t('admin.stats.challenges'),
+          value: format.number(challenges.length),
+          href: '/admin/events/challenges',
+          icon: Trophy,
+        }
+      : null,
+  ].filter(Boolean) as {
+    id: string;
+    label: string;
+    value: string;
+    href: string;
+    icon: typeof Flag;
+  }[];
+
+  const modules = entryPoints.map((entry) => ({
+    href: entry.href,
+    label: t(entry.labelKey),
+  }));
+
+  const tools = [
+    can('competitions', 'manage') || can('competitions', 'edit')
+      ? {
+          href: '/admin/events/competitions',
+          label: t('admin.nav.competitions'),
+          icon: Flag,
+        }
+      : null,
+    can('challenges', 'manage') || can('challenges', 'edit')
+      ? {
+          href: '/admin/events/challenges',
+          label: t('admin.nav.challenges'),
+          icon: Trophy,
+        }
+      : null,
+  ].filter(Boolean) as { href: string; label: string; icon: typeof Flag }[];
 
   return (
-    <div className="admin-content">
-      <div className="breadcrumbs" aria-label={t('admin.breadcrumb')}>
-        <Link href="/admin">{t('admin.breadcrumbRoot')}</Link>
-        <ChevronRight size={10} className="admin-breadcrumb-sep" aria-hidden />
-        <Link href="/admin/departments">{t('admin.nav.departments')}</Link>
-        <ChevronRight size={10} className="admin-breadcrumb-sep" aria-hidden />
-        <strong>{t('dashboard.doors.eventsTitle')}</strong>
-      </div>
-
-      <section className="page-intro">
-        <div>
-          <span className="section-kicker">{t('admin.departments.what')}</span>
-          <h1>{t('dashboard.doors.eventsTitle')}</h1>
-          <p>{t('admin.departments.events.desc')}</p>
-        </div>
-      </section>
-
-      <div className="admin-kpi-grid">
-        {metrics.map((metric) => (
-          <div key={metric.labelKey} className="admin-stat-card">
-            <div className="admin-stat-row">
-              <div>
-                <span className="admin-stat-label">{t(metric.labelKey)}</span>
-                <div className="admin-stat-value">{format.number(metric.value as number)}</div>
-              </div>
-              <span className="admin-stat-icon">
-                <metric.icon size={18} />
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <article className="admin-card">
-        <h2>{t('admin.departmentPanel.modules')}</h2>
-        {DEPARTMENT_MODULES.events.length && entryPoints.length ? (
-          <div className="admin-department-actions">
-            {entryPoints.map((entry) => (
-              <Link key={entry.href} href={entry.href} className="btn-next admin-btn">
-                {t(entry.labelKey)}
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <p className="admin-department-status">
-            {entryPoints.length ? t('admin.departments.noModule') : t('admin.departments.noAccess')}
-          </p>
-        )}
-      </article>
-    </div>
+    <DepartmentWorkspaceHome
+      slug="events"
+      description={t('admin.departments.events.desc')}
+      metrics={metrics}
+      modules={modules}
+      tools={tools}
+    />
   );
 }

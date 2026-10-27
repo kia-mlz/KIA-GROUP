@@ -1,21 +1,16 @@
 'use client';
 
-import Link from 'next/link';
-import { BookOpen, ChevronRight, ClipboardList, GraduationCap, Layers } from 'lucide-react';
+import { BookOpen, ClipboardList, GraduationCap, Layers } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 import type { AdminStats } from '@kia./shared';
+import { DepartmentWorkspaceHome } from '@/components/admin/DepartmentWorkspaceHome';
 import { AdminErrorState, AdminLoading } from '@/components/admin/AdminStates';
 import { useAdminAccess } from '@/components/admin/useAdminAccess';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api, ApiError } from '@/lib/api';
-import { useCallback, useEffect, useState } from 'react';
-import { DEPARTMENT_MODULES, departmentEntryPoints } from '@/lib/adminDepartments';
-import { useEffect as useEffectNamed } from 'react';
+import { departmentEntryPoints } from '@/lib/adminDepartments';
 
-/**
- * Academy department panel — one screen answering "what does Academy manage
- * and where?". Counts come from the same real endpoints the global dashboard
- * uses; nothing is estimated.
- */
+/** Academy Ops workspace — live counts from admin stats + real module links. */
 export default function AdminAcademyDashboardPage() {
   const { t, format } = useLanguage();
   const { can } = useAdminAccess();
@@ -29,16 +24,15 @@ export default function AdminAcademyDashboardPage() {
     api
       .adminStats()
       .then(setStats)
-      .catch((err) => setError(err instanceof ApiError ? err.message : t('admin.departments.loadError')))
+      .catch((err) =>
+        setError(err instanceof ApiError ? err.message : t('admin.departments.loadError')),
+      )
       .finally(() => setLoading(false));
   }, [t]);
 
   useEffect(() => {
     load();
   }, [load]);
-
-  // Named import above kept for symmetry with sibling department pages.
-  useEffectNamed(() => {}, []);
 
   const entryPoints = departmentEntryPoints('academy', can);
 
@@ -54,88 +48,77 @@ export default function AdminAcademyDashboardPage() {
   }
 
   const metrics = [
-    { labelKey: 'admin.stats.courses', value: stats.courses, href: '/admin/academy/courses', icon: BookOpen, gated: can('courses') },
-    { labelKey: 'admin.stats.lessons', value: stats.lessons, href: '/admin/academy/courses', icon: Layers, gated: can('courses') },
-    { labelKey: 'admin.stats.enrollments', value: stats.enrollments, href: '/admin/analytics', icon: GraduationCap, gated: can('stats') },
-  ];
+    can('courses')
+      ? {
+          id: 'courses',
+          label: t('admin.stats.courses'),
+          value: format.number(stats.courses),
+          href: '/admin/academy/courses',
+          icon: BookOpen,
+        }
+      : null,
+    can('courses')
+      ? {
+          id: 'lessons',
+          label: t('admin.stats.lessons'),
+          value: format.number(stats.lessons),
+          href: '/admin/academy/courses',
+          icon: Layers,
+        }
+      : null,
+    can('stats')
+      ? {
+          id: 'enrollments',
+          label: t('admin.stats.enrollments'),
+          value: format.number(stats.enrollments),
+          href: '/admin/analytics',
+          icon: GraduationCap,
+        }
+      : null,
+  ].filter(Boolean) as {
+    id: string;
+    label: string;
+    value: string;
+    href: string;
+    icon: typeof BookOpen;
+  }[];
+
+  const modules = entryPoints.map((entry) => ({
+    href: entry.href,
+    label: t(entry.labelKey),
+  }));
+
+  const tools = [
+    can('courses', 'manage') || can('courses', 'edit')
+      ? {
+          href: '/admin/academy/courses/new',
+          label: t('admin.quick.createCourse'),
+          icon: BookOpen,
+        }
+      : null,
+    can('courses')
+      ? {
+          href: '/admin/academy/courses',
+          label: t('admin.nav.coursesList'),
+          icon: Layers,
+        }
+      : null,
+    can('tests')
+      ? {
+          href: '/admin/academy/tests',
+          label: t('admin.nav.tests'),
+          icon: ClipboardList,
+        }
+      : null,
+  ].filter(Boolean) as { href: string; label: string; icon: typeof BookOpen }[];
 
   return (
-    <div className="admin-content">
-      <div className="breadcrumbs" aria-label={t('admin.breadcrumb')}>
-        <Link href="/admin">{t('admin.breadcrumbRoot')}</Link>
-        <ChevronRight size={10} className="admin-breadcrumb-sep" aria-hidden />
-        <Link href="/admin/departments">{t('admin.nav.departments')}</Link>
-        <ChevronRight size={10} className="admin-breadcrumb-sep" aria-hidden />
-        <strong>{t('dashboard.doors.academyTitle')}</strong>
-      </div>
-
-      <section className="page-intro">
-        <div>
-          <span className="section-kicker">{t('admin.departments.what')}</span>
-          <h1>{t('dashboard.doors.academyTitle')}</h1>
-          <p>{t('admin.departments.academy.desc')}</p>
-        </div>
-      </section>
-
-      <div className="admin-kpi-grid">
-        {metrics.map((metric) => (
-          <Link
-            key={metric.labelKey}
-            href={metric.gated ? metric.href : '/admin/academy'}
-            className="admin-stat-card"
-          >
-            <div className="admin-stat-row">
-              <div>
-                <span className="admin-stat-label">{t(metric.labelKey)}</span>
-                <div className="admin-stat-value">{format.number(metric.value)}</div>
-              </div>
-              <span className="admin-stat-icon">
-                <metric.icon size={18} />
-              </span>
-            </div>
-          </Link>
-        ))}
-      </div>
-
-      <article className="admin-card">
-        <h2>{t('admin.departmentPanel.modules')}</h2>
-        {DEPARTMENT_MODULES.academy.length && entryPoints.length ? (
-          <div className="admin-department-actions">
-            {entryPoints.map((entry) => (
-              <Link key={entry.href} href={entry.href} className="btn-next admin-btn">
-                {t(entry.labelKey)}
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <p className="admin-department-status">
-            {entryPoints.length
-              ? t('admin.departments.noModule')
-              : t('admin.departments.noAccess')}
-          </p>
-        )}
-      </article>
-
-      <article className="admin-card">
-        <h2>{t('admin.departmentPanel.tools')}</h2>
-        <div className="admin-quick-tiles">
-          {can('courses') ? (
-            <Link href="/admin/academy/courses/new" className="admin-quick-tile">
-              <BookOpen size={18} aria-hidden /> {t('admin.quick.createCourse')}
-            </Link>
-          ) : null}
-          {can('courses') ? (
-            <Link href="/admin/academy/courses" className="admin-quick-tile">
-              <Layers size={18} aria-hidden /> {t('admin.nav.coursesList')}
-            </Link>
-          ) : null}
-          {can('tests') ? (
-            <Link href="/admin/academy/tests" className="admin-quick-tile">
-              <ClipboardList size={18} aria-hidden /> {t('admin.nav.tests')}
-            </Link>
-          ) : null}
-        </div>
-      </article>
-    </div>
+    <DepartmentWorkspaceHome
+      slug="academy"
+      description={t('admin.departments.academy.desc')}
+      metrics={metrics}
+      modules={modules}
+      tools={tools}
+    />
   );
 }

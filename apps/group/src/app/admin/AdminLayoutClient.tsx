@@ -60,10 +60,11 @@ import {
 const ICON_BY_ID: Record<string, LucideIcon> = {
   users: Users,
   'users-create': Users,
+  staff: UsersRound,
   roles: ShieldCheck,
   tickets: Ticket,
   messages: MessageSquare,
-  contact: MailIconFallback,
+  contact: MessageSquare,
   finance: Coins,
   orders: ClipboardList,
   payments: CreditCard,
@@ -71,7 +72,7 @@ const ICON_BY_ID: Record<string, LucideIcon> = {
   entitlements: ShieldCheck,
   discounts: FileText,
   analytics: Activity,
-  audit: ScrollIconFallback,
+  audit: FileText,
   settings: Settings,
   security: ShieldCheck,
   'academy-home': LayoutDashboard,
@@ -82,13 +83,6 @@ const ICON_BY_ID: Record<string, LucideIcon> = {
   competitions: Flag,
   challenges: Trophy,
 };
-
-function MailIconFallback(props: { size?: number; className?: string }) {
-  return <MessageSquare {...props} />;
-}
-function ScrollIconFallback(props: { size?: number; className?: string }) {
-  return <FileText {...props} />;
-}
 
 const DEPT_ICON: Record<DepartmentSlug, LucideIcon> = {
   academy: GraduationCap,
