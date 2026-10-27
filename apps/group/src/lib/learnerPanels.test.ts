@@ -71,14 +71,18 @@ describe('learner department panels', () => {
     expect(pages.academyAlias).toContain("redirect('/dashboard')");
   });
 
-  it('personalizes the legacy dashboard as an Academy-only overview', () => {
+  it('keeps the Academy overview card grid with the bank/wallet card', () => {
     const dashboard = read('app/dashboard/page.tsx');
+    expect(dashboard).toContain('FinancialCard');
     expect(dashboard).toContain('EnrolledCourses');
     expect(dashboard).toContain('ProgressChart');
     expect(dashboard).toContain('TestResultsCard');
+    expect(dashboard).toContain('TodoList');
+    expect(dashboard).toContain('TicketsCard');
+    expect(dashboard).toContain('AdminMessages');
+    expect(dashboard).toContain('ProfileEditor');
     expect(dashboard).toContain('AcademyOverviewTiles');
     expect(dashboard).not.toContain('BootcampCard');
-    expect(dashboard).not.toContain('FinancialCard');
     expect(dashboard).toContain('dept--academy');
   });
 
