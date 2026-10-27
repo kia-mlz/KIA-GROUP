@@ -143,11 +143,11 @@ export function LearnerNav({ onNavigate }: { onNavigate?: () => void }) {
           <Link
             href="/home"
             className="top-nav-link learner-nav-link"
-            title={t('panel.departments.backHome')}
+            title={t('panel.departmentPanel.backHome')}
             onClick={onNavigate}
           >
             <LayoutGrid size={16} aria-hidden="true" />
-            <span className="learner-nav-text">{t('panel.departments.backHome')}</span>
+            <span className="learner-nav-text">{t('panel.departmentPanel.backHome')}</span>
           </Link>
         </>
       ) : (
