@@ -105,6 +105,7 @@ async function main() {
         trackKey: course.trackKey,
         sortOrder: course.sortOrder,
         published: true,
+        comingSoon: false,
       },
       create: {
         slug: course.slug,
@@ -115,6 +116,7 @@ async function main() {
         trackKey: course.trackKey,
         sortOrder: course.sortOrder,
         published: true,
+        comingSoon: false,
       },
     });
     seededCourses.push({ id: row.id, slug: row.slug });
@@ -134,6 +136,7 @@ async function main() {
           durationMin: lesson.durationMin,
           sortOrder: lesson.sortOrder,
           videoUrl: lesson.videoUrl,
+          comingSoon: false,
         },
         create: {
           courseId: row.id,
@@ -144,6 +147,7 @@ async function main() {
           durationMin: lesson.durationMin,
           sortOrder: lesson.sortOrder,
           videoUrl: lesson.videoUrl,
+          comingSoon: false,
         },
       });
     }

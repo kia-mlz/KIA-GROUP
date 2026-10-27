@@ -1,3 +1,4 @@
+import { demoLessonVideoUrl } from './demo-videos';
 import type {
   CatalogCourseSeed,
   CatalogLessonSeed,
@@ -124,13 +125,15 @@ export function buildCourseCatalog(
       (a, b) => a.order_index - b.order_index,
     );
 
-    const lessons: CatalogLessonSeed[] = rawLessons.map((lesson) => {
+    const lessons: CatalogLessonSeed[] = rawLessons.map((lesson, lessonIndex) => {
       const playground = resolvePlayground(lesson);
       const lessonSlug = uniqueSlug(lessonSlugFromTitle(lesson.title, lesson.id), usedLessonSlugs);
       const enLesson = en?.lessons[lesson.id];
       const enPlayground = enLesson?.playground
         ? normalizePlayground(enLesson.playground)
         : playground;
+      const videoUrl =
+        (lesson.video_url && lesson.video_url.trim()) || demoLessonVideoUrl(lessonIndex);
       return {
         sourceId: lesson.id,
         slug: lessonSlug,
@@ -139,7 +142,7 @@ export function buildCourseCatalog(
         contentEn: enLesson
           ? packLessonContent(enLesson.description, enPlayground)
           : null,
-        videoUrl: lesson.video_url,
+        videoUrl,
         durationMin: lesson.duration_minutes && lesson.duration_minutes > 0 ? lesson.duration_minutes : 5,
         sortOrder: lesson.order_index,
         playground,

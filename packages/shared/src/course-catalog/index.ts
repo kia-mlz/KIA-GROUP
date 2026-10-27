@@ -17,4 +17,5 @@ export {
   resolvePlayground,
   slugifyLabel,
 } from './transform';
+export { DEMO_LESSON_VIDEOS, demoLessonVideoUrl } from './demo-videos';
 export { buildCourseDbEnOverlay } from './en-content';

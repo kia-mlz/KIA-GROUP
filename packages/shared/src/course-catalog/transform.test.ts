@@ -38,6 +38,22 @@ describe('course-catalog', () => {
     expect(catalog[0]!.lessons).toHaveLength(1);
     expect(catalog[0]!.lessons[0]!.slug).toBe('html-home');
     expect(catalog[0]!.lessons[0]!.playground?.html).toBe('<h1>Hi</h1>');
+    // Null video_url in db.json still gets a playable demo MP4 for the Learn player.
+    expect(catalog[0]!.lessons[0]!.videoUrl).toMatch(/^https:\/\/storage\.googleapis\.com\//);
+  });
+
+  it('keeps an explicit video_url from db.json', () => {
+    const withVideo: CourseDbFile = {
+      ...sampleDb,
+      lessons: [
+        {
+          ...sampleDb.lessons[0]!,
+          video_url: 'https://example.com/lesson.mp4',
+        },
+      ],
+    };
+    const catalog = buildCourseCatalog(withVideo);
+    expect(catalog[0]!.lessons[0]!.videoUrl).toBe('https://example.com/lesson.mp4');
   });
 
   it('round-trips playground through packed lesson content', () => {
