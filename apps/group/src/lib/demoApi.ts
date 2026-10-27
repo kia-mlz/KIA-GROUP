@@ -1679,6 +1679,14 @@ export const demoApi = {
       .map(demoAdminExam);
   },
 
+  async adminListAllCourseExams(): Promise<AdminCourseExam[]> {
+    requireUser();
+    return readExamStore()
+      .exams.slice()
+      .sort((a, b) => a.courseSlug.localeCompare(b.courseSlug) || a.sortOrder - b.sortOrder)
+      .map(demoAdminExam);
+  },
+
   async adminCreateCourseExam(
     courseSlug: string,
     dto: {

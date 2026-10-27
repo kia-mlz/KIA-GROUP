@@ -77,6 +77,7 @@ describe('adminNav registry', () => {
     const can = (section: AdminAccessSection) => section === 'courses' || section === 'tests';
     const groups = filterAdminNavGroups(DEPARTMENT_WORKSPACES.academy.groups, can);
     expect(groups[0]?.items.map((item) => item.id)).toContain('courses');
+    expect(groups[0]?.items.map((item) => item.id)).toContain('course-exams');
     expect(flattenAdminNavLeaves(DEPARTMENT_WORKSPACES.academy.groups, allowAll).length).toBeGreaterThan(
       0,
     );

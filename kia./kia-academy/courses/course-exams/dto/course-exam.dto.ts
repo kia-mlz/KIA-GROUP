@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
   ArrayMinSize,
@@ -31,7 +31,11 @@ class AdminCourseExamQuestionDto implements CourseExamQuestion {
   @IsObject({ each: true })
   options!: Array<{ id: string; label: string }>;
 
+  /** Accept seed-style string answers or multi-choice string[]. */
+  @Transform(({ value }) => (typeof value === 'string' ? [value] : value))
   @IsArray()
+  @ArrayMinSize(1)
+  @IsString({ each: true })
   answer!: string | string[];
 
   @IsOptional()
