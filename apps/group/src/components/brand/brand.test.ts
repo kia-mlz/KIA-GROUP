@@ -6,31 +6,32 @@ import { en, fa } from '@/i18n/messages';
 import { BRAND_WORDMARK } from '@/components/brand/BrandMark';
 
 /**
- * kia. rebrand (was Kia Academy).
+ * Kia rebrand (was KIA. / kia. — and earlier Kia Academy / Kia Group).
  *
  * A rename is the one change with no failing test to point at it: every string
  * still compiles, every page still renders. So the invariants live here.
  *
- * The six departments and the wordmark are written in English in both locales,
- * so no Persian spelling of the brand survives in the source tree either. The
- * sweep below proves it: any `Kia Academy`/`KIA ACADEMY`, any `کیا.` wordmark
- * and any `کیا ` department name anywhere, fails this file.
+ * English UI uses Latin «Kia»; Persian UI uses «کیا». Department names stay
+ * Latin in both locales («Kia Academy», …). Stale spellings (KIA., Kia Group,
+ * کیا گروه, کیا.) must not reappear in user-visible source.
  */
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 /** apps/group — brand → components → src → apps/group */
-const WEB = path.join(HERE, '..', '..', '..');
+const WEB_ROOT = path.join(HERE, '..', '..', '..');
 /** repo root — apps/group → apps → repo root */
-const ROOT = path.join(WEB, '..', '..');
+const ROOT = path.join(WEB_ROOT, '..', '..');
 
 /** Source roots that can hold a user-visible brand string. */
 const SWEEP_ROOTS = [
-  path.join(WEB, 'src'),
-  path.join(WEB, 'public'),
-  path.join(WEB, 'e2e'),
+  path.join(WEB_ROOT, 'src'),
+  path.join(WEB_ROOT, 'public'),
+  path.join(WEB_ROOT, 'e2e'),
   path.join(ROOT, 'apps', 'api', 'src'),
   path.join(ROOT, 'apps', 'api', 'prisma'),
   path.join(ROOT, 'packages', 'shared', 'src'),
+  path.join(ROOT, 'packages', 'platform', 'src'),
+  path.join(ROOT, 'packages', 'brand', 'src'),
 ];
 
 /** Build output and env files: generated, or local-only and git-ignored. */
@@ -63,29 +64,26 @@ const hits = (needle: string) => {
   return found;
 };
 
-describe('KIA. brand', () => {
-  it('uses one Latin wordmark in both locales', () => {
-    expect(BRAND_WORDMARK).toBe('KIA.');
-    expect(fa.common.brand).toBe('KIA.');
-    expect(en.common.brand).toBe('KIA.');
+describe('Kia brand', () => {
+  it('uses locale-aware brand names', () => {
+    expect(BRAND_WORDMARK).toBe('Kia');
+    expect(fa.common.brand).toBe('کیا');
+    expect(en.common.brand).toBe('Kia');
   });
 
-  it('never spells the wordmark lowercase anywhere in either dictionary', () => {
-    // "KIA." is the only spelling of the brand; the only legitimate lowercase
-    // `kia.` in the dictionaries is the contact domain (legal@kia.academy).
-    const walk = (node: unknown, trail: string): string[] => {
+  it('never spells the obsolete KIA. wordmark in either dictionary', () => {
+    const walkDict = (node: unknown, trail: string): string[] => {
       if (typeof node === 'string') {
-        const copy = node.replace(/@kia\.academy/g, '');
-        return copy.includes('kia.') ? [`${trail}: ${node}`] : [];
+        return node.includes('KIA.') ? [`${trail}: ${node}`] : [];
       }
       if (node && typeof node === 'object') {
         return Object.entries(node).flatMap(([key, value]) =>
-          walk(value, `${trail}.${key}`),
+          walkDict(value, `${trail}.${key}`),
         );
       }
       return [];
     };
-    expect([...walk(fa, 'fa'), ...walk(en, 'en')]).toEqual([]);
+    expect([...walkDict(fa, 'fa'), ...walkDict(en, 'en')]).toEqual([]);
   });
 
   it('carries the five-pillar tagline', () => {
@@ -93,33 +91,29 @@ describe('KIA. brand', () => {
     expect(en.common.tagline).toBe('Learn · Work · Create · Connect · Grow');
   });
 
-  it('leaves no stale company name or Persian brand spelling in the source tree', () => {
-    expect(hits('Kia Academy')).toEqual([]);
-    expect(hits('KIA ACADEMY')).toEqual([]);
-    // Neither the wordmark nor a department name may be spelled in Persian.
-    // `کیا ` / `کیا.` catch both forms without matching the city names in the
-    // province data (کیاکلا، کیاشهر … have no space or dot after کیا).
+  it('leaves no stale company or period-wordmark spellings in the source tree', () => {
+    expect(hits('Kia Group')).toEqual([]);
+    expect(hits('KIA Group')).toEqual([]);
+    expect(hits('کیا گروه')).toEqual([]);
+    expect(hits('کیاگروپ')).toEqual([]);
+    expect(hits('KIA.')).toEqual([]);
+    // Trailing-period Persian wordmark from the previous rebrand.
     expect(hits('کیا.')).toEqual([]);
-    expect(hits('کیا ')).toEqual([]);
   });
 
-  it('names the admin control room after the group, not the academy', () => {
-    expect(fa.admin.brandSub).toBe('مرکز کنترل گروه');
-    expect(en.admin.brandSub).toBe('Group control center');
+  it('names the admin control room without the old Group label', () => {
+    expect(fa.admin.brandSub).toBe('مرکز کنترل');
+    expect(en.admin.brandSub).toBe('Control center');
   });
 });
 
-describe('KIA. departments', () => {
+describe('Kia departments', () => {
   const hub = readFileSync(
-    path.join(WEB, 'src', 'components', 'hub', 'DepartmentSolarSystem.tsx'),
+    path.join(WEB_ROOT, 'src', 'components', 'hub', 'DepartmentSolarSystem.tsx'),
     'utf8',
   );
 
   it('offers six departments, each a real link, in the orbit order', () => {
-    // User feedback reordered the rings small → large by planet size: the
-    // smallest planet (labs) takes orbit 1 and the largest (community) takes
-    // orbit 6. PLANETS is spelled out in that order, and each entry links to
-    // the department's route.
     const hrefs = [...hub.matchAll(/href: '([^']+)'/g)].map((m) => m[1]);
     expect(hrefs).toEqual([
       '/labs',
@@ -132,9 +126,7 @@ describe('KIA. departments', () => {
   });
 
   it('lays the departments out on six orbit rings', () => {
-    // The mock supersedes the old three-column grid on the hub: one ring per
-    // department, 36% → 86% of the square stage, each with a comet pulse.
-    const css = readFileSync(path.join(WEB, 'src', 'styles', 'hub.css'), 'utf8');
+    const css = readFileSync(path.join(WEB_ROOT, 'src', 'styles', 'hub.css'), 'utf8');
     for (const orbit of ['1', '2', '3', '4', '5', '6']) {
       expect(css).toMatch(new RegExp(`\\.solar__orbit--${orbit} \\{`));
       expect(css).toMatch(new RegExp(`\\.solar__pulse--${orbit} \\{`));
@@ -152,7 +144,7 @@ describe('KIA. departments', () => {
       faDoors.eventsTitle,
       faDoors.communityTitle,
       faDoors.labsTitle,
-    ]).toEqual(['KIA. Academy', 'KIA. Work', 'KIA. Material', 'KIA. Event', 'KIA. Community', 'KIA. Lab']);
+    ]).toEqual(['Kia Academy', 'Kia Work', 'Kia Material', 'Kia Event', 'Kia Community', 'Kia Lab']);
     expect([
       enDoors.academyTitle,
       enDoors.workTitle,
@@ -160,9 +152,9 @@ describe('KIA. departments', () => {
       enDoors.eventsTitle,
       enDoors.communityTitle,
       enDoors.labsTitle,
-    ]).toEqual(['KIA. Academy', 'KIA. Work', 'KIA. Material', 'KIA. Event', 'KIA. Community', 'KIA. Lab']);
-    expect(faDoors.heading).toBe('دپارتمان‌های KIA.');
-    expect(enDoors.heading).toBe('KIA. departments');
+    ]).toEqual(['Kia Academy', 'Kia Work', 'Kia Material', 'Kia Event', 'Kia Community', 'Kia Lab']);
+    expect(faDoors.heading).toBe('دپارتمان‌های کیا');
+    expect(enDoors.heading).toBe('Kia departments');
   });
 
   it('routes every planet title through the dictionary, never a literal', () => {
@@ -175,40 +167,31 @@ describe('KIA. departments', () => {
       'materialTitle',
       'workTitle',
     ]);
-    // The old department keys must not linger next to the new ones.
     expect(hub).not.toContain('educationTitle');
   });
 
   it('creates the two departments that did not exist', () => {
     for (const slug of ['community', 'labs']) {
-      // Each department lives in its own route group under src/app.
-      const page = path.join(WEB, 'src', 'app', `(${slug})`, slug, 'page.tsx');
+      const page = path.join(WEB_ROOT, 'src', 'app', `(${slug})`, slug, 'page.tsx');
       const src = readFileSync(page, 'utf8');
       expect(src, slug).toContain(`t('${slug}.title')`);
-      // The header tagline (`.sub`) was removed with the per-page header; the
-      // door tile keeps the title and the coming-soon copy.
       expect(src, slug).not.toContain(`t('${slug}.sub')`);
       expect(src, slug).toContain(`t('${slug}.soon')`);
-      // A coming-soon department must not look tappable.
       expect(src, slug).toContain('door--soon');
     }
   });
 });
 
 describe('brand tagline placement', () => {
-  const topBar = readFileSync(path.join(WEB, 'src', 'components', 'layout', 'TopBar.tsx'), 'utf8');
-  const css = readFileSync(path.join(WEB, 'src', 'styles', 'layout.css'), 'utf8');
-  const responsive = readFileSync(path.join(WEB, 'src', 'styles', 'responsive.css'), 'utf8');
+  const topBar = readFileSync(path.join(WEB_ROOT, 'src', 'components', 'layout', 'TopBar.tsx'), 'utf8');
+  const css = readFileSync(path.join(WEB_ROOT, 'src', 'styles', 'layout.css'), 'utf8');
+  const responsive = readFileSync(path.join(WEB_ROOT, 'src', 'styles', 'responsive.css'), 'utf8');
 
   it('sits under the mark + wordmark, inside the brand button', () => {
     expect(topBar).toContain('<span className="logo-lockup">');
-    // UX-27 gave this line a second job: outside a department it is the group's
-    // five pillars, inside one it names the parent («kia.»). Either way it
-    // is the same row under the lockup, and it stays a dictionary lookup.
     expect(topBar).toContain(
-      "<span className=\"brand-tagline\">{dept ? BRAND_WORDMARK : t('common.tagline')}</span>",
+      "<span className=\"brand-tagline\">{dept ? t('common.brand') : t('common.tagline')}</span>",
     );
-    // Lockup first, tagline second: the tagline must follow the wordmark.
     expect(topBar.indexOf('logo-lockup')).toBeLessThan(topBar.indexOf('brand-tagline'));
   });
 
@@ -217,7 +200,6 @@ describe('brand tagline placement', () => {
     expect(rule).not.toBeNull();
     expect(rule?.[0]).toMatch(/flex-direction: column;/);
     expect(rule?.[0]).toMatch(/align-items: flex-start;/);
-    // Cross-axis centring is what the compact rail needs, not justify-content.
     expect(css).toMatch(/panel-nav--compact \.logo \{[^}]*align-items: center;/);
   });
 

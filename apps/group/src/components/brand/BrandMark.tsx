@@ -5,14 +5,14 @@ import { BRAND_MARK_PATHS, BRAND_MARK_VIEWBOX } from './brandMarkPaths';
 /** Native aspect ratio of the Kia mark (viewBox 497.37 × 512). */
 const LOGO_ASPECT = 497.37 / 512;
 
-/** Latin wordmark rendered beside the mark — brand-styled, same in every locale. */
-export const BRAND_WORDMARK = 'KIA.';
+/** Latin wordmark (English canonical). Locale UI uses `t('common.brand')` (Kia / کیا). */
+export const BRAND_WORDMARK = 'Kia';
 
-/** kia. mark — dual-path blue emblem from brand assets. */
+/** Kia mark — dual-path blue emblem from brand assets. */
 export function BrandMark({
   className = 'brand-mark',
   size,
-  title = 'KIA.',
+  title = 'Kia',
 }: {
   className?: string;
   /** Pixel height; width follows the mark’s native aspect ratio. Omit to size via CSS. */

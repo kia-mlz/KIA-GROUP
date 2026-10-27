@@ -15,7 +15,7 @@ import { DARK_INK, contrastRatio, luminance, readableInk } from './contrast';
  * departments, and measured ink choice — the same invariants the group app's
  * stylesheet suite checks on the CSS side.
  */
-describe('KIA. brand tokens', () => {
+describe('Kia brand tokens', () => {
   it('pins the seven published brand colours verbatim', () => {
     expect(GROUP_COLOR).toBe('#FFC864');
     expect(Object.fromEntries(BRAND_TOKENS.map((t) => [t.slug, t.color]))).toEqual({
@@ -28,7 +28,7 @@ describe('KIA. brand tokens', () => {
     });
   });
 
-  it('reserves the parent gold for KIA. alone', () => {
+  it('reserves the parent gold for Kia alone', () => {
     for (const token of BRAND_TOKENS) {
       expect(token.color.toLowerCase(), token.slug).not.toBe(GROUP_COLOR.toLowerCase());
     }
@@ -54,7 +54,7 @@ describe('KIA. brand tokens', () => {
     for (const token of BRAND_TOKENS) {
       // One name for both locales: departments are named in English even in
       // the Persian UI, so no Persian spelling is stored anywhere.
-      expect(token.name).toMatch(/^KIA\. /);
+      expect(token.name).toMatch(/^Kia /);
       expect(token.cssVariable).toBe(`--dept-${token.slug}`);
     }
   });

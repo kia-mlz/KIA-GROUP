@@ -1,4 +1,4 @@
-# Pre-Launch Checklist — Kia Academy
+# Pre-Launch Checklist — Kia
 
 Order matters: infrastructure → data → money → content → go/no-go.
 Security deep-dive lives in [`SECURITY_CHECKLIST.md`](./SECURITY_CHECKLIST.md).

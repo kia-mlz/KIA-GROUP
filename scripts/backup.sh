@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Kia Academy — production backup
+# Kia — production backup
 #
 #   ./scripts/backup.sh [backup_dir]     (default: ./backups)
 #

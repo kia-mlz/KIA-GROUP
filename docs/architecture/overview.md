@@ -1,4 +1,4 @@
-# kia. — Architecture Overview
+# Kia — Architecture Overview
 
 kia. is a **modular monolith in a pnpm monorepo**: one deployable web app,
 one API, one database — but internally organised as the parent platform plus six
@@ -34,8 +34,8 @@ scripts/         tooling (codemods, catalog generation)
 | Folder | Domain | Contents |
 | --- | --- | --- |
 | `group/` | **kia. platform** | `auth` (OTP + email + 2FA), `admin`, `site-settings`, `media`, `email`, `sms`, `contact`, `health`, `support/` (tickets · messages · todos), `commerce/` (cart · payments · stripe), `search` |
-| `academy/` | **KIA Academy** | `courses`, `course-exams`, `assessments`, `personality`, `readiness`, `roadmaps`, `test-banks`, `bootcamp`, `progress` |
-| `events/` | **KIA Events** | `competitions`, `challenges` |
+| `academy/` | **Kia Academy** | `courses`, `course-exams`, `assessments`, `personality`, `readiness`, `roadmaps`, `test-banks`, `bootcamp`, `progress` |
+| `events/` | **Kia Event** | `competitions`, `challenges` |
 | `common/` | cross-domain platform infra | guards, rate limiting, **domain events**, utils |
 | `prisma/`, `config/` | infrastructure | Prisma client + env schema |
 

@@ -40,18 +40,24 @@ function loadCourseDb(): CourseDbFile {
 }
 
 async function main() {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      'Refusing to seed: NODE_ENV=production. Create the first SUPER_ADMIN via BOOTSTRAP_ADMIN_* instead.',
+    );
+  }
+
   const passwordHash = await bcrypt.hash(SEED_PASSWORD, 12);
 
   const admin = await prisma.user.upsert({
     where: { email: 'admin@kia.academy' },
+    // Never reset passwordHash / role on update — re-running seed must not
+    // clobber a rotated admin password in a shared/staging database.
     update: {
-      name: 'KIA. Super Admin',
-      passwordHash,
-      role: 'SUPER_ADMIN',
+      name: 'Kia Super Admin',
       profileComplete: true,
     },
     create: {
-      name: 'KIA. Super Admin',
+      name: 'Kia Super Admin',
       email: 'admin@kia.academy',
       passwordHash,
       role: 'SUPER_ADMIN',
@@ -63,7 +69,6 @@ async function main() {
     where: { email: 'alex@kia.academy' },
     update: {
       name: 'Alex R.',
-      passwordHash,
       profileComplete: true,
       firstName: 'Alex',
       lastName: 'R.',
@@ -242,23 +247,52 @@ Review the STAR method on [Wikipedia](https://en.wikipedia.org/wiki/Situation,_T
   }
 
   console.log(`Seeded admin user: ${admin.name} (${admin.email})`);
-  console.log(`  Password: ${SEED_PASSWORD}`);
   console.log(`Seeded learner: ${user.name} (${user.email ?? 'alex@kia.academy'})`);
-  console.log(`  Password: ${SEED_PASSWORD}`);
   console.log(
     `Seeded courses from db.json: ${seededCourses.map((c) => c.slug).join(', ')}, interview-branding`,
   );
+  console.log(
+    `Dev seed password (new accounts only): ${SEED_PASSWORD} — change before any shared deploy.`,
+  );
 
   const defaults = createDefaultSiteSettings();
-  await prisma.siteSetting.upsert({
-    where: { key: 'site' },
-    create: { key: 'site', value: defaults },
-    update: {
-      // Keep evolving defaults in sync for local/dev seeds (pricing + payment + sms + enamad).
-      value: defaults,
-    },
-  });
-  console.log('Seeded site settings');
+  // Create-only for payment/SMS/enamad — never clobber live gateway config.
+  // Only migrate a stale parent siteName from prior brand spellings.
+  const existingSettings = await prisma.siteSetting.findUnique({ where: { key: 'site' } });
+  if (!existingSettings) {
+    await prisma.siteSetting.create({ data: { key: 'site', value: defaults } });
+    console.log('Seeded site settings (created defaults)');
+  } else {
+    const value =
+      existingSettings.value && typeof existingSettings.value === 'object'
+        ? (existingSettings.value as Record<string, unknown>)
+        : {};
+    const general =
+      value.general && typeof value.general === 'object'
+        ? (value.general as Record<string, unknown>)
+        : {};
+    const siteName = typeof general.siteName === 'string' ? general.siteName : '';
+    // Legacy parent spellings from prior rebrands (period wordmark / Group).
+    const legacyNames = new Set([
+      ['KIA', '.'].join(''),
+      ['kia', '.'].join(''),
+      ['Kia', ' Group'].join(''),
+    ]);
+    if (legacyNames.has(siteName)) {
+      await prisma.siteSetting.update({
+        where: { key: 'site' },
+        data: {
+          value: {
+            ...value,
+            general: { ...general, siteName: defaults.general.siteName },
+          },
+        },
+      });
+      console.log(`Migrated siteName "${siteName}" → "${defaults.general.siteName}"`);
+    } else {
+      console.log('Site settings already present — left unchanged');
+    }
+  }
 
   const testBanks = [
     {

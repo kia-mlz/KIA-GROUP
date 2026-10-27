@@ -1,4 +1,4 @@
-# kia. — Database Architecture
+# Kia — Database Architecture
 
 One PostgreSQL database, one identity, six department domains. The schema lives
 in [`apps/api/prisma/schema.prisma`](../../apps/api/prisma/schema.prisma) and

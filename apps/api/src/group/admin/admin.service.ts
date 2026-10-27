@@ -111,7 +111,7 @@ export class AdminService {
     return this.statsService.getStats();
   }
 
-  /* --- KIA Academy ---------------------------------------------------------- */
+  /* --- Kia Academy ---------------------------------------------------------- */
 
   listCourses(): Promise<AdminCourse[]> {
     return this.academyService.listCourses();

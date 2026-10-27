@@ -1,6 +1,6 @@
 # Learner dashboard
 
-The learner panel is the authenticated home for Kia Academy students.
+The learner panel is the authenticated home for Kia students.
 
 ## Overview (`/dashboard`)
 

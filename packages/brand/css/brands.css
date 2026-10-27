@@ -1,11 +1,11 @@
 /* =============================================================================
-   kia. brand tokens — CSS carrier.
+   Kia brand tokens — CSS carrier.
    Source of truth: packages/brand/src/tokens.ts. These custom properties are
    consumed by the group app's styles/base.css (imported first, so base.css can
    build ramps on top without redeclaring a brand value).
 
    Two tiers that must never be mixed:
-     1. `--group-gold` is the parent company, kia.. RESERVED: no
+     1. `--group-gold` is the parent company, Kia. RESERVED: no
         department may use #ffc864 for its tile or its mark, so the mother
         brand is never mistaken for one of its own departments.
      2. `--dept-*` is one hue per department, and a department's tile *and* its

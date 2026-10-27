@@ -151,7 +151,7 @@ const DEMO_LEARNER: AuthUser = {
 
 const DEMO_ADMIN: AuthUser = {
   id: 'demo-admin',
-  name: 'KIA. Super Admin',
+  name: 'Kia Super Admin',
   email: 'admin@kia.academy',
   phone: null,
   role: 'SUPER_ADMIN',
@@ -194,7 +194,7 @@ let demoCompetitions: CompetitionSummary[] = [
     id: 'demo-comp-1',
     slug: 'spring-code-sprint',
     title: 'Spring Code Sprint',
-    description: 'A timed algorithm sprint for KIA. learners.',
+    description: 'A timed algorithm sprint for Kia learners.',
     startsAt: DEMO_CREATED_AT,
     endsAt: '2026-12-31T00:00:00.000Z',
     active: true,
@@ -342,7 +342,7 @@ let demoAdminMessages: AdminLearnerMessage[] = [
     userId: DEMO_LEARNER.id,
     userName: DEMO_LEARNER.name,
     userEmail: DEMO_LEARNER.email,
-    subject: 'Welcome to KIA.',
+    subject: 'Welcome to Kia',
     body: 'We are glad to have you on board. Reach out any time you need help.',
     readAt: null,
     createdBy: DEMO_ADMIN.email,
@@ -354,7 +354,7 @@ let demoAdminCompetitions: AdminCompetition[] = [
     id: 'demo-comp-1',
     slug: 'spring-code-sprint',
     title: 'Spring Code Sprint',
-    description: 'A timed algorithm sprint for KIA. learners.',
+    description: 'A timed algorithm sprint for Kia learners.',
     startsAt: '2026-03-10T08:00:00.000Z',
     endsAt: '2026-03-12T20:00:00.000Z',
     active: true,
@@ -812,7 +812,7 @@ function demoCartLines(items: CartItemResponse[]) {
 
 function buildDemoCart(state: DemoPersistedState): CartResponse {
   const settings = readDemoSettings();
-  const siteName = settings.general.siteName || 'KIA.';
+  const siteName = settings.general.siteName || 'Kia';
   const trackMap = new Map(settings.tracks.map((t) => [t.key, t.name]));
   const items: CartItemResponse[] = [];
   for (const slug of state.cartCourseSlugs) {
@@ -1224,7 +1224,7 @@ export const demoApi = {
     // Static placeholder QR — the demo never stores a real secret.
     return delay({
       secret: 'DEMO234567DEMO234567DEMO234567DE',
-      otpauthUrl: 'otpauth://totp/KIA.%20Academy:demo%40kia.academy?secret=DEMO&issuer=KIA.%20Academy',
+      otpauthUrl: 'otpauth://totp/Kia%20Academy:demo%40kia.academy?secret=DEMO&issuer=Kia%20Academy',
       qrDataUrl:
         'data:image/svg+xml;utf8,' +
         encodeURIComponent(

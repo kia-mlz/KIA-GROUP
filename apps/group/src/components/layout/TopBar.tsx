@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { ChevronDown, LayoutGrid, LogOut, Menu, Moon, MoveHorizontal, Shield, Sun, Trophy, UserRound, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { isStaffRole } from '@kia./shared';
-import { BRAND_WORDMARK, BrandMark } from '@/components/brand/BrandMark';
+import { BrandMark } from '@/components/brand/BrandMark';
 import { departmentForPathname } from '@/components/brand/departments';
 import { CartBadge } from '@/components/cart/CartBadge';
 import { LanguageSelector } from '@/components/layout/LanguageSelector';
@@ -140,16 +140,16 @@ export function TopBar() {
           type="button"
           className={`logo${dept ? ' logo--dept' : ''}`}
           onClick={handleLogoClick}
-          aria-label={dept ? t(dept.titleKey) : BRAND_WORDMARK}
+          aria-label={dept ? t(dept.titleKey) : t('common.brand')}
         >
           <span className="logo-lockup">
             <BrandMark className="logo-mark" size={26} title="" />
-            <span className="logo-text">{dept ? t(dept.titleKey) : BRAND_WORDMARK}</span>
+            <span className="logo-text">{dept ? t(dept.titleKey) : t('common.brand')}</span>
           </span>
           {/* The supporting line swaps roles rather than disappearing: outside a
-              department it is the group's five pillars, inside one it is the
+              department it is the five pillars, inside one it is the
               parent name, so a department rail still says who it belongs to. */}
-          <span className="brand-tagline">{dept ? BRAND_WORDMARK : t('common.tagline')}</span>
+          <span className="brand-tagline">{dept ? t('common.brand') : t('common.tagline')}</span>
           {dept ? <span className="logo-dept-bar" aria-hidden="true" /> : null}
         </button>
 

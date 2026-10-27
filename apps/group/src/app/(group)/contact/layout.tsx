@@ -3,7 +3,7 @@ import { publicPageMetadata } from '@/lib/seo';
 
 export const metadata: Metadata = publicPageMetadata({
   title: 'تماس با ما',
-  description: 'ارتباط با پشتیبانی KIA. برای سوالات دوره، همکاری یا مشکلات فنی.',
+  description: 'ارتباط با پشتیبانی Kia برای سوالات دوره، همکاری یا مشکلات فنی.',
   path: '/contact',
 });
 

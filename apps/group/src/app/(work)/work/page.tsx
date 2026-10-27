@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
 /**
- * KIA Work department alias (spec routing: `/work`).
+ * Kia Work department alias (spec routing: `/work`).
  *
  * The Work department entry lives at `/freelance`; this alias keeps the
  * department-rooted URL from the architecture spec working without

@@ -1,4 +1,4 @@
-# Security Checklist — Kia Academy
+# Security Checklist — Kia
 
 Living checklist for reviewers & operators. Tick items before every production release.
 See also: [`SECURITY.md`](../SECURITY.md) (reporting), [`PRE_LAUNCH_CHECKLIST.md`](./PRE_LAUNCH_CHECKLIST.md).

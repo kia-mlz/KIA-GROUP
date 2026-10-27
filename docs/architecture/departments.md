@@ -1,4 +1,4 @@
-# kia. — Departments
+# Kia — Departments
 
 Six departments, one platform identity. The canonical vocabulary (slugs, roles,
 colours) lives in `@kia./brand` (colours) and `@kia./permissions`
@@ -6,12 +6,12 @@ colours) lives in `@kia./brand` (colours) and `@kia./permissions`
 
 | Department | Colour | API domain | Web routes | Status |
 | --- | --- | --- | --- | --- |
-| **KIA Academy** | `#6464FF` | `kia./kia-academy/` | `/education`, `/assessment`, `/readiness`, `/roadmap`, `/tracks`, `/courses`, `/learn`, `/bootcamp` (alias `/academy`) | Live — the learner journey end-to-end |
-| **KIA Work** | `#6492FF` | — (future `apps/api/src/work/`) | `/freelance` (alias `/work`) | Route + hub presence; domain module TODO |
-| **KIA Material** | `#148165` | — | `/material` (Material Studio feature) | Live front-end studio (client-side); backend domain TODO |
-| **KIA Labs** | `#28C793` | — | `/labs` | Coming-soon page + hub |
-| **KIA Events** | `#E32B1B` | `kia./kia-event/` | `/events` | Live — competitions & challenges |
-| **KIA Community** | `#FF7344` | — | `/community` | Coming-soon page + hub |
+| **Kia Academy** | `#6464FF` | `kia./kia-academy/` | `/education`, `/assessment`, `/readiness`, `/roadmap`, `/tracks`, `/courses`, `/learn`, `/bootcamp` (alias `/academy`) | Live — the learner journey end-to-end |
+| **Kia Work** | `#6492FF` | — (future `apps/api/src/work/`) | `/freelance` (alias `/work`) | Route + hub presence; domain module TODO |
+| **Kia Material** | `#148165` | — | `/material` (Material Studio feature) | Live front-end studio (client-side); backend domain TODO |
+| **Kia Lab** | `#28C793` | — | `/labs` | Coming-soon page + hub |
+| **Kia Event** | `#E32B1B` | `kia./kia-event/` | `/events` | Live — competitions & challenges |
+| **Kia Community** | `#FF7344` | — | `/community` | Coming-soon page + hub |
 
 ## Department isolation
 

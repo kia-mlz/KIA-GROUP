@@ -20,7 +20,7 @@ import type { AdminRequestMeta } from './admin-types';
 import { AdminAuditService } from './audit.service';
 
 /**
- * KIA Academy department — courses, lessons and lesson media.
+ * Kia Academy department — courses, lessons and lesson media.
  * Moved verbatim out of the former god-service; behaviour is unchanged.
  */
 @Injectable()

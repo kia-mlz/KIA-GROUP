@@ -1,6 +1,6 @@
-# Kia Academy — Design System (MASTER)
+# Kia — Design System (MASTER)
 
-Global source of truth for the کیا آکادمی UI. Page-specific deviations live in
+Global source of truth for the کیا UI. Page-specific deviations live in
 `docs/design-system/pages/<page>.md` and override this file. If no page file exists, this
 file applies exclusively.
 
@@ -11,7 +11,7 @@ stylesheet consumes tokens and must never hard-code a hex value.
 
 ## 1. Product concept
 
-کیا آکادمی is a Persian-first (RTL) adaptive learning platform for Iranian learners who want
+کیا is a Persian-first (RTL) adaptive learning platform for Iranian learners who want
 to become employable developers. Two front doors:
 
 | Door | Audience | Emotional job |
@@ -63,7 +63,7 @@ Four brand seeds, each expanded to a ramp so we always have an accessible step a
 
 | Seed | Hex | Role |
 | --- | --- | --- |
-| Periwinkle | `#6464FF` | Brand identity, agency, primary action, focus (= KIA Academy) |
+| Periwinkle | `#6464FF` | Brand identity, agency, primary action, focus (= Kia) |
 | Mint | `#C4EED9` | Earned progress, success, completion |
 | Amber | `#FFC864` | Value, reward, premium, price, warning (= kia., reserved) |
 | Ink | `#0E1626` | Foundation, dark surfaces, all text |
@@ -78,12 +78,12 @@ consumed as CSS custom properties. Never hard-code these hexes in a component.
 | Token | Brand | Hex |
 | --- | --- | --- |
 | `--group-gold` | kia. (parent — reserved, no department may use it) | `#FFC864` |
-| `--dept-academy` | KIA Academy | `#6464FF` |
-| `--dept-work` | KIA Work | `#6492FF` |
-| `--dept-material` | KIA Material | `#148165` |
-| `--dept-labs` | KIA Labs | `#28C793` |
-| `--dept-events` | KIA Events | `#E32B1B` |
-| `--dept-community` | KIA Community | `#FF7344` |
+| `--dept-academy` | Kia | `#6464FF` |
+| `--dept-work` | Kia Work | `#6492FF` |
+| `--dept-material` | Kia Material | `#148165` |
+| `--dept-labs` | Kia Lab | `#28C793` |
+| `--dept-events` | Kia Event | `#E32B1B` |
+| `--dept-community` | Kia Community | `#FF7344` |
 
 Text on a department fill is chosen by measured WCAG contrast
 (`readableInk` in `@kia./brand`), not by eye — see

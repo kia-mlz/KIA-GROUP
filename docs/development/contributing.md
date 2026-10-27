@@ -1,4 +1,4 @@
-# kia. — Contributing
+# Kia — Contributing
 
 ## Ground rules
 

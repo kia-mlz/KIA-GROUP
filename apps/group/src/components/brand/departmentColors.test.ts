@@ -49,13 +49,13 @@ const token = (name: string) => {
 
 const deptColour = (slug: string) => token(`dept-${slug}`);
 
-describe('KIA. parent colour', () => {
-  it('reserves the parent gold for KIA.', () => {
+describe('Kia parent colour', () => {
+  it('reserves the parent gold for Kia alone', () => {
     expect(token('group-gold')).toBe(GROUP_COLOR.toLowerCase());
   });
 
   it('paints every parent-brand emblem in that gold', () => {
-    // The KIA Group emblem: rail, footer, guest landing, auth pages, admin.
+    // The Kia emblem: rail, footer, guest landing, auth pages, admin.
     for (const [file, selector] of [
       ['layout.css', '.logo-mark'],
       ['landing.css', '.landing-brand-mark'],

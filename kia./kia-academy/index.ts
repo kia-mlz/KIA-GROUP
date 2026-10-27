@@ -1,4 +1,4 @@
-// @kia./kia-academy — KIA Academy department entry point.
+// @kia./kia-academy — Kia department entry point.
 // apps/api/src/app.module.ts imports these modules; nothing outside this
 // package may import anything else from it (cross-department imports are
 // lint-banned).

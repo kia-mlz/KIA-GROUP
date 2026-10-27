@@ -104,9 +104,13 @@ EOF
 fi
 
 if [ "${SEED_DATABASE:-false}" = "true" ]; then
+  if [ "${NODE_ENV:-}" = "production" ]; then
+    echo "[entrypoint] REFUSING SEED_DATABASE=true in production. Use BOOTSTRAP_ADMIN_* for the first admin." >&2
+    exit 1
+  fi
   echo "[entrypoint] Seeding database (SEED_DATABASE=true)…"
   "$PRISMA_BIN" db seed
 fi
 
-echo "[entrypoint] Starting Kia Academy API on port ${PORT:-3001}…"
+echo "[entrypoint] Starting Kia API on port ${PORT:-3001}…"
 exec node dist/main.js

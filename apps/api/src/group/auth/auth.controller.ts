@@ -188,24 +188,35 @@ export class AuthController {
     return this.authService.getLearnerState(user.id);
   }
 
-  private setRefreshCookie(res: Response, refreshToken: string): void {
-    const refreshExpiresIn = this.configService.get<string>('JWT_REFRESH_EXPIRES_IN', '7d');
-    const maxAge = parseExpiresInSeconds(refreshExpiresIn) * 1000;
+  private refreshCookieOptions(): {
+    httpOnly: boolean;
+    secure: boolean;
+    sameSite: 'none' | 'strict' | 'lax';
+    path: string;
+  } {
     const isProduction = this.configService.get<string>('NODE_ENV') === 'production';
     const corsOrigin = this.configService.get<string>('CORS_ORIGIN', 'http://localhost:3000');
     const crossSite = /github\.io/i.test(corsOrigin) || process.env.COOKIE_SAMESITE === 'none';
-
-    res.cookie('refreshToken', refreshToken, {
+    return {
       httpOnly: true,
       secure: isProduction || crossSite,
       sameSite: crossSite ? 'none' : isProduction ? 'strict' : 'lax',
-      maxAge,
       path: '/',
+    };
+  }
+
+  private setRefreshCookie(res: Response, refreshToken: string): void {
+    const refreshExpiresIn = this.configService.get<string>('JWT_REFRESH_EXPIRES_IN', '7d');
+    const maxAge = parseExpiresInSeconds(refreshExpiresIn) * 1000;
+    res.cookie('refreshToken', refreshToken, {
+      ...this.refreshCookieOptions(),
+      maxAge,
     });
   }
 
   private clearRefreshCookie(res: Response): void {
-    res.clearCookie('refreshToken', { path: '/' });
+    // clearCookie must mirror set options or browsers keep the refresh cookie.
+    res.clearCookie('refreshToken', this.refreshCookieOptions());
   }
 
   private stripRefreshToken(result: AuthResponse & { refreshToken: string }): AuthResponse {

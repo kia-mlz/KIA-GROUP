@@ -1,21 +1,21 @@
 /**
- * kia. brand tokens — the single source of truth for the seven brand
+ * Kia brand tokens — the single source of truth for the seven brand
  * colours. Every department reads its identity from here: the CSS custom
  * properties in `css/brands.css` are generated from these values, and the
  * group app's `departmentColors` suite cross-checks the stylesheet against
  * this module so the two can never drift apart.
  *
- * The hex values are the published brand values from the kia. identity
+ * The hex values are the published brand values from the Kia identity
  * (LOGO-1024). They are the specification — not a palette tuned for one UI —
  * so they are pinned verbatim:
  *
- *   KIA.      #FFC864   parent company — reserved, no department may use it
- *   KIA. Academy    #6464FF
- *   KIA. Work       #6492FF
- *   KIA. Material   #148165
- *   KIA. Lab       #28C793
- *   KIA. Event     #E32B1B
- *   KIA. Community  #FF7344
+ *   Kia      #FFC864   parent company — reserved, no department may use it
+ *   Kia Academy    #6464FF
+ *   Kia Work       #6492FF
+ *   Kia Material   #148165
+ *   Kia Lab       #28C793
+ *   Kia Event     #E32B1B
+ *   Kia Community  #FF7344
  *
  * `readableInk` (contrast.ts) chooses the on-fill ink by measurement, so a
  * recolour can never quietly leave unreadable text on a department tile.
@@ -58,42 +58,42 @@ export interface BrandToken {
 export const BRAND_TOKENS: readonly BrandToken[] = [
   {
     slug: 'academy',
-    name: 'KIA. Academy',
+    name: 'Kia Academy',
     color: '#6464FF',
     cssVariable: '--dept-academy',
     scope: 'Education, learning & skill development',
   },
   {
     slug: 'work',
-    name: 'KIA. Work',
+    name: 'Kia Work',
     color: '#6492FF',
     cssVariable: '--dept-work',
     scope: 'Jobs, freelancing, hiring & projects',
   },
   {
     slug: 'material',
-    name: 'KIA. Material',
+    name: 'Kia Material',
     color: '#148165',
     cssVariable: '--dept-material',
     scope: 'Materials, resources, tools & style',
   },
   {
     slug: 'labs',
-    name: 'KIA. Lab',
+    name: 'Kia Lab',
     color: '#28C793',
     cssVariable: '--dept-labs',
     scope: 'Technology, innovation, research & development',
   },
   {
     slug: 'events',
-    name: 'KIA. Event',
+    name: 'Kia Event',
     color: '#E32B1B',
     cssVariable: '--dept-events',
     scope: 'Competitions, events, webinars, workshops & bootcamps',
   },
   {
     slug: 'community',
-    name: 'KIA. Community',
+    name: 'Kia Community',
     color: '#FF7344',
     cssVariable: '--dept-community',
     scope: 'Community of users, professionals, students, teachers & employers',

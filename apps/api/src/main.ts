@@ -62,7 +62,7 @@ async function bootstrap() {
     .map((origin) => origin.trim())
     .filter(Boolean);
   if (isProductionEnv() && corsOrigins.some((o) => /localhost|127\.0\.0\.1/i.test(o))) {
-    console.warn(
+    throw new Error(
       '[security] CORS_ORIGIN still points at localhost in production — set it to your public web origin.',
     );
   }
@@ -81,7 +81,7 @@ async function bootstrap() {
   // Ensure SIGTERM/SIGINT close in-flight requests and DB connections cleanly.
   app.enableShutdownHooks();
 
-  new Logger('Bootstrap').log(`KIA. API running on http://localhost:${port}/api`);
+  new Logger('Bootstrap').log(`Kia API running on http://localhost:${port}/api`);
 }
 
 bootstrap();

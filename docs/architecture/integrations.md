@@ -1,4 +1,4 @@
-# kia. — Cross-Department Integrations
+# Kia — Cross-Department Integrations
 
 Departments cooperate without importing each other. Three sanctioned channels:
 

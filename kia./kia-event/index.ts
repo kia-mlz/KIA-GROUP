@@ -1,4 +1,4 @@
-// @kia./kia-event — KIA Event department entry point.
+// @kia./kia-event — Kia Event department entry point.
 // apps/api/src/app.module.ts imports these modules; nothing outside this
 // package may import anything else from it (cross-department imports are
 // lint-banned).

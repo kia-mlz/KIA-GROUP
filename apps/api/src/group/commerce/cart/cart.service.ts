@@ -117,7 +117,7 @@ export class CartService {
   private async toResponse(cartId: string, userId: string): Promise<CartResponse> {
     const settings = await this.siteSettings.get();
     const payment = normalizePaymentSettings(settings.payment);
-    const siteName = settings.general.siteName || 'KIA.';
+    const siteName = settings.general.siteName || 'Kia';
 
     const cart = await this.prisma.cart.findUniqueOrThrow({
       where: { id: cartId },

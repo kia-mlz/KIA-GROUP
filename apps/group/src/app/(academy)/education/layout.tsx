@@ -4,7 +4,7 @@ import { publicPageMetadata } from '@/lib/seo';
 export const metadata: Metadata = publicPageMetadata({
   title: 'شروع یادگیری',
   description:
-    'ثبت‌نام با شماره موبایل ایرانی در KIA. و شروع مسیر ارزیابی و یادگیری شخصی‌سازی‌شده.',
+    'ثبت‌نام با شماره موبایل ایرانی در Kia و شروع مسیر ارزیابی و یادگیری شخصی‌سازی‌شده.',
   path: '/education',
 });
 

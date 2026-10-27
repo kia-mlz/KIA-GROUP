@@ -26,7 +26,7 @@ We aim to acknowledge reports within **7 days** and to share a remediation timel
 
 ## Production hardening checklist
 
-Operators deploying Kia Academy should:
+Operators deploying Kia should:
 
 - Set strong unique `JWT_SECRET` and `JWT_REFRESH_SECRET` (min 32 chars; never example placeholders)
 - Set `NODE_ENV=production`
