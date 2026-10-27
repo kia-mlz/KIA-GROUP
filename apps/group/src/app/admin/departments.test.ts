@@ -154,7 +154,11 @@ describe('departments hub gating for a restricted moderator', () => {
 
   it('offers Academy its courses module when only courses is open', () => {
     const entryPoints = departmentEntryPoints('academy', onlyCourses);
-    expect(entryPoints.map((entry) => entry.href)).toEqual(['/admin/academy/courses']);
+    // course-exams shares the `courses` access section with the catalog.
+    expect(entryPoints.map((entry) => entry.href)).toEqual([
+      '/admin/academy/courses',
+      '/admin/academy/course-exams',
+    ]);
   });
 
   it('renders no Events entry points to a moderator without those sections', () => {
