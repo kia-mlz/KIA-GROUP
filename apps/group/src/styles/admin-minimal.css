@@ -1,23 +1,27 @@
-/* Kia Admin — minimal professional shell.
-   Quiet surfaces, hairline rules, department accent only as a marker. */
+/* Kia Admin — bright professional shell.
+   High-contrast ink on cool-white canvas; department color is a marker only. */
 
 .am-shell {
   /* Force a readable light admin surface regardless of site data-theme. */
   color-scheme: light;
 
-  --am-bg: #f4f4f1;
+  --am-bg: #f8fafc;
   --am-surface: #ffffff;
-  --am-ink: #141416;
-  --am-muted: #5c5c58;
-  --am-line: #dddcd6;
-  --am-hover: #ecece7;
-  --am-accent: #1a1a1a;
-  --am-warn: #9a3412;
+  --am-ink: #0f172a;
+  --am-muted: #475569;
+  --am-line: #e2e8f0;
+  --am-hover: #f1f5f9;
+  --am-accent: #0f172a;
+  --am-accent-soft: #1d4ed8;
+  --am-warn: #c2410c;
   --am-ok: #0f766e;
   --am-danger: #b91c1c;
-  --am-radius: 0.4rem;
-  --am-side: 15.5rem;
-  --am-focus: 0 0 0 2px #fff, 0 0 0 4px color-mix(in srgb, var(--am-accent) 55%, transparent);
+  --am-radius: 0.55rem;
+  --am-side: 16rem;
+  --am-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 20px rgba(15, 23, 42, 0.03);
+  --am-focus: 0 0 0 2px #fff, 0 0 0 4px color-mix(in srgb, var(--am-accent-soft) 45%, transparent);
+  --am-font-size: 0.925rem;
+  --am-leading: 1.65;
 
   /* Bridge legacy admin page tokens used by CRUD screens */
   --cr-blue: var(--am-accent);
@@ -40,14 +44,14 @@
    */
   --apro-bg: var(--am-bg);
   --apro-surface: var(--am-surface);
-  --apro-surface-2: #f7f7f4;
-  --apro-surface-3: #efefe9;
-  --apro-glass: rgba(255, 255, 255, 0.92);
-  --apro-overlay: rgba(20, 20, 18, 0.45);
-  --apro-text: #141416;
-  --apro-text-secondary: #3f3f3c;
-  --apro-text-muted: #5c5c58;
-  --apro-text-faint: #6f6f6a;
+  --apro-surface-2: #f8fafc;
+  --apro-surface-3: #f1f5f9;
+  --apro-glass: rgba(255, 255, 255, 0.94);
+  --apro-overlay: rgba(15, 23, 42, 0.4);
+  --apro-text: #0f172a;
+  --apro-text-secondary: #1e293b;
+  --apro-text-muted: #475569;
+  --apro-text-faint: #64748b;
   --apro-accent: #1d4ed8;
   --apro-accent-hover: #1e40af;
   --apro-accent-active: #1e3a8a;
@@ -57,42 +61,42 @@
   --apro-success: #0f766e;
   --apro-success-dim: rgba(15, 118, 110, 0.1);
   --apro-success-line: rgba(15, 118, 110, 0.35);
-  --apro-warning: #9a3412;
-  --apro-warning-dim: rgba(154, 52, 18, 0.1);
-  --apro-warning-line: rgba(154, 52, 18, 0.35);
+  --apro-warning: #c2410c;
+  --apro-warning-dim: rgba(194, 65, 12, 0.1);
+  --apro-warning-line: rgba(194, 65, 12, 0.35);
   --apro-danger: #b91c1c;
   --apro-danger-dim: rgba(185, 28, 28, 0.1);
   --apro-danger-line: rgba(185, 28, 28, 0.35);
   --apro-info: #1d4ed8;
   --apro-info-dim: rgba(29, 78, 216, 0.08);
   --apro-info-line: rgba(29, 78, 216, 0.3);
-  --apro-money: #9a3412;
-  --apro-money-dim: rgba(154, 52, 18, 0.08);
-  --apro-money-line: rgba(154, 52, 18, 0.3);
+  --apro-money: #c2410c;
+  --apro-money-dim: rgba(194, 65, 12, 0.08);
+  --apro-money-line: rgba(194, 65, 12, 0.3);
   --apro-line: var(--am-line);
-  --apro-line-strong: #c9c8c1;
-  --apro-line-faint: #ebebe6;
+  --apro-line-strong: #cbd5e1;
+  --apro-line-faint: #f1f5f9;
 
   --admin-bg: var(--am-bg);
   --admin-surface: var(--am-surface);
-  --admin-surface-2: #f7f7f4;
+  --admin-surface-2: #f8fafc;
   --admin-accent: #1d4ed8;
   --admin-accent-soft: #1d4ed8;
   --admin-accent-dark: #1e3a8a;
-  --admin-value: #9a3412;
-  --admin-text: #141416;
-  --admin-muted: #5c5c58;
-  --admin-faint: #6f6f6a;
+  --admin-value: #c2410c;
+  --admin-text: #0f172a;
+  --admin-muted: #475569;
+  --admin-faint: #64748b;
   --admin-line: var(--am-line);
-  --admin-line-strong: #c9c8c1;
+  --admin-line-strong: #cbd5e1;
   --admin-danger: #b91c1c;
   --admin-success: #0f766e;
   --admin-info: #1d4ed8;
-  --admin-warning: #9a3412;
-  --admin-glass: rgba(255, 255, 255, 0.92);
+  --admin-warning: #c2410c;
+  --admin-glass: rgba(255, 255, 255, 0.94);
   --admin-focus-ring: var(--am-focus);
-  --admin-shadow: none;
-  --admin-shadow-lg: 0 12px 28px rgba(20, 20, 18, 0.08);
+  --admin-shadow: var(--am-shadow);
+  --admin-shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.08);
 
   /* Site chrome tokens that some shared widgets still read */
   --text: var(--am-ink);
@@ -108,6 +112,10 @@
   color: var(--am-ink);
   background: var(--am-bg);
   direction: rtl;
+  font-size: var(--am-font-size);
+  line-height: var(--am-leading);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 .am-shell.is-collapsed {
@@ -121,7 +129,8 @@
 .am-shell.is-workspace--community { --am-marker: var(--dept-community); }
 .am-shell.is-workspace--labs { --am-marker: var(--dept-labs); }
 .am-shell.is-workspace {
-  --am-accent: var(--am-marker, #1a1a1a);
+  /* Department hue is a marker only — keep primary chrome ink dark for contrast. */
+  --am-marker-soft: color-mix(in srgb, var(--am-marker, #1d4ed8) 14%, #fff);
 }
 
 .am-shell :is(button, a, input, select, textarea):focus-visible {
@@ -157,11 +166,12 @@
   height: 100dvh;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  padding: 1rem 0.75rem 0.75rem;
-  background: var(--am-surface);
+  gap: 0.3rem;
+  padding: 1.15rem 0.85rem 0.85rem;
+  background: #ffffff;
   border-inline-end: 1px solid var(--am-line);
   overflow: hidden auto;
+  box-shadow: 4px 0 24px rgba(15, 23, 42, 0.02);
 }
 
 /* Quiet bridge for legacy header widgets (notifications) */
@@ -203,27 +213,30 @@
 .am-brand__mark {
   display: grid;
   place-items: center;
-  width: 1.85rem;
-  height: 1.85rem;
+  width: 2rem;
+  height: 2rem;
   flex: 0 0 auto;
   color: #fff;
-  border-radius: 0.35rem;
-  background: var(--am-accent);
+  border-radius: 0.45rem;
+  background: var(--am-marker, var(--am-accent-soft));
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--am-marker, var(--am-accent-soft)) 28%, transparent);
 }
 .am-brand__copy {
   display: grid;
   min-width: 0;
-  gap: 0.05rem;
+  gap: 0.08rem;
 }
 .am-brand__copy strong {
-  font-size: 0.92rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-size: 0.98rem;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  color: var(--am-ink);
 }
 .am-brand__copy small {
   overflow: hidden;
-  color: var(--am-muted);
-  font-size: 0.68rem;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 500;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -232,12 +245,12 @@
   display: flex;
   align-items: center;
   gap: 0.55rem;
-  min-height: 2.25rem;
-  padding: 0.4rem 0.55rem;
-  color: var(--am-muted);
+  min-height: 2.4rem;
+  padding: 0.45rem 0.65rem;
+  color: #334155;
   border-radius: var(--am-radius);
-  font-size: 0.8rem;
-  font-weight: 550;
+  font-size: 0.86rem;
+  font-weight: 600;
   text-decoration: none;
 }
 .am-link:hover {
@@ -245,15 +258,15 @@
   background: var(--am-hover);
 }
 .am-link.is-active {
-  color: var(--am-ink);
-  background: var(--am-hover);
-  font-weight: 650;
+  color: #1e3a8a;
+  background: #eff6ff;
+  font-weight: 700;
 }
 .am-link b {
   margin-inline-start: auto;
-  color: var(--am-muted);
-  font-size: 0.68rem;
-  font-weight: 600;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 650;
   font-variant-numeric: tabular-nums;
 }
 
@@ -262,10 +275,11 @@
   align-items: center;
   gap: 0.35rem;
   margin: 0 0.15rem 0.55rem;
-  padding: 0.25rem 0.35rem;
-  color: var(--am-muted);
+  padding: 0.3rem 0.45rem;
+  color: #475569;
   border-radius: var(--am-radius);
-  font-size: 0.72rem;
+  font-size: 0.78rem;
+  font-weight: 550;
   text-decoration: none;
 }
 .am-back:hover {
@@ -280,26 +294,28 @@
   padding-top: 0.35rem;
 }
 .am-nav__label {
-  margin: 0.85rem 0.55rem 0.35rem;
-  color: #8a8a84;
-  font-size: 0.64rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  margin: 0.95rem 0.55rem 0.4rem;
+  color: #64748b;
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: none;
 }
 .am-nav__items {
   display: grid;
-  gap: 0.08rem;
+  gap: 0.12rem;
 }
 .am-nav__item {
   position: relative;
   display: flex;
   align-items: center;
   gap: 0.55rem;
-  min-height: 2.2rem;
-  padding: 0.35rem 0.55rem;
-  color: #555550;
+  min-height: 2.35rem;
+  padding: 0.4rem 0.65rem;
+  color: #334155;
   border-radius: var(--am-radius);
-  font-size: 0.78rem;
+  font-size: 0.86rem;
+  font-weight: 550;
   text-decoration: none;
 }
 .am-nav__item:hover {
@@ -307,37 +323,42 @@
   background: var(--am-hover);
 }
 .am-nav__item.is-active {
+  color: #1e3a8a;
+  background: #eff6ff;
+  font-weight: 700;
+}
+.am-shell.is-workspace .am-nav__item.is-active {
   color: var(--am-ink);
-  background: var(--am-hover);
-  font-weight: 650;
+  background: var(--am-marker-soft, #eff6ff);
 }
 .am-nav__item.is-active::before {
   content: '';
   position: absolute;
-  inset-inline-end: -0.75rem;
-  width: 2px;
-  height: 1rem;
-  background: var(--am-accent);
+  inset-inline-end: -0.85rem;
+  width: 3px;
+  height: 1.15rem;
+  border-radius: 3px;
+  background: var(--am-marker, var(--am-accent-soft));
 }
 .am-nav__badge {
   margin-inline-start: auto;
-  min-width: 1.1rem;
-  height: 1.1rem;
+  min-width: 1.15rem;
+  height: 1.15rem;
   display: grid;
   place-items: center;
   padding-inline: 0.25rem;
   color: #fff;
   border-radius: 999px;
   background: var(--am-warn);
-  font-size: 0.6rem;
-  font-weight: 700;
+  font-size: 0.64rem;
+  font-weight: 750;
   font-variant-numeric: tabular-nums;
 }
 .am-nav__empty {
   margin: 0.75rem 0.45rem;
-  color: var(--am-muted);
-  font-size: 0.74rem;
-  line-height: 1.6;
+  color: #475569;
+  font-size: 0.82rem;
+  line-height: 1.65;
 }
 
 .am-depts {
@@ -349,18 +370,19 @@
 }
 .am-depts > span {
   margin: 0 0.45rem 0.25rem;
-  color: #8a8a84;
-  font-size: 0.64rem;
-  font-weight: 700;
+  color: #64748b;
+  font-size: 0.7rem;
+  font-weight: 750;
 }
 .am-depts a {
   display: flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.35rem 0.5rem;
-  color: #555550;
+  padding: 0.4rem 0.55rem;
+  color: #334155;
   border-radius: var(--am-radius);
-  font-size: 0.72rem;
+  font-size: 0.8rem;
+  font-weight: 550;
   text-decoration: none;
 }
 .am-depts a:hover {
@@ -449,6 +471,7 @@
 
 .am-main {
   min-width: 0;
+  background: var(--am-bg);
 }
 .am-top {
   position: sticky;
@@ -458,11 +481,11 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  min-height: 3.75rem;
-  padding: 0.75rem clamp(1rem, 2.5vw, 2rem);
+  min-height: 4.15rem;
+  padding: 0.85rem clamp(1.1rem, 2.8vw, 2.25rem);
   border-bottom: 1px solid var(--am-line);
-  background: color-mix(in srgb, var(--am-bg) 88%, #fff);
-  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(12px);
 }
 .am-top__title {
   min-width: 0;
@@ -470,24 +493,27 @@
 .am-crumb {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.35rem;
   overflow: hidden;
-  color: var(--am-muted);
-  font-size: 0.68rem;
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 550;
   white-space: nowrap;
 }
 .am-crumb a {
-  color: inherit;
+  color: #475569;
   text-decoration: none;
 }
 .am-crumb a:hover {
-  color: var(--am-ink);
+  color: #1d4ed8;
 }
 .am-top__title h1 {
-  margin: 0.15rem 0 0;
-  font-size: clamp(1rem, 1.4vw, 1.2rem);
-  font-weight: 650;
-  letter-spacing: -0.03em;
+  margin: 0.2rem 0 0;
+  color: var(--am-ink);
+  font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+  font-weight: 750;
+  letter-spacing: -0.035em;
+  line-height: 1.25;
 }
 .am-top__actions {
   position: relative;
@@ -585,9 +611,10 @@
 }
 
 .am-body {
-  max-width: 1120px;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: clamp(1.1rem, 2.2vw, 1.85rem);
+  padding: clamp(1.25rem, 2.5vw, 2.1rem);
+  color: var(--am-ink);
 }
 
 /* Content bridge + contrast lock for legacy admin widgets */
@@ -610,12 +637,12 @@
 .am-shell .admin-notice {
   border: 1px solid var(--am-line);
   border-radius: var(--am-radius);
-  background: var(--am-surface);
+  background: #ffffff;
   color: var(--am-ink);
-  box-shadow: none;
+  box-shadow: var(--am-shadow);
 }
 .am-shell .admin-card {
-  padding: 1.1rem 1.15rem;
+  padding: 1.2rem 1.25rem;
 }
 .am-shell .page-intro {
   background: var(--am-surface);
@@ -637,21 +664,24 @@
   color: var(--am-ink);
 }
 .am-shell .admin-table thead th {
-  color: #3f3f3c;
+  color: #1e293b;
   border-bottom-color: var(--am-line);
-  background: #f3f3ef;
-  font-size: 0.68rem;
-  font-weight: 700;
+  background: #f8fafc;
+  font-size: 0.75rem;
+  font-weight: 750;
+  letter-spacing: 0.01em;
 }
 .am-shell .admin-table td {
-  color: #1f1f1d;
-  border-bottom-color: #ecece7;
+  color: #0f172a;
+  border-bottom-color: #e2e8f0;
+  font-size: 0.9rem;
+  line-height: 1.55;
 }
 .am-shell .admin-table tbody tr:hover {
-  background: #f7f7f4;
+  background: #f8fafc;
 }
 .am-shell .admin-table :is(small, code, .admin-meta, .admin-cell-meta) {
-  color: #4a4a46;
+  color: #475569;
 }
 .am-shell :is(.admin-link, .admin-link-btn, .admin-dropdown-footer a, .admin-quick-links a) {
   color: #1d4ed8;
@@ -672,8 +702,9 @@
 .am-shell .btn--primary,
 .am-shell .cta-primary {
   color: #fff !important;
-  background: #1a1a1a;
-  border-color: #1a1a1a;
+  background: #0f172a;
+  border-color: #0f172a;
+  font-weight: 650;
 }
 .am-shell .admin-btn.primary:hover,
 .am-shell .btn-next:hover {
@@ -690,9 +721,10 @@
   background: transparent;
 }
 .am-shell .admin-badge {
-  color: #3f3f3c;
-  background: #efefe9;
+  color: #1e293b;
+  background: #f1f5f9;
   border: 1px solid var(--am-line);
+  font-weight: 650;
 }
 .am-shell .admin-badge.ok,
 .am-shell .admin-badge.success {
@@ -725,18 +757,18 @@
 }
 .am-shell
   :is(input, select, textarea, .admin-input, .admin-select, .admin-textarea)::placeholder {
-  color: #7a7a74;
+  color: #64748b;
   opacity: 1;
 }
 .am-shell select option,
 .am-shell select optgroup {
-  color: #141416;
+  color: #0f172a;
   background: #ffffff;
 }
 .am-shell :is(input, select, textarea):disabled,
 .am-shell :is(button, a)[aria-disabled='true'] {
-  color: #7a7a74;
-  background: #efefe9;
+  color: #64748b;
+  background: #f1f5f9;
   opacity: 1;
 }
 .am-shell :is(.form-error, .admin-error-state, .apro-alert) {
@@ -757,8 +789,8 @@
 }
 .am-shell .admin-stat-card.highlight {
   color: #fff;
-  background: #1a1a1a;
-  border-color: #1a1a1a;
+  background: #0f172a;
+  border-color: #0f172a;
 }
 .am-shell .admin-stat-card.highlight :is(.admin-stat-label, .admin-stat-value, .admin-stat-hint) {
   color: #fff;
@@ -786,22 +818,23 @@
   gap: 1rem;
 }
 .am-dash__head h2 {
-  margin: 0.2rem 0 0.35rem;
-  font-size: clamp(1.15rem, 2vw, 1.45rem);
-  font-weight: 650;
-  letter-spacing: -0.035em;
+  margin: 0.25rem 0 0.4rem;
+  color: var(--am-ink);
+  font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+  font-weight: 750;
+  letter-spacing: -0.04em;
 }
 .am-dash__head p {
   margin: 0;
-  max-width: 36rem;
-  color: var(--am-muted);
-  font-size: 0.86rem;
-  line-height: 1.6;
+  max-width: 38rem;
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.7;
 }
 .am-dash__kicker {
-  color: var(--am-muted);
-  font-size: 0.7rem;
-  font-weight: 650;
+  color: #1d4ed8;
+  font-size: 0.75rem;
+  font-weight: 750;
 }
 .am-kpi {
   display: grid;
@@ -810,39 +843,44 @@
 }
 .am-kpi a {
   display: grid;
-  gap: 0.35rem;
-  padding: 0.95rem 1rem;
+  gap: 0.4rem;
+  padding: 1.05rem 1.1rem;
   border: 1px solid var(--am-line);
   border-radius: var(--am-radius);
-  background: var(--am-surface);
-  color: inherit;
+  background: #ffffff;
+  color: var(--am-ink);
   text-decoration: none;
+  box-shadow: var(--am-shadow);
 }
 .am-kpi a:hover {
-  border-color: #d2d2cc;
+  border-color: #cbd5e1;
+  background: #ffffff;
 }
 .am-kpi span {
-  color: var(--am-muted);
-  font-size: 0.72rem;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 .am-kpi strong {
-  font-size: 1.35rem;
-  font-weight: 650;
+  color: var(--am-ink);
+  font-size: 1.45rem;
+  font-weight: 750;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.03em;
 }
 .am-panels {
   display: grid;
-  gap: 0.85rem;
+  gap: 0.95rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .am-panel {
   display: grid;
-  gap: 0.75rem;
-  padding: 1rem 1.05rem;
+  gap: 0.8rem;
+  padding: 1.15rem 1.2rem;
   border: 1px solid var(--am-line);
   border-radius: var(--am-radius);
-  background: var(--am-surface);
+  background: #ffffff;
+  box-shadow: var(--am-shadow);
 }
 .am-panel__head {
   display: flex;
@@ -852,16 +890,18 @@
 }
 .am-panel__head h3 {
   margin: 0;
-  font-size: 0.88rem;
-  font-weight: 650;
+  color: var(--am-ink);
+  font-size: 0.98rem;
+  font-weight: 750;
 }
 .am-panel__head a {
-  color: var(--am-muted);
-  font-size: 0.72rem;
+  color: #1d4ed8;
+  font-size: 0.8rem;
+  font-weight: 600;
   text-decoration: none;
 }
 .am-panel__head a:hover {
-  color: var(--am-ink);
+  color: #1e40af;
 }
 .am-list {
   display: grid;
@@ -872,21 +912,22 @@
 }
 .am-list li {
   display: grid;
-  gap: 0.15rem;
-  padding: 0.7rem 0;
-  border-bottom: 1px solid #f0f0ec;
+  gap: 0.2rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #e2e8f0;
 }
 .am-list li:last-child {
   border-bottom: 0;
   padding-bottom: 0;
 }
 .am-list strong {
-  font-size: 0.8rem;
-  font-weight: 600;
+  color: var(--am-ink);
+  font-size: 0.9rem;
+  font-weight: 650;
 }
 .am-list small {
-  color: var(--am-muted);
-  font-size: 0.7rem;
+  color: #475569;
+  font-size: 0.78rem;
 }
 .am-actions {
   display: grid;
@@ -1155,13 +1196,13 @@
 /* When the rest of the site is in dark mode, keep admin ink dark on light cards. */
 :root[data-theme='dark'] .am-shell,
 [data-theme='dark'] .am-shell {
-  --text: #141416;
-  --text-muted: #5c5c58;
-  --bg: #f4f4f1;
+  --text: #0f172a;
+  --text-muted: #475569;
+  --bg: #f8fafc;
   --bg-elevated: #ffffff;
-  --border: #dddcd6;
-  color: #141416;
-  background: #f4f4f1;
+  --border: #e2e8f0;
+  color: #0f172a;
+  background: #f8fafc;
 }
 
 @media (prefers-reduced-motion: reduce) {
