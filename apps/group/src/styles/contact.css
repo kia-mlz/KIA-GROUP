@@ -206,4 +206,5 @@
   gap: var(--space-3);
   min-width: 0;
   max-width: 100%;
+  color: var(--admin-text, var(--text));
 }
