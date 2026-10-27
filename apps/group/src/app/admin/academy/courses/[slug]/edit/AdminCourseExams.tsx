@@ -83,12 +83,17 @@ function emptyFormState(kind: CourseExamKind = 'MIDTERM'): ExamFormState {
 
 function toQuestionPayload(q: QuestionFormState): CourseExamQuestion {
   const options = q.options.filter((o) => o.label.trim() !== '');
+  // Always send string[] so Nest @IsArray validation accepts both kinds;
+  // scoring still accepts a bare string from older seeded rows.
   return {
     id: q.id,
     type: q.type,
     prompt: q.prompt,
     options,
-    answer: q.type === 'single_choice' ? (q.answer[0] ?? '') : q.answer,
+    answer:
+      q.type === 'single_choice'
+        ? [q.answer[0] ?? ''].filter(Boolean)
+        : q.answer,
     points: q.points,
   };
 }
