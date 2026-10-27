@@ -116,6 +116,13 @@
   gap: var(--space-3);
 }
 
+.dept-learner-panel__tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11.5rem), 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
 .dept-learner-panel__tile {
   display: flex;
   flex-direction: column;
@@ -132,6 +139,12 @@
 .dept-learner-panel__tile:hover {
   border-color: color-mix(in srgb, var(--dept, var(--brand)) 45%, var(--border));
   transform: translateY(-1px);
+}
+
+.dept-learner-panel__tile > b {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  line-height: 1.35;
 }
 
 .dept-learner-panel__tile span:last-child {

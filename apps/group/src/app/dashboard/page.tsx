@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { BookOpen, Compass } from 'lucide-react';
+import { AcademyOverviewTiles } from '@/components/dashboard/AcademyOverviewTiles';
 import { EnrolledCourses } from '@/components/dashboard/EnrolledCourses';
 import { ProgressChart } from '@/components/dashboard/ProgressChart';
 import { TestResultsCard } from '@/components/dashboard/TestResultsCard';
@@ -52,6 +53,8 @@ export default function AcademyDashboardPage() {
             </div>
           </header>
 
+          <AcademyOverviewTiles />
+
           <div className="bento">
             <Link href="/assessment" className="tile tile--half tile--feature">
               <span className="t-icon t-icon--brand" aria-hidden="true">
@@ -90,6 +93,8 @@ export default function AcademyDashboardPage() {
             </h1>
             <p>{t('panel.departmentPanel.academy.sub')}</p>
           </header>
+
+          <AcademyOverviewTiles />
 
           <div className="dash-grid dash-grid--academy">
             <ProgressChart />

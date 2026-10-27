@@ -76,9 +76,24 @@ describe('learner department panels', () => {
     expect(dashboard).toContain('EnrolledCourses');
     expect(dashboard).toContain('ProgressChart');
     expect(dashboard).toContain('TestResultsCard');
+    expect(dashboard).toContain('AcademyOverviewTiles');
     expect(dashboard).not.toContain('BootcampCard');
     expect(dashboard).not.toContain('FinancialCard');
     expect(dashboard).toContain('dept--academy');
+  });
+
+  it('keeps Academy tools off the rail and on the overview as tiles', () => {
+    expect(LEARNER_PANELS.academy.nav.map((item) => item.id)).toEqual(['overview']);
+    expect(LEARNER_PANELS.academy.overviewTiles?.map((item) => item.id)).toEqual([
+      'my-courses',
+      'progress',
+      'results',
+      'roadmap',
+      'tracks',
+    ]);
+    const tiles = read('components/dashboard/AcademyOverviewTiles.tsx');
+    expect(tiles).toContain('overviewTiles');
+    expect(tiles).toContain('dept-learner-panel__tile');
   });
 
   it('makes LearnerNav path-aware via the panel registry', () => {
