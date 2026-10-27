@@ -5,17 +5,22 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { BookOpen, Compass } from 'lucide-react';
 import { AcademyOverviewTiles } from '@/components/dashboard/AcademyOverviewTiles';
+import { AdminMessages } from '@/components/dashboard/AdminMessages';
 import { EnrolledCourses } from '@/components/dashboard/EnrolledCourses';
+import { FinancialCard } from '@/components/dashboard/FinancialCard';
+import { ProfileEditor } from '@/components/dashboard/ProfileEditor';
 import { ProgressChart } from '@/components/dashboard/ProgressChart';
 import { TestResultsCard } from '@/components/dashboard/TestResultsCard';
+import { TicketsCard } from '@/components/dashboard/TicketsCard';
+import { TodoList } from '@/components/dashboard/TodoList';
 import { ToastProvider } from '@/components/dashboard/ToastProvider';
 import { useApp } from '@/context/AppProvider';
 import { useAuth } from '@/context/AuthProvider';
 import { useLanguage } from '@/context/LanguageProvider';
 
 /**
- * Kia Academy learner panel — courses, progress and exam results only.
- * Events / wallet / support live in their own department or platform menus.
+ * Kia Academy learner panel — restored card grid with the bank/wallet card,
+ * plus overview tiles for destinations that left the top-nav.
  */
 export default function AcademyDashboardPage() {
   const router = useRouter();
@@ -96,10 +101,15 @@ export default function AcademyDashboardPage() {
 
           <AcademyOverviewTiles />
 
-          <div className="dash-grid dash-grid--academy">
+          <div className="dash-grid">
+            <FinancialCard />
             <ProgressChart />
             <TestResultsCard />
+            <TodoList />
             <EnrolledCourses />
+            <TicketsCard />
+            <AdminMessages />
+            <ProfileEditor />
           </div>
         </div>
       </div>
