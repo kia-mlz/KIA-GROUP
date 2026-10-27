@@ -7,6 +7,11 @@ export interface LessonSummary {
   hasVideo?: boolean;
   /** "Coming soon" — visible in listings but locked with no content access. */
   comingSoon: boolean;
+  /**
+   * First N lessons of every course (see `FREE_PREVIEW_LESSON_COUNT`) are
+   * open without purchase so learners can try the content.
+   */
+  freePreview?: boolean;
 }
 
 export interface CourseSummary {

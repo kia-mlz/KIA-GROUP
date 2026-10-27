@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import type { CourseSummary, LessonDetail, LessonSummary } from '@kia./shared';
+import { isFreePreviewLessonIndex } from '@kia./shared';
 import { MediaService } from '@kia./platform';
 import { EventBusService } from '@kia./platform';
 import { PrismaService } from '@kia./platform';
@@ -106,7 +107,7 @@ export class CoursesService {
       ? await this.getCompletedLessonIds(userId, course.lessons.map((lesson) => lesson.id))
       : new Set<string>();
 
-    const lessons: LessonSummary[] = course.lessons.map((lesson) => ({
+    const lessons: LessonSummary[] = course.lessons.map((lesson, index) => ({
       id: lesson.id,
       slug: lesson.slug,
       title: lesson.title,
@@ -114,6 +115,7 @@ export class CoursesService {
       completed: completedLessonIds.has(lesson.id),
       hasVideo: Boolean(lesson.videoUrl),
       comingSoon: lesson.comingSoon,
+      freePreview: isFreePreviewLessonIndex(index),
     }));
 
     const enrolled = Array.isArray(course.enrollments) && course.enrollments.length > 0;
@@ -151,8 +153,6 @@ export class CoursesService {
       throw new NotFoundException(`Course ${courseSlug} not found`);
     }
 
-    await this.assertCourseEntitlement(userId, course.slug);
-
     const lessonIndex = course.lessons.findIndex((lesson) => lesson.slug === lessonSlug);
     if (lessonIndex === -1) {
       throw new NotFoundException(`Lesson ${lessonSlug} not found in course ${courseSlug}`);
@@ -163,6 +163,11 @@ export class CoursesService {
     // Coming-soon lessons stay visible in listings but are locked — no content access.
     if (lesson.comingSoon || course.comingSoon) {
       throw new ForbiddenException('This course is coming soon');
+    }
+
+    // First N lessons are free to try without a course purchase.
+    if (!isFreePreviewLessonIndex(lessonIndex)) {
+      await this.assertCourseEntitlement(userId, course.slug);
     }
 
     const progress = await this.prisma.lessonProgress.findUnique({
@@ -185,6 +190,7 @@ export class CoursesService {
       completed: progress?.completed ?? false,
       hasVideo: Boolean(lesson.videoUrl),
       comingSoon: lesson.comingSoon,
+      freePreview: isFreePreviewLessonIndex(lessonIndex),
       content: lesson.content,
       contentEn: lesson.contentEn,
       videoUrl: this.resolveVideoUrl(lesson.videoUrl, lesson.id, userId),
@@ -246,7 +252,7 @@ export class CoursesService {
     const course = await this.prisma.course.findUnique({
       where: { slug: courseSlug },
       include: {
-        lessons: true,
+        lessons: { orderBy: { sortOrder: 'asc' } },
         enrollments: { where: { userId } },
       },
     });
@@ -255,7 +261,8 @@ export class CoursesService {
       throw new NotFoundException(`Course ${courseSlug} not found`);
     }
 
-    const lesson = course.lessons.find((entry) => entry.slug === lessonSlug);
+    const lessonIndex = course.lessons.findIndex((entry) => entry.slug === lessonSlug);
+    const lesson = lessonIndex >= 0 ? course.lessons[lessonIndex] : undefined;
     if (!lesson) {
       throw new NotFoundException(`Lesson ${lessonSlug} not found in course ${courseSlug}`);
     }
@@ -265,7 +272,9 @@ export class CoursesService {
       throw new ForbiddenException('This course is coming soon');
     }
 
-    await this.assertCourseEntitlement(userId, course.slug);
+    if (!isFreePreviewLessonIndex(lessonIndex)) {
+      await this.assertCourseEntitlement(userId, course.slug);
+    }
 
     const progress = await this.prisma.lessonProgress.upsert({
       where: { userId_lessonId: { userId, lessonId: lesson.id } },
@@ -309,6 +318,7 @@ export class CoursesService {
       durationMin: lesson.durationMin,
       completed: progress.completed,
       comingSoon: lesson.comingSoon,
+      freePreview: isFreePreviewLessonIndex(lessonIndex),
     };
   }
 

@@ -1375,9 +1375,12 @@ export const en = {
     price: 'Price',
     introEyebrow: 'Course introduction',
     introBody:
-      'The full lesson content is locked until you purchase the course. You can review the overview and preview a few lessons before deciding.',
-    sessionsLocked: 'Sessions are not available yet',
-    previewTitle: 'Preview lessons',
+      'The first 3 lessons of every course are free so you can try the content. Remaining lessons unlock after you purchase the course.',
+    sessionsLocked: 'Lessons from the fourth onward require purchase',
+    previewTitle: '3 free lessons to start',
+    freeBadge: 'Free',
+    tryFree: 'Try free',
+    buyToContinue: 'Purchase the course to continue',
     domains: {
       eyebrow: 'Domain catalog',
       title: 'Learning domains',

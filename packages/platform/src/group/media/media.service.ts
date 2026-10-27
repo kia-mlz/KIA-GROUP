@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { isFreePreviewLessonIndex } from '@kia./shared';
 import { createReadStream, existsSync } from 'fs';
 import type { Response } from 'express';
 import { resolveUnderRoot } from '../../common/utils/safe-path';
@@ -47,15 +48,25 @@ export class MediaService {
       throw new NotFoundException('Lesson not found');
     }
 
-    const entitlement = await this.prisma.entitlement.findFirst({
-      where: {
-        userId,
-        resourceType: 'course',
-        resourceId: lesson.course.slug,
-      },
+    const siblings = await this.prisma.lesson.findMany({
+      where: { courseId: lesson.courseId },
+      orderBy: { sortOrder: 'asc' },
+      select: { id: true },
     });
-    if (!entitlement) {
-      throw new UnauthorizedException('Course access required');
+    const lessonIndex = siblings.findIndex((entry) => entry.id === lessonId);
+    const freePreview = isFreePreviewLessonIndex(lessonIndex);
+
+    if (!freePreview) {
+      const entitlement = await this.prisma.entitlement.findFirst({
+        where: {
+          userId,
+          resourceType: 'course',
+          resourceId: lesson.course.slug,
+        },
+      });
+      if (!entitlement) {
+        throw new UnauthorizedException('Course access required');
+      }
     }
 
     const expectedPrefix = `/api/uploads/lessons/${lessonId}/`;

@@ -47,10 +47,13 @@ function LessonPlayerContent({
   const { t, locale, format } = useLanguage();
   const [lesson, setLesson] = useState<LessonDetail | null>(null);
   const [lessons, setLessons] = useState<LessonSummary[]>([]);
+  const [courseEnrolled, setCourseEnrolled] = useState(false);
   const [exams, setExams] = useState<CourseExamSummary[]>([]);
   const [passedExamIds, setPassedExamIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  /** True when lesson load failed with 403 (needs purchase / not entitled). */
+  const [needsPurchase, setNeedsPurchase] = useState(false);
   const [completing, setCompleting] = useState(false);
   const [note, setNote] = useState('');
   const [query, setQuery] = useState('');
@@ -101,6 +104,8 @@ function LessonPlayerContent({
   useEffect(() => {
     if (!courseSlug || !lessonSlug) return;
     setLoading(true);
+    setError('');
+    setNeedsPurchase(false);
     const noteKey = `kia-lesson-note:${courseSlug}:${lessonSlug}`;
     setNote(typeof window !== 'undefined' ? (localStorage.getItem(noteKey) ?? '') : '');
 
@@ -108,8 +113,14 @@ function LessonPlayerContent({
       .then(([lessonDetail, course]) => {
         setLesson(lessonDetail);
         setLessons(course.lessons ?? []);
+        setCourseEnrolled(Boolean(course.enrolled));
       })
       .catch((err) => {
+        const forbidden = err instanceof ApiError && err.status === 403;
+        // Coming-soon also returns 403 — only offer purchase when access is paywalled.
+        setNeedsPurchase(
+          forbidden && !/coming\s*soon/i.test(err instanceof ApiError ? err.message : ''),
+        );
         setError(err instanceof ApiError ? err.message : t('lesson.loadError'));
       })
       .finally(() => setLoading(false));
@@ -157,6 +168,10 @@ function LessonPlayerContent({
   }, [lessons, examsAfterLesson, passedExamIds]);
 
   const isLessonLocked = (slug: string) => lockedLessonSlugs.has(slug);
+
+  /** Purchase-gated (not free preview) when the learner has not enrolled/bought. */
+  const isPurchaseLocked = (item: LessonSummary) =>
+    !courseEnrolled && !item.freePreview && !item.comingSoon;
 
   // Pin the active lesson to the top of the lessons navigation: previous lessons
   // stay above it (reachable by scrolling up), next ones remain below.
@@ -288,6 +303,13 @@ function LessonPlayerContent({
       <div className="page-content">
         <div className="container lesson-shell kia-lesson-shell">
           <p className="form-error">{error || t('lesson.notFound')}</p>
+          {needsPurchase && courseSlug ? (
+            <p style={{ marginTop: '1rem' }}>
+              <Link href={`/courses/${courseSlug}`} className="pill-btn pill-btn--primary">
+                {t('publicCourses.buyToContinue')}
+              </Link>
+            </p>
+          ) : null}
         </div>
       </div>
     );
@@ -330,13 +352,18 @@ function LessonPlayerContent({
             <nav ref={navRef} className="lesson-nav" aria-label={t('lesson.lessonsNav')}>
               {filteredLessons.map((item) => {
                 const locked = isLessonLocked(item.slug);
+                const purchaseLocked = isPurchaseLocked(item);
                 const soon = item.comingSoon;
+                const blocked = locked || purchaseLocked;
+                const blockHint = purchaseLocked
+                  ? t('publicCourses.buyToContinue')
+                  : t('lesson.lockedHint');
                 const itemBody = (
                   <>
                     <span className="lesson-nav-title">
                       {soon ? (
                         <Clock size={13} className="inline-leading-icon" aria-hidden />
-                      ) : locked ? (
+                      ) : blocked ? (
                         <Lock size={13} className="inline-leading-icon" aria-hidden />
                       ) : null}
                       {item.title}
@@ -344,9 +371,11 @@ function LessonPlayerContent({
                     <span className="lesson-nav-meta">
                       {soon
                         ? t('lesson.comingSoonHint')
-                        : locked
-                          ? t('lesson.lockedHint')
-                          : `${t('lesson.duration', { minutes: item.durationMin })}${item.completed ? ` · ${t('lesson.completed')}` : ''}`}
+                        : purchaseLocked
+                          ? t('publicCourses.buyToContinue')
+                          : locked
+                            ? t('lesson.lockedHint')
+                            : `${t('lesson.duration', { minutes: item.durationMin })}${item.completed ? ` · ${t('lesson.completed')}` : ''}`}
                     </span>
                   </>
                 );
@@ -359,10 +388,10 @@ function LessonPlayerContent({
                       >
                         {itemBody}
                       </span>
-                    ) : locked ? (
+                    ) : blocked ? (
                       <span
                         className={`lesson-nav-item${item.slug === lessonSlug ? ' active' : ''}${item.completed ? ' done' : ''} locked`}
-                        title={t('lesson.lockedHint')}
+                        title={blockHint}
                       >
                         {itemBody}
                       </span>

@@ -1,6 +1,11 @@
 'use client';
 
-import { coursePriceCents, type CourseSummary, type LessonSummary } from '@kia./shared';
+import {
+  coursePriceCents,
+  FREE_PREVIEW_LESSON_COUNT,
+  type CourseSummary,
+  type LessonSummary,
+} from '@kia./shared';
 import { BookOpen, Loader2, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -46,6 +51,17 @@ export default function CoursePage() {
     () => lessons.find((lesson) => !lesson.completed) ?? lessons[0],
     [lessons],
   );
+
+  const freeLessons = useMemo(
+    () =>
+      lessons.filter(
+        (lesson, index) =>
+          !lesson.comingSoon && (lesson.freePreview ?? index < FREE_PREVIEW_LESSON_COUNT),
+      ),
+    [lessons],
+  );
+
+  const firstFreeLesson = freeLessons[0] ?? null;
 
   if (loading) {
     return (
@@ -122,16 +138,35 @@ export default function CoursePage() {
           </div>
           <h3>{t('publicCourses.previewTitle')}</h3>
           <div className="lesson-nav">
-            {lessons.slice(0, 3).map((lesson) => (
-              <span key={lesson.id} className="lesson-nav-item">
-                <span className="lesson-nav-title">{lesson.title}</span>
-                <span className="lesson-nav-meta">
-                  {lesson.comingSoon
-                    ? t('lesson.comingSoonHint')
-                    : t('common.durationMin', { min: lesson.durationMin })}
-                </span>
-              </span>
-            ))}
+            {lessons.slice(0, FREE_PREVIEW_LESSON_COUNT).map((lesson, index) => {
+              const isFree = lesson.freePreview ?? index < FREE_PREVIEW_LESSON_COUNT;
+              const learnHref = `/learn/${localizedCourse.slug}/${lesson.slug}`;
+              const openHref = isAuthenticated
+                ? learnHref
+                : `/education?next=${encodeURIComponent(learnHref)}`;
+              const meta = lesson.comingSoon
+                ? t('lesson.comingSoonHint')
+                : t('common.durationMin', { min: lesson.durationMin });
+
+              if (lesson.comingSoon || !isFree) {
+                return (
+                  <span key={lesson.id} className="lesson-nav-item">
+                    <span className="lesson-nav-title">{lesson.title}</span>
+                    <span className="lesson-nav-meta">{meta}</span>
+                  </span>
+                );
+              }
+
+              return (
+                <Link key={lesson.id} href={openHref} className="lesson-nav-item">
+                  <span className="lesson-nav-title">
+                    {lesson.title}
+                    <span className="catalog-soon"> {t('publicCourses.freeBadge')}</span>
+                  </span>
+                  <span className="lesson-nav-meta">{meta}</span>
+                </Link>
+              );
+            })}
           </div>
           <p>{t('publicCourses.introBody')}</p>
           {cartMsg ? <p className="form-success">{cartMsg}</p> : null}
@@ -150,9 +185,23 @@ export default function CoursePage() {
               </Link>
             ) : !localizedCourse.enrolled ? (
               <>
+                {firstFreeLesson ? (
+                  <Link
+                    href={
+                      isAuthenticated
+                        ? `/learn/${localizedCourse.slug}/${firstFreeLesson.slug}`
+                        : `/education?next=${encodeURIComponent(
+                            `/learn/${localizedCourse.slug}/${firstFreeLesson.slug}`,
+                          )}`
+                    }
+                    className="btn btn--primary"
+                  >
+                    <BookOpen size={16} /> {t('publicCourses.tryFree')}
+                  </Link>
+                ) : null}
                 <button
                   type="button"
-                  className="btn btn--primary"
+                  className="btn btn--ghost"
                   onClick={() => void handleAddToCart()}
                   disabled={cartBusy}
                 >
