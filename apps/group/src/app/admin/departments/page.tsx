@@ -10,7 +10,6 @@ import type {
 } from '@kia./shared';
 import { AdminErrorState, AdminLoading } from '@/components/admin/AdminStates';
 import { useAdminAccess } from '@/components/admin/useAdminAccess';
-import { BrandMark } from '@/components/brand/BrandMark';
 import { DEPARTMENTS, type DepartmentSlug } from '@/components/brand/departments';
 import { useLanguage } from '@/context/LanguageProvider';
 import { api } from '@/lib/api';
@@ -24,7 +23,7 @@ import { DEPARTMENT_WORKSPACES } from '@/lib/adminNav';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 
 /**
- * Ops Center departments hub — six branded workspaces.
+ * Departments hub — six branded workspaces.
  * Counts only render when a real endpoint answered; empty departments stay honest.
  */
 
@@ -167,23 +166,18 @@ export default function AdminDepartmentsPage() {
 
   if (attempted > 0 && failed === attempted) {
     return (
-      <div className="admin-content">
+      <div className="am-hub">
         <AdminErrorState message={t('admin.departments.loadError')} onRetry={reload} />
       </div>
     );
   }
 
   return (
-    <div className="ops-dept-hub">
-      <section className="ops-dept-hub__intro" aria-labelledby="ops-dept-hub-title">
-        <div>
-          <span className="ops-dept-hub__kicker">{t('admin.departments.what')}</span>
-          <h2 id="ops-dept-hub-title">{t('admin.nav.departments')}</h2>
-          <p>{t('admin.departments.onePlatform')}</p>
-        </div>
-        <Link href="/admin/users/roles" className="btn-next admin-btn">
-          {t('admin.departments.accessAction')}
-        </Link>
+    <div className="am-hub">
+      <section className="am-hub__head" aria-labelledby="am-hub-title">
+        <span className="am-dash__kicker">{t('admin.departments.what')}</span>
+        <h2 id="am-hub-title">{t('admin.nav.departments')}</h2>
+        <p>{t('admin.departments.onePlatform')}</p>
       </section>
 
       {failed > 0 ? (
@@ -192,32 +186,27 @@ export default function AdminDepartmentsPage() {
         </p>
       ) : null}
 
-      <div className="ops-dept-grid">
+      <div className="am-hub__grid">
         {departments.map((department) => (
           <article
             key={department.slug}
-            className={`ops-dept-card ops-dept-card--${department.slug} dept--${department.slug}`}
+            className={`am-hub__card am-hub__card--${department.slug} dept--${department.slug}`}
             aria-labelledby={`admin-dept-${department.slug}`}
           >
-            <div className="ops-dept-card__head">
-              <span className="ops-dept-card__mark" aria-hidden>
-                <BrandMark size={20} title="" />
-              </span>
-              <div className="ops-dept-card__copy">
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
                 <h3 id={`admin-dept-${department.slug}`}>{department.name}</h3>
-                <p>{department.description}</p>
+                <span className="am-hub__status">
+                  {department.live
+                    ? t('admin.departments.status.live')
+                    : t('admin.departments.noModule')}
+                </span>
               </div>
-              <span
-                className={`ops-dept-card__status ${department.live ? 'is-live' : 'is-soon'}`}
-              >
-                {department.live
-                  ? t('admin.departments.status.live')
-                  : t('admin.departments.noModule')}
-              </span>
+              <p>{department.description}</p>
             </div>
 
             {department.metrics.length ? (
-              <dl className="ops-dept-card__metrics">
+              <dl className="am-hub__meta">
                 {department.metrics.map((metric) => (
                   <div key={metric.labelKey}>
                     <dt>{t(metric.labelKey)}</dt>
@@ -228,39 +217,33 @@ export default function AdminDepartmentsPage() {
             ) : null}
 
             {!DEPARTMENT_MODULES[department.slug].length ? (
-              <div className="ops-dept-card__empty">
-                <span>{t('admin.departments.noModuleHint')}</span>
-              </div>
+              <span className="am-hub__status">{t('admin.departments.noModuleHint')}</span>
             ) : null}
 
             {DEPARTMENT_MODULES[department.slug].length && !department.entryPoints.length ? (
-              <div className="ops-dept-card__empty">
-                <span>{t('admin.departments.noAccess')}</span>
-              </div>
+              <span className="am-hub__status">{t('admin.departments.noAccess')}</span>
             ) : null}
 
             {hasDepartmentMetrics(department.slug) && !department.entryPoints.length ? (
-              <div className="ops-dept-card__empty">
-                <span>{t('admin.departments.metricsHidden')}</span>
-              </div>
+              <span className="am-hub__status">{t('admin.departments.metricsHidden')}</span>
             ) : null}
 
-            <div className="ops-dept-card__actions">
-              <Link href={department.manageHref} className="ops-dept-card__cta">
+            <div className="am-hub__foot">
+              <Link href={department.manageHref} className="am-hub__cta">
                 {t('admin.departments.enterWorkspace')}
-                <ArrowLeft size={14} aria-hidden />
+                <ArrowLeft size={13} aria-hidden style={{ marginInlineStart: '0.35rem' }} />
               </Link>
               {department.entryPoints.slice(0, 2).map((entry) => (
-                <Link key={entry.href} href={entry.href} className="ops-dept-card__ghost">
+                <Link key={entry.href} href={entry.href} className="am-hub__ghost">
                   {t(entry.labelKey)}
                 </Link>
               ))}
               <Link
                 href={department.href}
-                className="ops-dept-card__ghost"
+                className="am-hub__ghost"
                 aria-label={t('admin.departments.publicAria', { name: department.name })}
               >
-                <ExternalLink size={13} aria-hidden />
+                <ExternalLink size={12} aria-hidden style={{ marginInlineEnd: '0.25rem' }} />
                 {t('admin.departments.publicLabel')}
               </Link>
             </div>

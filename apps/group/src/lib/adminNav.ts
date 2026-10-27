@@ -3,7 +3,7 @@ import type { DepartmentSlug } from '@/components/brand/departments';
 import { DEPARTMENTS } from '@/components/brand/departments';
 
 /**
- * Single source of truth for Admin Ops Center navigation.
+ * Single source of truth for Admin panel navigation.
  * Shell, command palette, and tests must read from here — not duplicate menus.
  */
 
@@ -27,7 +27,7 @@ export type AdminNavGroup = {
 };
 
 export const ADMIN_ROOT = {
-  overview: { href: '/admin', label: 'مرکز کنترل' },
+  overview: { href: '/admin', label: 'نمای کلی' },
   departments: { href: '/admin/departments', label: 'دپارتمان‌ها' },
 } as const;
 
@@ -95,7 +95,7 @@ export const PLATFORM_NAV_GROUPS: AdminNavGroup[] = [
   },
   {
     id: 'system',
-    label: 'سیستم و کنترل',
+    label: 'سیستم',
     items: [
       { id: 'analytics', label: 'گزارش‌ها', href: '/admin/analytics', section: 'stats' },
       { id: 'audit', label: 'حسابرسی', href: '/admin/audit', section: 'audit' },

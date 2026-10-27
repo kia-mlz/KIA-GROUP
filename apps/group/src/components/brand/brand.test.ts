@@ -101,9 +101,9 @@ describe('Kia brand', () => {
     expect(hits('کیا.')).toEqual([]);
   });
 
-  it('names the admin control room without the old Group label', () => {
-    expect(fa.admin.brandSub).toBe('مرکز کنترل');
-    expect(en.admin.brandSub).toBe('Control center');
+  it('names the admin panel without the old Group label', () => {
+    expect(fa.admin.brandSub).toBe('پنل مدیریت');
+    expect(en.admin.brandSub).toBe('Admin panel');
   });
 });
 
