@@ -2,7 +2,7 @@
 # =============================================================================
 # Kia Academy — production multi-stage images
 #   • target `api`  : NestJS REST API        (port 3001, /api)
-#   • target `web`  : Next.js 15 standalone  (port 3000)
+#   • target `web`  : Next.js 16 standalone  (port 3000)
 #
 # Design notes
 #   - Node 22 slim base (matches .nvmrc / engines >=22.13), pnpm via Corepack
@@ -137,6 +137,8 @@ USER node
 WORKDIR /app/apps/api
 
 EXPOSE 3001
+# Liveness is database-only. Do not point this at /api/ready — an unconfigured
+# SMS provider or payment gateway must not restart-loop the container.
 HEALTHCHECK --interval=15s --timeout=5s --start-period=40s --retries=5 \
   CMD node -e "fetch('http://127.0.0.1:'+ (process.env.PORT||3001) +'/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 ENTRYPOINT ["api-entrypoint.sh"]

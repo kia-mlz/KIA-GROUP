@@ -8,6 +8,8 @@ Security deep-dive lives in [`SECURITY_CHECKLIST.md`](./SECURITY_CHECKLIST.md).
 - [ ] PostgreSQL 16 reachable only from private network; automated backups verified (restore drill once)
 - [ ] DNS + HTTPS live on final domains (API and Web); force-HTTPS redirect at edge
 - [ ] Env files generated from examples with production values (`apps/api/.env`, `apps/group/.env.local`, `.env.docker`)
+- [ ] `pnpm docker:preflight` exits 0 against the real `.env.docker` (the example file is expected to fail; the script prints names and reasons only)
+- [ ] `NEXT_PUBLIC_APP_URL` is the public HTTPS origin at **web image build** time (compose build-arg, or the GitHub Actions repository variable). A GHCR web image built without that variable is not host-ready
 - [ ] `docker compose config -q` passes; containers healthy (`docker compose ps`)
 - [ ] Resource limits acceptable under expected load (compose defaults: api 768M, web 512M)
 
@@ -43,7 +45,8 @@ Security deep-dive lives in [`SECURITY_CHECKLIST.md`](./SECURITY_CHECKLIST.md).
 ## 6. Observability & ops
 
 - [ ] API logs shipped somewhere durable; error alerts routed (email/log service)
-- [ ] Healthchecks wired to orchestrator restart policy; uptime monitor on `/api/health` and `/`
+- [ ] Container HEALTHCHECK and restart policy stay on `/api/health` (database liveness only). `/api/ready` is a separate readiness probe: production returns 503 until SMS is a real provider and the payment provider is not `dev`. Do not point the Docker HEALTHCHECK at `/api/ready`
+- [ ] Uptime monitors on `/`, `/api/health`, and `/api/ready`
 - [ ] Backup cron for Postgres + `uploads/` volume tested restore
 - [ ] Rollback plan: previous image tag retained; migrations are backward-compatible one step back
 

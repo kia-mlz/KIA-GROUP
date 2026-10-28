@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
+import { SiteSettingsModule } from '@kia./platform';
 import { HealthController } from './health.controller';
+import { ReadinessController } from './readiness.controller';
 
 @Module({
-  controllers: [HealthController],
+  imports: [SiteSettingsModule],
+  controllers: [HealthController, ReadinessController],
 })
 export class HealthModule {}

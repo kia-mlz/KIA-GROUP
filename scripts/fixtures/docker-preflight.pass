@@ -1,0 +1,10 @@
+# Fixture for scripts/preflight-docker-env.test.mjs
+# NOT a real environment. Values are obvious placeholders long enough to pass
+# the length check and are not credentials for any service.
+NODE_ENV=production
+JWT_SECRET=fixture-jwt-secret-not-a-real-credential-0001
+JWT_REFRESH_SECRET=fixture-jwt-refresh-not-a-real-credential-0002
+CORS_ORIGIN=https://kia.example.com
+SITE_DOMAIN=kia.example.com
+POSTGRES_PASSWORD=fixture-db-password-not-real
+NEXT_PUBLIC_APP_URL=https://kia.example.com

@@ -7,8 +7,11 @@ export function generateStaticParams() {
   return [{ id: primaryCourseSlug }];
 }
 
-export const dynamicParams = false;
-
+// Do not export `dynamicParams`. Next 16 only accepts a boolean literal here,
+// so `process.env.GITHUB_PAGES !== 'true'` fails the build. Explicit `true`
+// is rejected by `output: 'export'`. Explicit `false` 404s unknown ticket ids
+// on `next start` and in the Docker standalone server. The default is
+// on-demand; the Pages export still only emits generateStaticParams paths.
 export default function Page() {
   return <TicketDetail />;
 }

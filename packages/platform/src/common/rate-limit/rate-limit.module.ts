@@ -7,7 +7,7 @@ import {
   type OnModuleDestroy,
 } from '@nestjs/common';
 import { ThrottlerStorage, ThrottlerStorageService } from '@nestjs/throttler';
-import Redis from 'ioredis';
+import Redis, { type RedisOptions } from 'ioredis';
 import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis';
 import { ConfigService } from '@nestjs/config';
 
@@ -32,23 +32,36 @@ export class RateLimitStorageProvider implements OnModuleDestroy, OnApplicationS
   private readonly logger = new Logger(RateLimitStorageProvider.name);
   private readonly redis: ThrottlerStorageRedisService | null;
   private readonly memory = new ThrottlerStorageService();
+  private released = false;
 
   constructor(configService: ConfigService) {
     const url = configService.get<string>('REDIS_URL');
     if (url) {
       try {
-        this.redis = new ThrottlerStorageRedisService(
-          new Redis(url, {
-            // Rate limiting must never block app boot on a slow Redis.
-            lazyConnect: false,
-            maxRetriesPerRequest: 2,
-            connectTimeout: 5_000,
-            enableOfflineQueue: false,
-          }),
-        );
-        this.logger.log('Distributed rate limiting enabled (Redis storage)');
-        this.redis.redis.on('error', (err: Error) => {
+        const isTest = process.env.NODE_ENV === 'test';
+        const redisOptions: RedisOptions = {
+          // Attach the error listener before the socket opens. Connecting is
+          // still kicked off below so boot does not wait on Redis.
+          lazyConnect: true,
+          maxRetriesPerRequest: isTest ? 1 : 2,
+          connectTimeout: isTest ? 500 : 5_000,
+          enableOfflineQueue: false,
+        };
+        // Jest must not inherit ioredis's infinite reconnect timer when the
+        // test points at a closed port. Production keeps the default strategy.
+        if (isTest) redisOptions.retryStrategy = () => null;
+
+        const client = new Redis(url, redisOptions);
+        client.on('error', (err: Error) => {
           this.logger.error(`Redis rate-limit store error: ${err.message}`);
+        });
+        this.redis = new ThrottlerStorageRedisService(client);
+        this.logger.log('Distributed rate limiting enabled (Redis storage)');
+        void client.connect().catch((err: unknown) => {
+          this.logger.error(
+            `Redis rate-limit connection failed; failing open to in-memory storage`,
+            err instanceof Error ? err.message : undefined,
+          );
         });
       } catch (err) {
         this.redis = null;
@@ -58,6 +71,7 @@ export class RateLimitStorageProvider implements OnModuleDestroy, OnApplicationS
         );
       }
     } else {
+      this.redis = null;
       this.logger.warn(
         'REDIS_URL not set — using in-memory rate limiting (single-instance only)',
       );
@@ -89,20 +103,32 @@ export class RateLimitStorageProvider implements OnModuleDestroy, OnApplicationS
     return this.memory.increment(key, ttl, limit, blockDuration, throttlerName);
   }
 
-  onModuleDestroy(): void {
-    // ThrottlerStorageRedisService owns its connection only when it created it
-    // from a URL; it disconnects itself via its own OnModuleDestroy hook when
-    // registered directly. Here we constructed it with an explicit client, so
-    // we close it. disconnect() is a hard close — quit() would wait on the
-    // socket, which must not delay shutdown (or tests) when Redis is down.
-    if (this.redis) {
-      this.redis.redis.disconnect();
+  /**
+   * Close the Redis socket and the in-memory TTL timers. Either Nest hook is
+   * enough: tests and shutdown both need both resources released, or Jest
+   * force-exits the worker (Redis reconnect + throttler setTimeout).
+   */
+  private release(): void {
+    if (this.released) return;
+    this.released = true;
+    const client = this.redis?.redis;
+    if (client) {
+      client.removeAllListeners();
+      try {
+        client.disconnect();
+      } catch {
+        // Already closed after a refused connection.
+      }
     }
+    this.memory.onApplicationShutdown();
   }
 
-  /** The fallback in-memory storage arms setTimeout timers per hit — clear them. */
+  onModuleDestroy(): void {
+    this.release();
+  }
+
   onApplicationShutdown(): void {
-    this.memory.onApplicationShutdown();
+    this.release();
   }
 }
 

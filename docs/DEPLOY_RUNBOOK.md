@@ -62,14 +62,32 @@ openssl rand -base64 24     # → POSTGRES_PASSWORD و BOOTSTRAP_ADMIN_PASSWORD
 | `BOOTSTRAP_ADMIN_EMAIL` / `BOOTSTRAP_ADMIN_PASSWORD` | ادمین اول — **بعد از اولین ورود حذف شوند** |
 | `SMTP_*` | حساب SMTP واقعی (بازیابی رمز عبور و ایمیل‌ها وابسته به آن است) |
 
+`NEXT_PUBLIC_APP_URL` در زمان **بیلد** ایمیج وب پخته می‌شود (build-arg در `docker compose` و، اگر ست شده باشد، variable گیت‌هاب در workflow انتشار). مقدار `localhost` یعنی ایمیج برای هاست واقعی آماده نیست.
+
+قبل از بالا آوردن استک، پیش‌پرواز را اجرا کنید. اسکریپت فقط **نام** متغیر و دلیل را چاپ می‌کند، نه مقدار راز. روی `.env.docker.example` باید با کد ۱ بشکند؛ فقط فایل پر شدهٔ production باید عبور کند:
+
+```bash
+pnpm docker:preflight
+# یا صریح:
+node scripts/preflight-docker-env.mjs .env.docker
+```
+
+وقتی `NODE_ENV=production` است این‌ها شکست‌اند: `JWT_SECRET` / `JWT_REFRESH_SECRET` خالی، کوتاه‌تر از ۳۲ نویسه، یا برابر placeholderهای `apps/api/src/config/env.validation.ts`؛ `CORS_ORIGIN` خالی یا شامل localhost / `127.0.0.1`؛ `SITE_DOMAIN` خالی؛ `POSTGRES_PASSWORD` خالی یا برابر رمز نمونه؛ `NEXT_PUBLIC_APP_URL` خالی یا localhost.
+
 ## ۳. راه‌اندازی
 
 ```bash
+pnpm docker:preflight                 # باید ۰ باشد؛ example فایل شکست می‌خورد
 pnpm docker:build
 pnpm docker:up
 docker compose --profile full ps      # هر ۴ سرویس healthy
-curl -k https://kia.example.com/api/health   # {"status":"ok",...}
+curl -k https://kia.example.com/api/health   # {"status":"ok",...}  liveness، فقط دیتابیس
+curl -k https://kia.example.com/api/ready    # آمادگی ثبت‌نام/پرداخت؛ تا درگاه و SMS واقعی نباشد در production برابر 503
 ```
+
+`/api/health` زنده بودن پروسه و دیتابیس است. HEALTHCHECK داکر همان مسیر را می‌زند تا کانتینری که هنوز کاوه‌نگار یا درگاه ندارد در حلقهٔ ری‌استارت نیفتد. `/api/ready` را جایگزین HEALTHCHECK نکنید. در production اگر پیامک ارائه‌دهندهٔ واقعی نباشد یا درگاه `dev` باشد (یا خاموش / بدون اعتبار لازم) پاسخ 503 است؛ در development همیشه 200 با بدنهٔ ساخت‌یافته. کلید API و merchant id در پاسخ نیست.
+
+مسیرهای داینامیک تیکت، دوره و درس دیگر `dynamicParams = false` ندارند. Next 16 فقط مقدار بولینِ لیترال را در این segment config می‌پذیرد (`process.env.GITHUB_PAGES !== 'true'` بیلد را می‌شکند). مقدار صریح `true` با `output: 'export'` ناسازگار است و مقدار `false` شناسه‌های واقعی را روی `next start` و ایمیج standalone با 404 برمی‌گرداند. با حذف این export، پیش‌فرض سرور on-demand است. خروجی Pages همچنان فقط مسیرهای `generateStaticParams` را می‌نویسد.
 
 Caddy در اولین اجرا گواهی Let's Encrypt را صادر می‌کند (چند ثانیه).
 لاگ آن: `docker compose --profile full logs -f caddy`
@@ -125,8 +143,8 @@ docker compose --profile monitor up -d
 # داشبورد: http://127.0.0.1:3101 (فقط از سرور؛ با SSH tunnel: ssh -L 3101:127.0.0.1:3101 user@server)
 ```
 
-دو مانیتور HTTP بسازید: `https://kia.example.com/` و `https://kia.example.com/api/health`
-و هشدار (تلگرام/ایمیل) تنظیم کنید.
+سه مانیتور HTTP بسازید: `https://kia.example.com/`، `https://kia.example.com/api/health` (liveness؛ سیاست restart کانتینر) و `https://kia.example.com/api/ready` (آمادگی SMS/درگاه — 503 اینجا یعنی ری‌استارت کانتینر درست نیست، پیکربندی پنل ادمین لازم است).
+هشدار (تلگرام/ایمیل) تنظیم کنید.
 
 ### بکاپ خودکار
 
@@ -146,7 +164,9 @@ crontab -e
 ## ۷. چک‌لیست go-live
 
 - [ ] `docker compose --profile full ps` — همه سرویس‌ها healthy
+- [ ] `pnpm docker:preflight` روی `.env.docker` واقعی = ۰ (فایل example باید شکست بخورد)
 - [ ] `curl https://SITE_DOMAIN/api/health` = ok؛ `https://` بدون اخطار مرورگر
+- [ ] `curl https://SITE_DOMAIN/api/ready` بعد از تنظیم کاوه‌نگار و درگاه غیر dev = 200 (قبل از آن 503 طبیعی است و نباید HEALTHCHECK را عوض کند)
 - [ ] `pnpm test:e2e` روی build پروڈاکشن پاس (پیش از استقرار روی سیستم خودتان)
 - [ ] ثبت‌نام با شماره واقعی → دریافت OTP از کاوه‌نگار → تکمیل پروفایل
 - [ ] خرید آزمایشی هر ۳ نوع محصول + یک مسیر ناموفق/لغو
@@ -165,6 +185,8 @@ crontab -e
 
 - `ghcr.io/kia-mlz/kia./api:main` (+ تگ `sha-<commit>` برای هر کامیت)
 - `ghcr.io/kia-mlz/kia./web:main`
+
+ایمیج web فقط وقتی variableهای ریپازیتوری `NEXT_PUBLIC_APP_URL` و در صورت نیاز `NEXT_PUBLIC_API_URL` و `API_PROXY_TARGET` ست شده باشند آن‌ها را به‌عنوان build-arg می‌گیرد. اگر `NEXT_PUBLIC_APP_URL` خالی باشد job انتشار شکست نمی‌خورد، ولی ایمیج **host-ready نیست** (پیش‌فرض Dockerfile یعنی `http://localhost:3000` داخل باندل می‌ماند و API در production به‌خاطر CORS لوکال بالا نمی‌آید). قبل از تکیه بر ایمیج GHCR آن variable را ست کنید. بیلد محلی `docker compose` از قبل همین argها را از `.env.docker` پاس می‌دهد.
 
 روی سرور یک `docker-compose.override.yml` بسازید:
 

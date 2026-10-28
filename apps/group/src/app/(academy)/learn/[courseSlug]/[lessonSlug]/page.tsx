@@ -11,8 +11,10 @@ export function generateStaticParams() {
   return params;
 }
 
-export const dynamicParams = false;
-
+// db.json lessons are the Pages/demo paths. Do not set `dynamicParams` to a
+// literal: `false` 404s other lessons on `next start` and Docker standalone,
+// and `true` is illegal with `output: 'export'`. Next 16 rejects `process.env`
+// in this segment config. The default is on-demand.
 export default function Page() {
   return <LessonPlayer />;
 }

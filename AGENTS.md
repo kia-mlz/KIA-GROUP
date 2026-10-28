@@ -5,7 +5,7 @@
 **کیا (Kia)** — Persian-first platform with six departments: Kia Academy, Kia Work,
 Kia Material, Kia Event, Kia Community, Kia Lab (tagline: آموزش · اشتغال · نوآوری · ارتباط · توسعه). Architecture notes: `docs/REBUILD_ARCHITECTURE.md`.
 
-Monorepo: Node `>=22.13`, pnpm `11.13.0` via Corepack. Standard commands live in root `package.json` and `README.md`.
+Monorepo: Node `>=22.13`, pnpm `11.19.0` via Corepack (`packageManager` in the root `package.json`). Standard commands live in root `package.json` and `README.md`.
 
 ### Services
 

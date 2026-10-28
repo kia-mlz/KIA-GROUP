@@ -14,6 +14,7 @@ export class AppController {
       timestamp: new Date().toISOString(),
       endpoints: {
         health: '/api/health',
+        ready: '/api/ready',
         settings: '/api/settings',
         courses: '/api/courses',
         auth: '/api/auth',

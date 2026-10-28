@@ -5,8 +5,10 @@ import { absoluteUrl, PUBLIC_SITEMAP_PATHS } from '@/lib/seo';
 export const dynamic = 'force-static';
 
 /**
- * Sitemap generated from real public routes + course catalog (db.json / shared catalog).
- * Private app routes are intentionally omitted.
+ * Public static paths only, plus db.json course URLs when this is the GitHub
+ * Pages demo export. A normal build does not advertise those slugs: the live
+ * catalog is the API, and a down API must not be replaced with invented URLs.
+ * Private app routes stay omitted (see robots.ts).
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -18,12 +20,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: path === '/' ? 1 : path === '/courses' || path === '/material' ? 0.8 : 0.6,
   }));
 
-  const courseEntries: MetadataRoute.Sitemap = courseCatalog.map((course) => ({
-    url: absoluteUrl(`/courses/${course.slug}`),
-    lastModified: now,
-    changeFrequency: 'weekly',
-    priority: 0.7,
-  }));
+  const courseEntries: MetadataRoute.Sitemap =
+    process.env.GITHUB_PAGES === 'true'
+      ? courseCatalog.map((course) => ({
+          url: absoluteUrl(`/courses/${course.slug}`),
+          lastModified: now,
+          changeFrequency: 'weekly' as const,
+          priority: 0.7,
+        }))
+      : [];
 
   return [...staticEntries, ...courseEntries];
 }

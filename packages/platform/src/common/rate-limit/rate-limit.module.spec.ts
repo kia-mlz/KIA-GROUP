@@ -43,13 +43,15 @@ describe('RateLimitStorageProvider (CI-2)', () => {
   it('fails open to in-memory counting when Redis rejects writes', async () => {
     const provider = makeProvider({ REDIS_URL: 'redis://127.0.0.1:1' });
     try {
-      // The embedded client cannot connect to port 1; increment must not throw —
-      // it degrades to the in-memory service so the API keeps serving.
+      // Port 1 never accepts a write (offline queue is off, so the command is
+      // rejected). increment must not throw — it degrades to in-memory storage.
       const record = await provider.increment('k3', 60_000, 100, 60_000, 'default');
       expect(record.totalHits).toBe(1);
     } finally {
-      // Close the Redis client so Jest can exit cleanly.
+      // Close Redis and the in-memory TTL timers. Both hooks must be safe
+      // to call; either one releases every handle.
       provider.onModuleDestroy();
+      provider.onApplicationShutdown();
     }
   });
 });

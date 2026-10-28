@@ -2441,7 +2441,7 @@ export const en = {
       refund: 'Refund',
       refundTitle: 'Refund this payment',
       refundBody:
-        'A refund credits the learner wallet. Leave the amount empty to refund the full payment.',
+        'This refund is recorded only in the ledger and the learner wallet. The card payment is not reversed at the gateway automatically — that step stays manual. Leave the amount empty to refund the full amount in the ledger.',
       refundAmount: 'Amount ({unit})',
       refundAmountPlaceholder: 'Leave empty for a full refund',
       refundFullHint: 'Empty → the full payment is refunded.',

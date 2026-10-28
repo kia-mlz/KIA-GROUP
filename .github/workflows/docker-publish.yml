@@ -4,6 +4,13 @@ name: Docker Publish
 # main and on version tags (v*). Deploy servers then `docker pull` + restart —
 # no image building on the production host (see docs/DEPLOY_RUNBOOK.md §8).
 #
+# Web build-args (NEXT_PUBLIC_APP_URL, NEXT_PUBLIC_API_URL, API_PROXY_TARGET)
+# come from repository Actions variables when those variables are set. They are
+# not secrets. If vars.NEXT_PUBLIC_APP_URL is empty this job still succeeds,
+# but the web image bakes the Dockerfile default http://localhost:3000 and is
+# NOT host-ready — set the variable before relying on the GHCR web image.
+# docker-compose already passes the same args from .env.docker for local builds.
+#
 # Tags pushed per image:
 #   main  /  sha-<commit>   (branch pushes)
 #   1.2.3  /  sha-<commit>  (v* tags)
@@ -81,12 +88,45 @@ jobs:
             type=gha,scope=deps
           cache-to: type=gha,scope=api,mode=max
 
+      # Only pass a build-arg when the matching repository variable is set.
+      # An empty NEXT_PUBLIC_APP_URL would override the Dockerfile default and
+      # still bake a useless origin; omitting it keeps the default and the job
+      # green. That image is not host-ready until the variable is set.
+      - name: Compose optional web build-args
+        id: webargs
+        env:
+          NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL }}
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          API_PROXY_TARGET: ${{ vars.API_PROXY_TARGET }}
+        run: |
+          set -euo pipefail
+          args_file="$(mktemp)"
+          if [[ -n "${NEXT_PUBLIC_APP_URL}" ]]; then
+            printf 'NEXT_PUBLIC_APP_URL=%s\n' "${NEXT_PUBLIC_APP_URL}" >> "${args_file}"
+          else
+            echo "::notice title=Web image not host-ready::vars.NEXT_PUBLIC_APP_URL is empty. The published web image bakes the Dockerfile default (http://localhost:3000) and is NOT host-ready. Set the repository variable before using this image on a host. This job is not failed."
+          fi
+          if [[ -n "${NEXT_PUBLIC_API_URL}" ]]; then
+            printf 'NEXT_PUBLIC_API_URL=%s\n' "${NEXT_PUBLIC_API_URL}" >> "${args_file}"
+          fi
+          if [[ -n "${API_PROXY_TARGET}" ]]; then
+            printf 'API_PROXY_TARGET=%s\n' "${API_PROXY_TARGET}" >> "${args_file}"
+          fi
+          delimiter="WEB_BUILD_ARGS_$(openssl rand -hex 8)"
+          {
+            echo "args<<${delimiter}"
+            cat "${args_file}"
+            echo "${delimiter}"
+          } >> "${GITHUB_OUTPUT}"
+          rm -f "${args_file}"
+
       - name: Build and push web image
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83
         with:
           context: .
           target: web
           push: true
+          build-args: ${{ steps.webargs.outputs.args }}
           tags: |
             ${{ steps.tags.outputs.web_image }}:${{ steps.tags.outputs.version }}
             ${{ steps.tags.outputs.web_image }}:sha-${{ github.sha }}
