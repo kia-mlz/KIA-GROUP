@@ -13,7 +13,7 @@
     "@kia./shared": "workspace:*"
   },
   "devDependencies": {
-    "@types/react": "^19.1.4",
+    "@types/react": "^19.3.0",
     "typescript": "^5.8.3"
   }
 }
