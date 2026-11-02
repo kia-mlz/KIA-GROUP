@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import type { GamePlaySession, GameSubmitResult, LearnerGameStage } from '@kia./shared';
 import { RequireAuth } from '@/components/auth/RequireAuth';
 import { useLanguage } from '@/context/LanguageProvider';
@@ -10,7 +11,8 @@ import { GameActivity } from './Activities';
 import { gamesCopy } from './games-copy';
 
 export default function GamePlay({ gameId }: { gameId: string }) {
-  const nextPath = `/learn/play/${gameId}`;
+  const pathname = usePathname();
+  const nextPath = pathname || `/learn/play/${gameId}`;
   return (
     <RequireAuth nextPath={nextPath} learnerFlow>
       <GamePlayInner gameId={gameId} />

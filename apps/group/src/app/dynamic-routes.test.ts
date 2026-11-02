@@ -14,8 +14,10 @@ const appDir = __dirname;
 const ON_DEMAND_PAGES = [
   'dashboard/tickets/[id]/page.tsx',
   'admin/tickets/[id]/page.tsx',
+  'admin/academy/games/[id]/page.tsx',
   '(academy)/courses/[slug]/page.tsx',
   '(academy)/learn/[courseSlug]/[lessonSlug]/page.tsx',
+  '(academy)/learn/[courseSlug]/[lessonSlug]/play/[gameId]/page.tsx',
 ];
 
 /** These already allow unknown params; do not lock them to the Pages export. */

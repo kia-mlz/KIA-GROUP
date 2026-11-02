@@ -145,6 +145,20 @@ import {
 } from '@kia./shared';
 import { ApiError } from '@/lib/apiError';
 import { clearTokens, setAccessToken } from '@/lib/auth';
+import {
+  demoAdminGameResults,
+  demoAdminGamesCatalog,
+  demoAdminGamesDashboard,
+  demoAdminGetGame,
+  demoAdminListGames,
+  demoCourseGamesSummary,
+  demoGameHint,
+  demoLessonGames,
+  demoRestartGame,
+  demoResumeGame,
+  demoStartGame,
+  demoSubmitStage,
+} from '@/lib/demoGames';
 
 const DEMO_SESSION_KEY = 'kia-academy-demo-session';
 const DEMO_STATE_KEY = 'kia-academy-demo-state';
@@ -3595,44 +3609,28 @@ export const demoApi = {
     return delay(payload);
   },
 
-  async lessonGames(): Promise<LessonGamesResponse> {
-    return delay({
-      lessonId: 'demo',
-      lessonSlug: 'demo',
-      lessonTitle: 'Demo',
-      courseSlug: 'demo',
-      courseTitle: 'Demo',
-      games: [],
-    });
+  async lessonGames(courseSlug: string, lessonSlug: string): Promise<LessonGamesResponse> {
+    return delay(demoLessonGames(courseSlug, lessonSlug));
   },
 
-  async courseGamesSummary(): Promise<CourseGamesSummary> {
-    return delay({
-      gameCount: 0,
-      completed: 0,
-      remaining: 0,
-      progressPct: 0,
-      xpEarned: 0,
-      level: 1,
-      streakDays: 0,
-      games: [],
-    });
+  async courseGamesSummary(slug: string): Promise<CourseGamesSummary> {
+    return delay(demoCourseGamesSummary(slug));
   },
 
-  async startGame(): Promise<GamePlaySession> {
-    throw new ApiError('Games need the live API', 404);
+  async startGame(gameId: string): Promise<GamePlaySession> {
+    return delay(demoStartGame(gameId));
   },
-  async resumeGame(): Promise<GamePlaySession> {
-    throw new ApiError('Games need the live API', 404);
+  async resumeGame(gameId: string): Promise<GamePlaySession> {
+    return delay(demoResumeGame(gameId));
   },
-  async restartGame(): Promise<GamePlaySession> {
-    throw new ApiError('Games need the live API', 404);
+  async restartGame(gameId: string): Promise<GamePlaySession> {
+    return delay(demoRestartGame(gameId));
   },
-  async submitStage(): Promise<GameSubmitResult> {
-    throw new ApiError('Games need the live API', 404);
+  async submitStage(gameId: string, stageId: string, answer: unknown): Promise<GameSubmitResult> {
+    return delay(demoSubmitStage(gameId, stageId, answer));
   },
-  async gameHint(): Promise<GameHintResult> {
-    throw new ApiError('Games need the live API', 404);
+  async gameHint(gameId: string, stageId: string, index: number): Promise<GameHintResult> {
+    return delay(demoGameHint(gameId, stageId, index));
   },
   async myGameStats(): Promise<LearnerGameStatsView> {
     return delay({ xp: 0, level: 1, streakDays: 0, gamesCompleted: 0, achievements: [] });
@@ -3641,26 +3639,16 @@ export const demoApi = {
     return delay([]);
   },
   async adminGamesDashboard(): Promise<AdminGamesDashboard> {
-    return delay({
-      total: 0,
-      published: 0,
-      drafts: 0,
-      archived: 0,
-      participants: 0,
-      completions: 0,
-      averageScore: 0,
-      popular: [],
-      lessonsWithoutGames: [],
-    });
+    return delay(demoAdminGamesDashboard());
   },
   async adminGamesCatalog(): Promise<GameCatalogCourse[]> {
-    return delay([]);
+    return delay(demoAdminGamesCatalog());
   },
   async adminListGames(): Promise<AdminEducationalGame[]> {
-    return delay([]);
+    return delay(demoAdminListGames());
   },
-  async adminGetGame(): Promise<AdminEducationalGame> {
-    throw new ApiError('Games need the live API', 404);
+  async adminGetGame(id: string): Promise<AdminEducationalGame> {
+    return delay(demoAdminGetGame(id));
   },
   async adminCreateGame(body: AdminEducationalGameInput): Promise<AdminEducationalGame> {
     throw new ApiError(`Games need the live API (${body.title})`, 404);
@@ -3680,8 +3668,8 @@ export const demoApi = {
   async adminRemoveGame(): Promise<{ archived: boolean; deleted: boolean }> {
     return delay({ archived: false, deleted: false });
   },
-  async adminGameResults(): Promise<AdminGameResults> {
-    throw new ApiError('Games need the live API', 404);
+  async adminGameResults(gameId: string): Promise<AdminGameResults> {
+    return delay(demoAdminGameResults(gameId));
   },
   async adminCreateChapter(): Promise<{ id: string }> {
     return delay({ id: 'demo-chapter' });
