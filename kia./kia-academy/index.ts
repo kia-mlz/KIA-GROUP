@@ -10,3 +10,4 @@ export { ReadinessModule } from './learning-paths/readiness/readiness.module';
 export { TestBanksModule } from './learning-paths/test-banks/test-banks.module';
 export { PersonalityModule } from './students/personality/personality.module';
 export { ProgressModule } from './students/progress/progress.module';
+export { EducationalGamesModule } from './courses/educational-games/educational-games.module';

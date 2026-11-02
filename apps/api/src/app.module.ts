@@ -49,6 +49,7 @@ import { ReadinessModule } from '@kia./kia-academy';
 import { BootcampModule } from '@kia./kia-event';
 import { TestBanksModule } from '@kia./kia-academy';
 import { ProgressModule } from '@kia./kia-academy';
+import { EducationalGamesModule } from '@kia./kia-academy';
 import { CompetitionsModule } from '@kia./kia-event';
 import { ChallengesModule } from '@kia./kia-event';
 
@@ -102,6 +103,7 @@ ConfigModule.forRoot({
     BootcampModule,
     TestBanksModule,
     ProgressModule,
+    EducationalGamesModule,
     // ── KIA Event (competitions & challenges) ────────────────────────────
     CompetitionsModule,
     ChallengesModule,

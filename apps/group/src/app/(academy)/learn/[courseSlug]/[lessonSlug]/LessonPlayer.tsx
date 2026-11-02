@@ -16,6 +16,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import type { CourseExamSummary, LessonDetail, LessonSummary } from '@kia./shared';
 import { parseLessonContent } from '@kia./shared';
 import { RequireAuth } from '@/components/auth/RequireAuth';
+import { LessonGames } from '@/components/games/LessonGames';
 import { LessonPlayground } from '@/components/lesson/LessonPlayground';
 import { LessonVideo } from '@/components/lesson/LessonVideo';
 import { useLanguage } from '@/context/LanguageProvider';
@@ -482,6 +483,10 @@ function LessonPlayerContent({
                 )}
               </div>
             </article>
+
+            {courseSlug && lessonSlug ? (
+              <LessonGames courseSlug={courseSlug} lessonSlug={lessonSlug} />
+            ) : null}
 
             <section className="learn-utility-grid">
               <article className="notes-card glass-panel">

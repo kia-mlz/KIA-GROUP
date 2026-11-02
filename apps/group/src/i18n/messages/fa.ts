@@ -1793,6 +1793,7 @@ export const fa = {
       coursesList: 'لیست دوره‌ها',
       coursesNew: 'افزودن دوره',
       courseExams: 'آزمون‌های میان‌ترم و پایان‌ترم',
+      educationalGames: 'مدیریت بازی‌های آموزشی',
       challenges: 'چالش‌ها',
       users: 'کاربران',
       usersList: 'مدیریت کاربران',
@@ -2760,6 +2761,7 @@ export const fa = {
         tickets: 'تیکت‌های پشتیبانی',
         messages: 'پیام‌ها',
         competitions: 'مسابقات',
+        educationalGames: 'بازی‌های آموزشی',
         superOnly: 'فقط سوپر ادمین‌ها می‌توانند این مجوزها را ویرایش کنند.',
         sectionCol: 'بخش',
         level: {

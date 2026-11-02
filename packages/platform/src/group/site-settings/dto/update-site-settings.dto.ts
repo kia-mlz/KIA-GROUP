@@ -179,6 +179,36 @@ export class SiteAdminAccessDto {
   @ValidateNested()
   @Type(() => AdminSectionPermissionDto)
   tests?: AdminSectionPermissionDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => AdminSectionPermissionDto)
+  discounts?: AdminSectionPermissionDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => AdminSectionPermissionDto)
+  tickets?: AdminSectionPermissionDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => AdminSectionPermissionDto)
+  messages?: AdminSectionPermissionDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => AdminSectionPermissionDto)
+  competitions?: AdminSectionPermissionDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => AdminSectionPermissionDto)
+  audit?: AdminSectionPermissionDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => AdminSectionPermissionDto)
+  educationalGames?: AdminSectionPermissionDto;
 }
 
 export class SitePaymentDto {

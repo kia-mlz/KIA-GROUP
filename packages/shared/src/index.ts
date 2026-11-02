@@ -9,6 +9,7 @@ export * from './types/discount';
 export * from './types/order';
 export * from './types/course';
 export * from './types/course-exam';
+export * from './types/educational-game';
 export * from './types/admin';
 export * from './types/site-settings';
 export * from './types/contact';

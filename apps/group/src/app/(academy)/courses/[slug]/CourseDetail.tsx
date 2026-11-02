@@ -15,6 +15,7 @@ import { useCart } from '@/context/CartProvider';
 import { useLanguage } from '@/context/LanguageProvider';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 import { api, ApiError } from '@/lib/api';
+import { CourseGamesSummary } from '@/components/games/CourseGamesSummary';
 import { localizeCourse, localizeLesson } from '@/lib/courseLocalization';
 
 export default function CoursePage() {
@@ -128,6 +129,7 @@ export default function CoursePage() {
           ) : null}
         </h1>
         <p className="auth-sub">{localizedCourse.description}</p>
+        <CourseGamesSummary slug={localizedCourse.slug} />
         <div className="catalog-panel" style={{ maxWidth: 760 }}>
           <div className="catalog-meta">
             <span>{t('common.lessonsCount', { count: localizedCourse.lessonCount })}</span>

@@ -26,6 +26,7 @@ export function AdminAccessMatrix({
     'messages',
     'competitions',
     'audit',
+    'educationalGames',
   ];
   const levels = ['view', 'manage', 'edit'] as const;
 

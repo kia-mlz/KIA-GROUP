@@ -25,9 +25,11 @@ generator client {
 //                        SupportTicket(+Reply/Attachment), LearnerMessage,
 //                        LearnerTodo
 //   ACADEMY              Assessment, Roadmap, ReadinessTest, PersonalityResult,
-//                        ExamAttempt, Course, Lesson, CourseExam(+Attempt),
+//                        ExamAttempt, Course, Chapter, Lesson, CourseExam(+Attempt),
 //                        CourseAttachment, Enrollment, LessonProgress,
-//                        BootcampProfile
+//                        EducationalGame, GameStage, GameAttempt, UserGameProgress,
+//                        UserXpTransaction, Achievement, UserAchievement,
+//                        LearnerGameStats, BootcampProfile
 //   EVENTS               Challenge, ChallengeSubmission, Competition,
 //                        CompetitionRegistration
 // =============================================================================
@@ -175,6 +177,11 @@ model User {
   enrollments            Enrollment[]
   lessonProgress         LessonProgress[]
   courseExamAttempts     CourseExamAttempt[]
+  gameAttempts           GameAttempt[]
+  gameProgress           UserGameProgress[]
+  xpTransactions         UserXpTransaction[]
+  userAchievements       UserAchievement[]
+  learnerGameStats       LearnerGameStats?
   supportTickets         SupportTicket[]
   ticketReplies          TicketReply[]
   learnerMessages        LearnerMessage[]
@@ -611,6 +618,7 @@ model Course {
   createdAt     DateTime @default(now())
 
   lessons     Lesson[]
+  chapters    Chapter[]
   courseExams CourseExam[]
   enrollments Enrollment[]
   attachments CourseAttachment[]
@@ -707,13 +715,21 @@ model Lesson {
    * "Coming soon" lessons stay visible in listings but are locked with no content access.
    */
   comingSoon  Boolean @default(false)
+  /**
+   * Optional grouping. Null keeps the lesson on the course directly so existing
+   * rows stay valid — chapters are additive, not a rewrite of the lesson model.
+   */
+  chapterId   String?
+  chapter     Chapter? @relation(fields: [chapterId], references: [id], onDelete: SetNull)
 
   progress LessonProgress[]
+  games    EducationalGame[]
 
   examsAfter CourseExam[]
 
   @@unique([courseId, slug])
   @@index([courseId, sortOrder])
+  @@index([chapterId])
 }
 
 model Enrollment {
@@ -1020,4 +1036,249 @@ model AdminAuditLog {
   @@index([actorId, createdAt])
   @@index([section, action])
   @@index([entityType, entityId])
+}
+
+// =============================================================================
+// ACADEMY — interactive educational games (attached to lessons)
+// =============================================================================
+
+enum EducationalGameType {
+  CODE_BUILDER
+  CODE_EDITOR
+  BUG_HUNTER
+  DRAG_DROP
+  QUIZ
+  WEBSITE_BUILDER
+  CODE_ADVENTURE
+  MATCHING
+  FILL_BLANKS
+  OUTPUT_PREDICTION
+  SIMULATION
+  FINAL_PROJECT
+}
+
+enum GameDifficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum GamePublishStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum UserGameStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum XpTransactionType {
+  EARN
+  ADJUST
+}
+
+/**
+ * Optional course chapter. Lessons may stay unassigned (chapterId null).
+ */
+model Chapter {
+  id          String   @id @default(cuid())
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title       String
+  description String   @default("")
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  lessons Lesson[]
+
+  @@index([courseId, sortOrder])
+}
+
+/**
+ * One playable game attached to a lesson. Correct answers live on stages
+ * (gradingConfig) and are never returned to learners.
+ */
+model EducationalGame {
+  id                  String              @id @default(cuid())
+  lessonId            String
+  lesson              Lesson              @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  slug                String
+  title               String
+  description         String              @default("")
+  learningGoal        String              @default("")
+  type                EducationalGameType
+  difficulty          GameDifficulty      @default(BEGINNER)
+  estimatedMin        Int                 @default(10)
+  points              Int                 @default(50)
+  publishStatus       GamePublishStatus   @default(DRAFT)
+  sortOrder           Int                 @default(0)
+  required            Boolean             @default(false)
+  prerequisiteGameId  String?
+  prerequisite        EducationalGame?    @relation("GamePrerequisite", fields: [prerequisiteGameId], references: [id], onDelete: SetNull)
+  dependents          EducationalGame[]   @relation("GamePrerequisite")
+  /**
+   * Pass rules and presentation only — never answer keys.
+   * { passScorePct, hintPenalty, completionBonus? }
+   */
+  settings            Json                @default("{}")
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  stages   GameStage[]
+  attempts GameAttempt[]
+  progress UserGameProgress[]
+
+  @@unique([lessonId, slug])
+  @@index([lessonId, sortOrder])
+  @@index([publishStatus])
+}
+
+model GameStage {
+  id              String          @id @default(cuid())
+  gameId          String
+  game            EducationalGame @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  title           String
+  description     String          @default("")
+  mission         String          @default("")
+  sortOrder       Int             @default(0)
+  /**
+   * Grading strategy key (exact, mcq, pattern, html, dom, output, unit,
+   * test_cases, drag_drop, matching, manual).
+   */
+  challengeType   String
+  /**
+   * Learner-visible prompt. The API still strips known answer keys before send.
+   */
+  challengeConfig Json
+  /**
+   * Server-only expected answers and validators.
+   */
+  gradingConfig   Json
+  hints           Json            @default("[]")
+  points          Int             @default(10)
+  timeLimitSec    Int?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  attempts GameAttempt[]
+
+  @@index([gameId, sortOrder])
+}
+
+model GameAttempt {
+  id              String          @id @default(cuid())
+  userId          String
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gameId          String
+  game            EducationalGame @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  stageId         String
+  stage           GameStage       @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  attemptNumber   Int
+  submittedAnswer Json
+  /**
+   * Learner-safe feedback (code, passed, points). No canonical answer.
+   */
+  gradingResult   Json
+  score           Int             @default(0)
+  passed          Boolean         @default(false)
+  startedAt       DateTime        @default(now())
+  finishedAt      DateTime?
+
+  @@index([userId, gameId])
+  @@index([stageId])
+  @@index([userId, stageId])
+}
+
+model UserGameProgress {
+  id                String         @id @default(cuid())
+  userId            String
+  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gameId            String
+  game              EducationalGame @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  status            UserGameStatus @default(NOT_STARTED)
+  currentStageOrder Int            @default(0)
+  completedStageIds Json           @default("[]")
+  score             Int            @default(0)
+  bestScore         Int            @default(0)
+  attemptsCount     Int            @default(0)
+  correctCount      Int            @default(0)
+  gradedCount       Int            @default(0)
+  timeSpentSec      Int            @default(0)
+  /**
+   * Stays true after the first completion so a replay cannot farm XP or
+   * increment games-completed again. Restart does not clear it.
+   */
+  everCompleted     Boolean        @default(false)
+  hintsByStage      Json           @default("{}")
+  startedAt         DateTime?
+  completedAt       DateTime?
+  updatedAt         DateTime       @updatedAt
+
+  @@unique([userId, gameId])
+  @@index([userId, status])
+  @@index([gameId])
+}
+
+model UserXpTransaction {
+  id              String            @id @default(cuid())
+  userId          String
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /**
+   * GAME_STAGE | GAME_COMPLETE | ACHIEVEMENT
+   */
+  sourceType      String
+  sourceId        String
+  amount          Int
+  transactionType XpTransactionType @default(EARN)
+  createdAt       DateTime          @default(now())
+
+  @@unique([userId, sourceType, sourceId, transactionType])
+  @@index([userId, createdAt])
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  title       String
+  description String
+  icon        String   @default("award")
+  xp          Int      @default(0)
+  /**
+   * { kind: 'GAMES_COMPLETED' | 'XP_REACHED' | 'STREAK', threshold: number }
+   */
+  rule        Json
+  createdAt   DateTime @default(now())
+
+  awards UserAchievement[]
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  earnedAt      DateTime    @default(now())
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+}
+
+model LearnerGameStats {
+  userId          String   @id
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  xp              Int      @default(0)
+  level           Int      @default(1)
+  streakDays      Int      @default(0)
+  /**
+   * Asia/Tehran calendar date (YYYY-MM-DD) of the last successful stage.
+   */
+  lastActiveKey   String?
+  gamesCompleted  Int      @default(0)
+  updatedAt       DateTime @updatedAt
+
+  @@index([xp])
 }

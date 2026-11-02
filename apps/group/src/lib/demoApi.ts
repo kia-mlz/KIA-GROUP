@@ -16,6 +16,18 @@ import type {
   CourseExamSubmitResult,
   CourseExamSummary,
   CourseExamKind,
+  LessonGamesResponse,
+  CourseGamesSummary,
+  GamePlaySession,
+  GameSubmitResult,
+  GameHintResult,
+  LearnerGameStatsView,
+  GameLeaderboardEntry,
+  AdminGamesDashboard,
+  AdminEducationalGame,
+  AdminEducationalGameInput,
+  GameCatalogCourse,
+  AdminGameResults,
   CourseSummary,
   CreateChallengeDto,
   CreateCourseDto,
@@ -3581,6 +3593,101 @@ export const demoApi = {
     const payload = defaultDemoTestBank(id);
     writeDemoTestBank(payload);
     return delay(payload);
+  },
+
+  async lessonGames(): Promise<LessonGamesResponse> {
+    return delay({
+      lessonId: 'demo',
+      lessonSlug: 'demo',
+      lessonTitle: 'Demo',
+      courseSlug: 'demo',
+      courseTitle: 'Demo',
+      games: [],
+    });
+  },
+
+  async courseGamesSummary(): Promise<CourseGamesSummary> {
+    return delay({
+      gameCount: 0,
+      completed: 0,
+      remaining: 0,
+      progressPct: 0,
+      xpEarned: 0,
+      level: 1,
+      streakDays: 0,
+      games: [],
+    });
+  },
+
+  async startGame(): Promise<GamePlaySession> {
+    throw new ApiError('Games need the live API', 404);
+  },
+  async resumeGame(): Promise<GamePlaySession> {
+    throw new ApiError('Games need the live API', 404);
+  },
+  async restartGame(): Promise<GamePlaySession> {
+    throw new ApiError('Games need the live API', 404);
+  },
+  async submitStage(): Promise<GameSubmitResult> {
+    throw new ApiError('Games need the live API', 404);
+  },
+  async gameHint(): Promise<GameHintResult> {
+    throw new ApiError('Games need the live API', 404);
+  },
+  async myGameStats(): Promise<LearnerGameStatsView> {
+    return delay({ xp: 0, level: 1, streakDays: 0, gamesCompleted: 0, achievements: [] });
+  },
+  async gameLeaderboard(): Promise<GameLeaderboardEntry[]> {
+    return delay([]);
+  },
+  async adminGamesDashboard(): Promise<AdminGamesDashboard> {
+    return delay({
+      total: 0,
+      published: 0,
+      drafts: 0,
+      archived: 0,
+      participants: 0,
+      completions: 0,
+      averageScore: 0,
+      popular: [],
+      lessonsWithoutGames: [],
+    });
+  },
+  async adminGamesCatalog(): Promise<GameCatalogCourse[]> {
+    return delay([]);
+  },
+  async adminListGames(): Promise<AdminEducationalGame[]> {
+    return delay([]);
+  },
+  async adminGetGame(): Promise<AdminEducationalGame> {
+    throw new ApiError('Games need the live API', 404);
+  },
+  async adminCreateGame(body: AdminEducationalGameInput): Promise<AdminEducationalGame> {
+    throw new ApiError(`Games need the live API (${body.title})`, 404);
+  },
+  async adminUpdateGame(): Promise<AdminEducationalGame> {
+    throw new ApiError('Games need the live API', 404);
+  },
+  async adminDuplicateGame(): Promise<AdminEducationalGame> {
+    throw new ApiError('Games need the live API', 404);
+  },
+  async adminPublishGame(): Promise<AdminEducationalGame> {
+    throw new ApiError('Games need the live API', 404);
+  },
+  async adminUnpublishGame(): Promise<AdminEducationalGame> {
+    throw new ApiError('Games need the live API', 404);
+  },
+  async adminRemoveGame(): Promise<{ archived: boolean; deleted: boolean }> {
+    return delay({ archived: false, deleted: false });
+  },
+  async adminGameResults(): Promise<AdminGameResults> {
+    throw new ApiError('Games need the live API', 404);
+  },
+  async adminCreateChapter(): Promise<{ id: string }> {
+    return delay({ id: 'demo-chapter' });
+  },
+  async adminAssignLessonChapter(): Promise<{ id: string }> {
+    return delay({ id: 'demo-lesson' });
   },
 };
 

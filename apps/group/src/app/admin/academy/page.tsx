@@ -1,6 +1,6 @@
 'use client';
 
-import { BookOpen, ClipboardList, GraduationCap, Layers } from 'lucide-react';
+import { BookOpen, ClipboardList, Gamepad2, GraduationCap, Layers } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import type { AdminStats } from '@kia./shared';
 import { DepartmentWorkspaceHome } from '@/components/admin/DepartmentWorkspaceHome';
@@ -115,6 +115,13 @@ export default function AdminAcademyDashboardPage() {
           href: '/admin/academy/tests',
           label: t('admin.nav.tests'),
           icon: ClipboardList,
+        }
+      : null,
+    can('educationalGames')
+      ? {
+          href: '/admin/academy/games',
+          label: t('admin.nav.educationalGames'),
+          icon: Gamepad2,
         }
       : null,
   ].filter(Boolean) as { href: string; label: string; icon: typeof BookOpen }[];

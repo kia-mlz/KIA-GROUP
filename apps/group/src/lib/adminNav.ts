@@ -157,6 +157,12 @@ export const DEPARTMENT_WORKSPACES: Record<DepartmentSlug, DepartmentWorkspace> 
             href: '/admin/academy/tests',
             section: 'tests',
           },
+          {
+            id: 'educational-games',
+            label: 'مدیریت بازی‌های آموزشی',
+            href: '/admin/academy/games',
+            section: 'educationalGames',
+          },
         ],
       },
     ],

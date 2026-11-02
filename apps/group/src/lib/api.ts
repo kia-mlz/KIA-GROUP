@@ -110,6 +110,18 @@ import type {
   CourseExamQuestion,
   CourseExamAttemptSummary,
   CourseExamKind,
+  LessonGamesResponse,
+  CourseGamesSummary,
+  GamePlaySession,
+  GameSubmitResult,
+  GameHintResult,
+  LearnerGameStatsView,
+  GameLeaderboardEntry,
+  AdminGamesDashboard,
+  AdminEducationalGame,
+  AdminEducationalGameInput,
+  GameCatalogCourse,
+  AdminGameResults,
 } from '@kia./shared';
 import { clearTokens, getAccessToken, setAccessToken } from '@/lib/auth';
 import { ApiError } from '@/lib/apiError';
@@ -1209,6 +1221,103 @@ const liveApi = {
   adminResetTestBank(id: TestBankId): Promise<TestBankPayload> {
     return request<TestBankPayload>(`/admin/tests/${id}/reset`, {
       method: 'POST',
+    });
+  },
+
+  lessonGames(courseSlug: string, lessonSlug: string): Promise<LessonGamesResponse> {
+    return request(`/academy/games/lessons/by-slug/${courseSlug}/${lessonSlug}`);
+  },
+
+  courseGamesSummary(slug: string): Promise<CourseGamesSummary> {
+    return request(`/academy/games/courses/${slug}/summary`);
+  },
+
+  startGame(gameId: string): Promise<GamePlaySession> {
+    return request(`/academy/games/${gameId}/start`, { method: 'POST' });
+  },
+
+  resumeGame(gameId: string): Promise<GamePlaySession> {
+    return request(`/academy/games/${gameId}/resume`, { method: 'POST' });
+  },
+
+  restartGame(gameId: string): Promise<GamePlaySession> {
+    return request(`/academy/games/${gameId}/restart`, { method: 'POST' });
+  },
+
+  submitStage(gameId: string, stageId: string, answer: unknown): Promise<GameSubmitResult> {
+    return request(`/academy/games/${gameId}/stages/${stageId}/submit`, {
+      method: 'POST',
+      body: JSON.stringify({ answer }),
+    });
+  },
+
+  gameHint(gameId: string, stageId: string, index: number): Promise<GameHintResult> {
+    return request(`/academy/games/${gameId}/stages/${stageId}/hint`, {
+      method: 'POST',
+      body: JSON.stringify({ index }),
+    });
+  },
+
+  myGameStats(): Promise<LearnerGameStatsView> {
+    return request('/academy/games/me/stats');
+  },
+
+  gameLeaderboard(): Promise<GameLeaderboardEntry[]> {
+    return request('/academy/games/leaderboard');
+  },
+
+  adminGamesDashboard(): Promise<AdminGamesDashboard> {
+    return request('/admin/academy/games/dashboard');
+  },
+
+  adminGamesCatalog(): Promise<GameCatalogCourse[]> {
+    return request('/admin/academy/games/catalog');
+  },
+
+  adminListGames(query = ''): Promise<AdminEducationalGame[]> {
+    return request(`/admin/academy/games${query}`);
+  },
+
+  adminGetGame(id: string): Promise<AdminEducationalGame> {
+    return request(`/admin/academy/games/${id}`);
+  },
+
+  adminCreateGame(body: AdminEducationalGameInput): Promise<AdminEducationalGame> {
+    return request('/admin/academy/games', { method: 'POST', body: JSON.stringify(body) });
+  },
+
+  adminUpdateGame(id: string, body: Partial<AdminEducationalGameInput>): Promise<AdminEducationalGame> {
+    return request(`/admin/academy/games/${id}`, { method: 'PATCH', body: JSON.stringify(body) });
+  },
+
+  adminDuplicateGame(id: string): Promise<AdminEducationalGame> {
+    return request(`/admin/academy/games/${id}/duplicate`, { method: 'POST' });
+  },
+
+  adminPublishGame(id: string): Promise<AdminEducationalGame> {
+    return request(`/admin/academy/games/${id}/publish`, { method: 'POST' });
+  },
+
+  adminUnpublishGame(id: string): Promise<AdminEducationalGame> {
+    return request(`/admin/academy/games/${id}/unpublish`, { method: 'POST' });
+  },
+
+  adminRemoveGame(id: string): Promise<{ archived: boolean; deleted: boolean }> {
+    return request(`/admin/academy/games/${id}`, { method: 'DELETE' });
+  },
+
+  adminGameResults(id: string): Promise<AdminGameResults> {
+    return request(`/admin/academy/games/${id}/results`);
+  },
+
+  adminCreateChapter(body: { courseId: string; title: string; description?: string }): Promise<{ id: string }> {
+    return request('/admin/academy/chapters', { method: 'POST', body: JSON.stringify(body) });
+  },
+
+  adminAssignLessonChapter(lessonId: string, chapterId: string | null): Promise<{ id: string }> {
+    return request(`/admin/academy/lessons/${lessonId}/chapter`, {
+      method: 'PATCH',
+      body: JSON.stringify({ chapterId }),
     });
   },
 };

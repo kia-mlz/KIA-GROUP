@@ -37,6 +37,11 @@ export const DEPARTMENT_MODULES: Record<DepartmentSlug, DepartmentModule[]> = {
     { href: '/admin/academy/courses', labelKey: 'admin.nav.courses', key: 'courses' },
     { href: '/admin/academy/course-exams', labelKey: 'admin.nav.courseExams', key: 'courses' },
     { href: '/admin/academy/tests', labelKey: 'admin.nav.tests', key: 'tests' },
+    {
+      href: '/admin/academy/games',
+      labelKey: 'admin.nav.educationalGames',
+      key: 'educationalGames',
+    },
   ],
   // Bootcamps, challenges and competitions all live in the event department.
   events: [

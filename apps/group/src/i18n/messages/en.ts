@@ -1796,6 +1796,7 @@ export const en = {
       coursesList: 'Course list',
       coursesNew: 'Add course',
       courseExams: 'Midterm & final exams',
+      educationalGames: 'Educational games',
       challenges: 'Challenges',
       users: 'Users',
       usersList: 'Manage users',
@@ -2766,6 +2767,7 @@ export const en = {
         tickets: 'Support tickets',
         messages: 'Messages',
         competitions: 'Competitions',
+        educationalGames: 'Educational games',
         superOnly: 'Only super admins can edit these permissions.',
         sectionCol: 'Section',
         level: {

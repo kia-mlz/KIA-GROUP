@@ -4,6 +4,7 @@ import { PrismaClient } from '@kia./platform';
 import * as bcrypt from 'bcrypt';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { seedEducationalGames } from './seed-educational-games';
 import {
   DEFAULT_ASSESSMENT_BANK,
   EXAM_QUESTION_BANK,
@@ -378,6 +379,7 @@ Review the STAR method on [Wikipedia](https://en.wikipedia.org/wiki/Situation,_T
   console.log('Seeded default midterm/final exams for all courses');
 
   console.log('Seeded test banks: personality, assessment, readiness');
+  await seedEducationalGames(prisma);
 }
 
 main()

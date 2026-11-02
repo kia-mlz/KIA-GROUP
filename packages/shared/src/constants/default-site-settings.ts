@@ -110,6 +110,7 @@ export function createDefaultSiteSettings(): SiteSettings {
       messages: createSectionPermission(true, true, true),
       competitions: createSectionPermission(true, true, false),
       audit: createSectionPermission(true, false, false),
+      educationalGames: createSectionPermission(false, false, false),
     },
   };
 }
@@ -166,6 +167,10 @@ export function mergeSiteSettings(
             ...patch.adminAccess.competitions,
           },
           audit: { ...base.adminAccess.audit, ...patch.adminAccess.audit },
+          educationalGames: {
+            ...base.adminAccess.educationalGames,
+            ...patch.adminAccess.educationalGames,
+          },
         }
       : base.adminAccess,
   };
