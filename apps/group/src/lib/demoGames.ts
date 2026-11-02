@@ -14,12 +14,14 @@ import type {
   LessonGamesResponse,
   UserGameStatus,
 } from '@kia./shared';
+import { buildCoverGameForLesson } from '@kia./shared';
 import { ApiError } from '@/lib/apiError';
 import { courseCatalog } from '@/lib/courseCatalog';
+import { STATIC_COURSE_LESSONS } from '@/lib/staticPaths';
 
 /**
  * Published demo games for the GitHub Pages export.
- * Params must be known at build time, and the play page must render without a live API.
+ * One cover game per static lesson (same blueprints as production seed).
  */
 
 type DemoStage = {
@@ -30,7 +32,7 @@ type DemoStage = {
   sortOrder: number;
   challengeType: string;
   challengeConfig: JsonRecord;
-  grading: { strategy: string; correctIds: string[] };
+  gradingConfig: JsonRecord;
   hints: string[];
   points: number;
   timeLimitSec: number | null;
@@ -80,68 +82,91 @@ type StoredProgress = {
 const PROGRESS_KEY = 'kia-demo-educational-games';
 const CREATED_AT = '2026-08-01T09:00:00.000Z';
 
+const BRANDING_TITLES: Record<string, string> = {
+  'portfolio-story': 'Portfolio Story',
+  'interview-framework': 'Interview Framework',
+};
+
+function courseTitleFor(slug: string): string {
+  if (slug === 'interview-branding') return 'Interview & Personal Branding';
+  return courseCatalog.find((course) => course.slug === slug)?.title ?? slug;
+}
+
+function lessonsForCourse(courseSlug: string): Array<{ slug: string; title: string }> {
+  if (courseSlug === 'interview-branding') {
+    return Object.entries(BRANDING_TITLES).map(([slug, title]) => ({ slug, title }));
+  }
+  return (
+    courseCatalog.find((course) => course.slug === courseSlug)?.lessons.map((lesson) => ({
+      slug: lesson.slug,
+      title: lesson.title,
+    })) ?? []
+  );
+}
+
 function buildDemoGames(): DemoGame[] {
-  const course =
-    courseCatalog.find((item) => item.slug === 'html') ??
-    courseCatalog.find((item) => item.lessons.length > 0);
-  if (!course) return [];
-  const lesson =
-    course.lessons.find((item) => /heading/i.test(`${item.slug} ${item.title}`)) ??
-    course.lessons[0];
-  if (!lesson) return [];
-  const lessonIndex = course.lessons.findIndex((item) => item.slug === lesson.slug);
-  const next = course.lessons[lessonIndex + 1] ?? null;
-  const id = `demo-game-${course.slug}-${lesson.slug}`;
-  return [
-    {
-      id,
-      slug: 'heading-quiz',
-      title: 'عنوان صفحه را بشناس',
-      description: 'میان برچسب‌های پایه HTML، عنوان اصلی را پیدا کن.',
-      learningGoal: 'تشخیص برچسب عنوان سطح یک',
-      type: 'QUIZ',
-      difficulty: 'BEGINNER',
-      estimatedMin: 8,
-      points: 30,
-      required: false,
-      sortOrder: 0,
-      publishStatus: 'PUBLISHED',
-      lessonId: `lesson-${course.slug}-${lesson.slug}`,
-      lessonSlug: lesson.slug,
-      lessonTitle: lesson.title,
-      courseId: `course-${course.slug}`,
-      courseSlug: course.slug,
-      courseTitle: course.title,
-      nextLessonSlug: next?.slug ?? null,
-      chapterId: null,
-      chapterTitle: null,
-      settings: { passScorePct: 100, hintPenalty: 0 },
-      stages: [
-        {
-          id: `${id}-stage-1`,
-          title: 'کدام برچسب عنوان اصلی است؟',
-          description: '',
-          mission: 'عنوان اصلی یک صفحه وب را انتخاب کن.',
-          sortOrder: 0,
-          challengeType: 'mcq',
-          challengeConfig: {
-            ui: 'quiz',
-            prompt: 'کدام برچسب عنوان اصلی صفحه است؟',
-            options: [
-              { id: 'p', text: 'p' },
-              { id: 'h1', text: 'h1' },
-              { id: 'div', text: 'div' },
-              { id: 'span', text: 'span' },
-            ],
-          },
-          grading: { strategy: 'mcq', correctIds: ['h1'] },
-          hints: ['عنوان‌ها با حرف h شروع می‌شوند.', 'سطح یک، مهم‌ترین عنوان است.'],
-          points: 10,
-          timeLimitSec: null,
-        },
-      ],
-    },
-  ];
+  const byCourse = new Map<string, Array<{ slug: string; title: string }>>();
+  for (const entry of STATIC_COURSE_LESSONS) {
+    const list = byCourse.get(entry.courseSlug) ?? [];
+    if (!list.some((lesson) => lesson.slug === entry.lessonSlug)) {
+      const known = lessonsForCourse(entry.courseSlug).find((lesson) => lesson.slug === entry.lessonSlug);
+      list.push({ slug: entry.lessonSlug, title: known?.title ?? entry.lessonSlug });
+    }
+    byCourse.set(entry.courseSlug, list);
+  }
+
+  const games: DemoGame[] = [];
+  for (const [courseSlug, lessons] of byCourse) {
+    const courseTitle = courseTitleFor(courseSlug);
+    for (const [lessonIndex, lesson] of lessons.entries()) {
+      const blueprint = buildCoverGameForLesson({
+        courseSlug,
+        lessonSlug: lesson.slug,
+        lessonTitle: lesson.title,
+        lessonIndex,
+      });
+      const id = `demo-game-${courseSlug}-${lesson.slug}`;
+      const next = lessons[lessonIndex + 1] ?? null;
+      games.push({
+        id,
+        slug: blueprint.slug,
+        title: blueprint.title,
+        description: blueprint.description,
+        learningGoal: blueprint.learningGoal,
+        type: blueprint.type,
+        difficulty: blueprint.difficulty,
+        estimatedMin: blueprint.estimatedMin,
+        points: blueprint.points,
+        required: blueprint.required,
+        sortOrder: 0,
+        publishStatus: blueprint.publishStatus === 'ARCHIVED' ? 'ARCHIVED' : blueprint.publishStatus,
+        lessonId: `lesson-${courseSlug}-${lesson.slug}`,
+        lessonSlug: lesson.slug,
+        lessonTitle: lesson.title,
+        courseId: `course-${courseSlug}`,
+        courseSlug,
+        courseTitle,
+        nextLessonSlug: next?.slug ?? null,
+        chapterId: null,
+        chapterTitle: null,
+        settings: { passScorePct: 100, hintPenalty: 0 },
+        stages: blueprint.stages.map((stage, stageIndex) => ({
+          id: `${id}-stage-${stageIndex + 1}`,
+          title: stage.title,
+          description: stage.description ?? '',
+          mission: stage.mission,
+          sortOrder: stage.sortOrder,
+          challengeType: stage.challengeType,
+          challengeConfig: stage.challengeConfig,
+          gradingConfig: stage.gradingConfig,
+          hints: stage.hints ?? [],
+          points: stage.points,
+          timeLimitSec: stage.timeLimitSec ?? null,
+        })),
+      });
+    }
+  }
+  return games;
 }
 
 const DEMO_GAMES = buildDemoGames();
@@ -207,18 +232,168 @@ function requireGame(gameId: string): DemoGame {
   return game;
 }
 
-function selectedIds(answer: unknown): string[] {
-  if (!answer || typeof answer !== 'object' || Array.isArray(answer)) return [];
-  const selected = (answer as JsonRecord).selected;
-  if (Array.isArray(selected)) return selected.map((item) => String(item));
-  if (typeof selected === 'string' && selected) return [selected];
-  return [];
+function asRecord(value: unknown): JsonRecord {
+  return value && typeof value === 'object' && !Array.isArray(value) ? (value as JsonRecord) : {};
+}
+
+function stringsOf(value: unknown): string[] {
+  if (Array.isArray(value)) return value.map((item) => String(item));
+  if (value === undefined || value === null) return [];
+  return [String(value)];
+}
+
+function normalizeText(value: string): string {
+  return value.replace(/\r\n/g, '\n').replace(/[ \t]+/g, ' ').trim().toLowerCase();
+}
+
+function answerRecord(answer: unknown): JsonRecord {
+  if (typeof answer === 'string' || typeof answer === 'number' || typeof answer === 'boolean') {
+    return { value: String(answer) };
+  }
+  return asRecord(answer);
+}
+
+function codeOf(answer: unknown): string {
+  const record = answerRecord(answer);
+  const code = record.code ?? record.value ?? record.html ?? '';
+  return typeof code === 'string' ? code : '';
+}
+
+function mapsEqual(expectedRaw: unknown, gotRaw: unknown): boolean {
+  const expected = asRecord(expectedRaw);
+  const got = asRecord(gotRaw);
+  const keys = Object.keys(expected);
+  if (!keys.length) return false;
+  return keys.every((key) => String(got[key] ?? '') === String(expected[key] ?? ''));
+}
+
+function patternsPass(source: string, config: JsonRecord): boolean {
+  const mustMatch = stringsOf(config.mustMatch);
+  const mustNotMatch = stringsOf(config.mustNotMatch);
+  for (const pattern of mustMatch) {
+    try {
+      if (!new RegExp(pattern, 'i').test(source)) return false;
+    } catch {
+      return false;
+    }
+  }
+  for (const pattern of mustNotMatch) {
+    try {
+      if (new RegExp(pattern, 'i').test(source)) return false;
+    } catch {
+      return false;
+    }
+  }
+  return mustMatch.length > 0 || mustNotMatch.length > 0;
+}
+
+function tagCount(html: string, tag: string): number {
+  const re = new RegExp(`<${tag}\\b`, 'gi');
+  return (html.match(re) ?? []).length;
+}
+
+function domChecksPass(html: string, checks: unknown): boolean {
+  if (!Array.isArray(checks) || !checks.length) return false;
+  for (const raw of checks) {
+    const check = asRecord(raw);
+    const tag = String(check.tag ?? '');
+    if (!tag) return false;
+    const min = Number(check.min ?? 1);
+    if (tagCount(html, tag) < min) return false;
+    const textIncludes = check.textIncludes;
+    if (typeof textIncludes === 'string' && textIncludes) {
+      const block = html.match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)</${tag}>`, 'i'));
+      if (!block?.[1]?.includes(textIncludes)) return false;
+    }
+  }
+  return true;
 }
 
 function isStageCorrect(stage: DemoStage, answer: unknown): boolean {
-  const chosen = selectedIds(answer);
-  const correct = stage.grading.correctIds;
-  return correct.length > 0 && correct.every((id) => chosen.includes(id)) && chosen.length === correct.length;
+  const config = asRecord(stage.gradingConfig);
+  const strategy = String(config.strategy ?? stage.challengeType ?? '').toLowerCase();
+  const submitted = answerRecord(answer);
+
+  switch (strategy) {
+    case 'mcq': {
+      const expected = new Set(stringsOf(config.correctIds));
+      const selected = new Set(stringsOf(submitted.selected));
+      if (!expected.size) return false;
+      if (selected.size !== expected.size) return false;
+      for (const id of expected) if (!selected.has(id)) return false;
+      return true;
+    }
+    case 'drag_drop':
+      return mapsEqual(config.placements, submitted.placements);
+    case 'matching':
+      return mapsEqual(config.pairs, submitted.pairs);
+    case 'output': {
+      const expected = stringsOf(config.expected ?? config.value).map(normalizeText);
+      return expected.includes(normalizeText(String(submitted.value ?? '')));
+    }
+    case 'exact': {
+      if (Array.isArray(config.order)) {
+        const expected = config.order.map((item) => String(item));
+        const got = Array.isArray(submitted.order) ? submitted.order.map((item) => String(item)) : [];
+        return expected.length === got.length && expected.every((item, index) => item === got[index]);
+      }
+      if (config.blanks && typeof config.blanks === 'object') {
+        const expected = asRecord(config.blanks);
+        const got = asRecord(submitted.blanks);
+        const keys = Object.keys(expected);
+        if (!keys.length) return false;
+        return keys.every((key) => {
+          const alts = stringsOf(expected[key]).map(normalizeText);
+          return alts.includes(normalizeText(String(got[key] ?? '')));
+        });
+      }
+      if (config.choices && typeof config.choices === 'object') {
+        return mapsEqual(config.choices, submitted.choices);
+      }
+      const expectedValues = stringsOf(config.value ?? config.answer).map(normalizeText);
+      return expectedValues.includes(normalizeText(String(submitted.value ?? '')));
+    }
+    case 'pattern':
+      return patternsPass(codeOf(answer), config);
+    case 'dom':
+      return domChecksPass(codeOf(answer), config.checks);
+    case 'html': {
+      const html = codeOf(answer);
+      const required = stringsOf(config.requiredTags);
+      if (!required.length) return false;
+      return required.every((tag) => tagCount(html, tag) >= 1);
+    }
+    case 'test_cases':
+    case 'unit': {
+      const source = codeOf(answer);
+      const fns = stringsOf(config.mustDeclareFunctions);
+      for (const name of fns) {
+        const re = new RegExp(
+          `(?:function\\s+${name}\\b|(?:const|let|var)\\s+${name}\\s*=|async\\s+function\\s+${name}\\b)`,
+        );
+        if (!re.test(source)) return false;
+      }
+      const mustMatch = stringsOf(config.mustMatch);
+      const mustNotMatch = stringsOf(config.mustNotMatch);
+      for (const pattern of mustMatch) {
+        try {
+          if (!new RegExp(pattern, 'i').test(source)) return false;
+        } catch {
+          return false;
+        }
+      }
+      for (const pattern of mustNotMatch) {
+        try {
+          if (new RegExp(pattern, 'i').test(source)) return false;
+        } catch {
+          return false;
+        }
+      }
+      return fns.length > 0 || mustMatch.length > 0;
+    }
+    default:
+      return false;
+  }
 }
 
 function toProgress(game: DemoGame, stored: StoredProgress): LearnerGameProgress {
@@ -318,16 +493,20 @@ export function demoAdminGameStaticParams(): Array<{ id: string }> {
 
 export function demoLessonGames(courseSlug: string, lessonSlug: string): LessonGamesResponse {
   const course = courseCatalog.find((item) => item.slug === courseSlug);
-  const lesson = course?.lessons.find((item) => item.slug === lessonSlug);
+  const lesson =
+    course?.lessons.find((item) => item.slug === lessonSlug) ??
+    (courseSlug === 'interview-branding'
+      ? { slug: lessonSlug, title: BRANDING_TITLES[lessonSlug] ?? lessonSlug }
+      : undefined);
   const games = publishedGames().filter(
     (game) => game.courseSlug === courseSlug && game.lessonSlug === lessonSlug,
   );
   return {
-    lessonId: lesson ? `lesson-${courseSlug}-${lessonSlug}` : courseSlug,
+    lessonId: `lesson-${courseSlug}-${lessonSlug}`,
     lessonSlug,
     lessonTitle: lesson?.title ?? '',
     courseSlug,
-    courseTitle: course?.title ?? '',
+    courseTitle: courseTitleFor(courseSlug),
     games: games.map((game) => toLearner(game, readProgress(game.id), false)),
   };
 }
@@ -472,6 +651,15 @@ export function demoAdminGamesDashboard(): AdminGamesDashboard {
   const published = DEMO_GAMES.filter((game) => game.publishStatus === 'PUBLISHED').length;
   const drafts = DEMO_GAMES.filter((game) => game.publishStatus === 'DRAFT').length;
   const archived = DEMO_GAMES.filter((game) => game.publishStatus === 'ARCHIVED').length;
+  const covered = new Set(publishedGames().map((game) => `${game.courseSlug}::${game.lessonSlug}`));
+  const lessonsWithoutGames = STATIC_COURSE_LESSONS.filter(
+    (entry) => !covered.has(`${entry.courseSlug}::${entry.lessonSlug}`),
+  ).map((entry) => ({
+    lessonId: `lesson-${entry.courseSlug}-${entry.lessonSlug}`,
+    lessonTitle: entry.lessonSlug,
+    courseTitle: courseTitleFor(entry.courseSlug),
+    courseSlug: entry.courseSlug,
+  }));
   return {
     total: DEMO_GAMES.length,
     published,
@@ -480,33 +668,35 @@ export function demoAdminGamesDashboard(): AdminGamesDashboard {
     participants: 0,
     completions: 0,
     averageScore: 0,
-    popular: publishedGames().map((game) => ({ id: game.id, title: game.title, participants: 0 })),
-    lessonsWithoutGames: [],
+    popular: publishedGames()
+      .slice(0, 8)
+      .map((game) => ({ id: game.id, title: game.title, participants: 0 })),
+    lessonsWithoutGames,
   };
 }
 
 export function demoAdminGamesCatalog(): GameCatalogCourse[] {
   const courses: GameCatalogCourse[] = [];
   for (const game of publishedGames()) {
-    if (courses.some((course) => course.id === game.courseId)) continue;
-    const course = courseCatalog.find((item) => item.slug === game.courseSlug);
-    const lesson = course?.lessons.find((item) => item.slug === game.lessonSlug);
-    courses.push({
-      id: game.courseId,
-      title: game.courseTitle,
-      slug: game.courseSlug,
-      chapters: [],
-      unassignedLessons: lesson
-        ? [
-            {
-              id: game.lessonId,
-              title: lesson.title,
-              slug: lesson.slug,
-              sortOrder: lesson.sortOrder,
-            },
-          ]
-        : [],
-    });
+    let course = courses.find((item) => item.id === game.courseId);
+    if (!course) {
+      course = {
+        id: game.courseId,
+        title: game.courseTitle,
+        slug: game.courseSlug,
+        chapters: [],
+        unassignedLessons: [],
+      };
+      courses.push(course);
+    }
+    if (!course.unassignedLessons.some((lesson) => lesson.slug === game.lessonSlug)) {
+      course.unassignedLessons.push({
+        id: game.lessonId,
+        title: game.lessonTitle,
+        slug: game.lessonSlug,
+        sortOrder: course.unassignedLessons.length,
+      });
+    }
   }
   return courses;
 }
@@ -560,7 +750,7 @@ function toAdmin(game: DemoGame): AdminEducationalGame {
       sortOrder: stage.sortOrder,
       challengeType: stage.challengeType,
       challengeConfig: stage.challengeConfig,
-      gradingConfig: { strategy: stage.grading.strategy, correctIds: stage.grading.correctIds },
+      gradingConfig: stage.gradingConfig,
       hints: stage.hints,
       points: stage.points,
       timeLimitSec: stage.timeLimitSec,

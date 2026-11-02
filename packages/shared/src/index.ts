@@ -34,3 +34,4 @@ export * from './types/test-report';
 export * from './types/dashboard';
 export * from './utils/test-report-score';
 export * from './course-catalog';
+export * from './educational-games';

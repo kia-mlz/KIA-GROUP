@@ -1,47 +1,19 @@
 import type { PrismaClient } from '@kia./platform';
+import { buildCoverGameForLesson, type LessonGameBlueprint } from '@kia./shared';
 
-type StageInput = {
-  title: string;
-  description?: string;
-  mission: string;
-  sortOrder: number;
-  challengeType: string;
-  challengeConfig: unknown;
-  gradingConfig: unknown;
-  hints?: string[];
-  points: number;
-  timeLimitSec?: number | null;
-};
+type StageInput = LessonGameBlueprint['stages'][number];
 
-type GameInput = {
-  slug: string;
-  title: string;
-  description: string;
-  learningGoal: string;
-  type:
-    | 'CODE_BUILDER'
-    | 'CODE_EDITOR'
-    | 'BUG_HUNTER'
-    | 'DRAG_DROP'
-    | 'QUIZ'
-    | 'WEBSITE_BUILDER'
-    | 'CODE_ADVENTURE'
-    | 'MATCHING'
-    | 'FILL_BLANKS'
-    | 'OUTPUT_PREDICTION'
-    | 'SIMULATION'
-    | 'FINAL_PROJECT';
-  difficulty?: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
+type GameInput = Omit<LessonGameBlueprint, 'difficulty' | 'estimatedMin' | 'required'> & {
+  difficulty?: LessonGameBlueprint['difficulty'];
   estimatedMin?: number;
-  points: number;
-  publishStatus: 'DRAFT' | 'PUBLISHED';
   required?: boolean;
-  stages: StageInput[];
 };
 
 /**
- * Idempotent examples on existing lessons. Re-running seed does not wipe or
- * overwrite a game an admin has already edited.
+ * Idempotent educational games on existing lessons.
+ * - Achievements upsert by key.
+ * - Per-lesson `cover` games upsert (stages replaced) so re-seed refreshes content.
+ * - Optional showcase extras use skip-if-exists so admin edits stay untouched.
  */
 export async function seedEducationalGames(prisma: PrismaClient) {
   const achievements = [
@@ -82,51 +54,148 @@ export async function seedEducationalGames(prisma: PrismaClient) {
     });
   }
 
-  const html = await courseWithLessons(prisma, 'html');
-  const css = await courseWithLessons(prisma, 'css');
-  const javascript = await courseWithLessons(prisma, 'javascript');
-  const branding = await courseWithLessons(prisma, 'interview-branding');
-
-  await attach(prisma, html, 0, htmlGames());
-  await attach(prisma, html, 1, [draftQuiz()]);
-  await attach(prisma, css, 0, cssGames());
-  await attach(prisma, javascript, 0, javascriptGames());
-  await attach(prisma, branding, 0, brandingGames());
-  console.log('Seeded educational games on existing lessons');
-}
-
-async function courseWithLessons(prisma: PrismaClient, slug: string) {
-  return prisma.course.findUnique({
-    where: { slug },
+  const courses = await prisma.course.findMany({
+    where: { published: true },
     include: { lessons: { orderBy: { sortOrder: 'asc' } } },
+    orderBy: { sortOrder: 'asc' },
   });
+
+  let coverUpserts = 0;
+  let lessonsCovered = 0;
+  for (const course of courses) {
+    if (!course.lessons.length) continue;
+    await ensureChapter(prisma, course.id, course.lessons);
+    for (const [lessonIndex, lesson] of course.lessons.entries()) {
+      const cover = buildCoverGameForLesson({
+        courseSlug: course.slug,
+        lessonSlug: lesson.slug,
+        lessonTitle: lesson.title,
+        lessonIndex,
+      });
+      await upsertCoverGame(prisma, lesson.id, cover);
+      coverUpserts += 1;
+      lessonsCovered += 1;
+    }
+  }
+
+  // Showcase extras on the first topical lessons (skip if already present).
+  const html = courses.find((course) => course.slug === 'html');
+  const css = courses.find((course) => course.slug === 'css');
+  const javascript = courses.find((course) => course.slug === 'javascript');
+  const branding = courses.find((course) => course.slug === 'interview-branding');
+
+  if (html) {
+    const headingsIdx = html.lessons.findIndex((lesson) => /heading/i.test(lesson.slug));
+    await attachExtras(prisma, html, headingsIdx >= 0 ? headingsIdx : 0, htmlShowcaseGames());
+    const second = html.lessons[1];
+    if (second) await attachExtras(prisma, html, 1, [draftQuiz()]);
+  }
+  if (css) await attachExtras(prisma, css, 0, cssShowcaseGames());
+  if (javascript) await attachExtras(prisma, javascript, 0, javascriptShowcaseGames());
+  if (branding) await attachExtras(prisma, branding, 0, brandingShowcaseGames());
+
+  const published = await prisma.educationalGame.count({ where: { publishStatus: 'PUBLISHED' } });
+  console.log(
+    `Seeded educational games: ${lessonsCovered} lessons covered, ${coverUpserts} cover upserts, ${published} published games total`,
+  );
 }
 
-async function attach(
+async function ensureChapter(
   prisma: PrismaClient,
-  course: Awaited<ReturnType<typeof courseWithLessons>>,
-  lessonIndex: number,
-  games: GameInput[],
+  courseId: string,
+  lessons: Array<{ id: string; chapterId: string | null }>,
 ) {
-  if (!course) return;
-  const lesson = course.lessons[lessonIndex];
-  if (!lesson) return;
-  const chapter = await prisma.chapter.findFirst({
-    where: { courseId: course.id, title: 'فصل ۱ — شروع' },
-  });
-  const ensured =
-    chapter ??
+  const chapter =
+    (await prisma.chapter.findFirst({
+      where: { courseId, title: 'فصل ۱ — شروع' },
+    })) ??
     (await prisma.chapter.create({
       data: {
-        courseId: course.id,
+        courseId,
         title: 'فصل ۱ — شروع',
         description: 'درس‌های آغاز این دوره',
         sortOrder: 0,
       },
     }));
-  if (!lesson.chapterId) {
-    await prisma.lesson.update({ where: { id: lesson.id }, data: { chapterId: ensured.id } });
+  for (const lesson of lessons) {
+    if (!lesson.chapterId) {
+      await prisma.lesson.update({ where: { id: lesson.id }, data: { chapterId: chapter.id } });
+    }
   }
+}
+
+async function upsertCoverGame(prisma: PrismaClient, lessonId: string, game: LessonGameBlueprint) {
+  const existing = await prisma.educationalGame.findUnique({
+    where: { lessonId_slug: { lessonId, slug: game.slug } },
+    select: { id: true },
+  });
+  if (existing) {
+    await prisma.gameStage.deleteMany({ where: { gameId: existing.id } });
+    await prisma.educationalGame.update({
+      where: { id: existing.id },
+      data: {
+        title: game.title,
+        description: game.description,
+        learningGoal: game.learningGoal,
+        type: game.type,
+        difficulty: game.difficulty,
+        estimatedMin: game.estimatedMin,
+        points: game.points,
+        publishStatus: game.publishStatus,
+        required: game.required,
+        settings: { passScorePct: 100, hintPenalty: 0 },
+        stages: {
+          create: game.stages.map((stage) => stageCreateData(stage)),
+        },
+      },
+    });
+    return;
+  }
+  await prisma.educationalGame.create({
+    data: {
+      lessonId,
+      slug: game.slug,
+      title: game.title,
+      description: game.description,
+      learningGoal: game.learningGoal,
+      type: game.type,
+      difficulty: game.difficulty,
+      estimatedMin: game.estimatedMin,
+      points: game.points,
+      publishStatus: game.publishStatus,
+      required: game.required,
+      sortOrder: 0,
+      settings: { passScorePct: 100, hintPenalty: 0 },
+      stages: {
+        create: game.stages.map((stage) => stageCreateData(stage)),
+      },
+    },
+  });
+}
+
+function stageCreateData(stage: StageInput) {
+  return {
+    title: stage.title,
+    description: stage.description ?? '',
+    mission: stage.mission,
+    sortOrder: stage.sortOrder,
+    challengeType: stage.challengeType,
+    challengeConfig: stage.challengeConfig as object,
+    gradingConfig: stage.gradingConfig as object,
+    hints: stage.hints ?? [],
+    points: stage.points,
+    timeLimitSec: stage.timeLimitSec ?? null,
+  };
+}
+
+async function attachExtras(
+  prisma: PrismaClient,
+  course: { id: string; lessons: Array<{ id: string; chapterId: string | null }> },
+  lessonIndex: number,
+  games: GameInput[],
+) {
+  const lesson = course.lessons[lessonIndex];
+  if (!lesson) return;
   for (const [index, game] of games.entries()) {
     const exists = await prisma.educationalGame.findUnique({
       where: { lessonId_slug: { lessonId: lesson.id, slug: game.slug } },
@@ -145,28 +214,17 @@ async function attach(
         points: game.points,
         publishStatus: game.publishStatus,
         required: game.required ?? false,
-        sortOrder: index,
+        sortOrder: index + 1,
         settings: { passScorePct: 100, hintPenalty: 0 },
         stages: {
-          create: game.stages.map((stage) => ({
-            title: stage.title,
-            description: stage.description ?? '',
-            mission: stage.mission,
-            sortOrder: stage.sortOrder,
-            challengeType: stage.challengeType,
-            challengeConfig: stage.challengeConfig as object,
-            gradingConfig: stage.gradingConfig as object,
-            hints: stage.hints ?? [],
-            points: stage.points,
-            timeLimitSec: stage.timeLimitSec ?? null,
-          })),
+          create: game.stages.map((stage) => stageCreateData(stage)),
         },
       },
     });
   }
 }
 
-function htmlGames(): GameInput[] {
+function htmlShowcaseGames(): GameInput[] {
   return [
     {
       slug: 'html-heading-quiz',
@@ -263,41 +321,6 @@ function htmlGames(): GameInput[] {
         },
       ],
     },
-    {
-      slug: 'html-final-page',
-      title: 'پروژه کوتاه صفحه معرفی',
-      description: 'مهارت همین درس را در یک صفحه معرفی جمع کن.',
-      learningGoal: 'ترکیب عنوان، بدنه و پاراگراف',
-      type: 'FINAL_PROJECT',
-      difficulty: 'INTERMEDIATE',
-      points: 50,
-      publishStatus: 'PUBLISHED',
-      stages: [
-        {
-          title: 'صفحه معرفی',
-          mission: 'صفحه باید header، main، یک h1 و یک p داشته باشد.',
-          sortOrder: 0,
-          challengeType: 'dom',
-          points: 25,
-          hints: ['header و main بخش‌های معنایی صفحه هستند.'],
-          challengeConfig: {
-            ui: 'website',
-            language: 'html',
-            prompt: 'صفحه معرفی را با بخش‌های معنایی بساز.',
-            starter: '<header></header>\n<main></main>',
-          },
-          gradingConfig: {
-            strategy: 'dom',
-            checks: [
-              { tag: 'header', min: 1 },
-              { tag: 'main', min: 1 },
-              { tag: 'h1', min: 1 },
-              { tag: 'p', min: 1 },
-            ],
-          },
-        },
-      ],
-    },
   ];
 }
 
@@ -331,7 +354,7 @@ function draftQuiz(): GameInput {
   };
 }
 
-function cssGames(): GameInput[] {
+function cssShowcaseGames(): GameInput[] {
   return [
     {
       slug: 'css-property-match',
@@ -367,27 +390,6 @@ function cssGames(): GameInput[] {
       ],
     },
     {
-      slug: 'css-fill-color',
-      title: 'جای خالی رنگ',
-      description: 'ویژگی رنگ را در قاعده CSS کامل کن.',
-      learningGoal: 'نوشتن مقدار color',
-      type: 'FILL_BLANKS',
-      points: 20,
-      publishStatus: 'PUBLISHED',
-      stages: [
-        {
-          title: 'رنگ عنوان',
-          mission: 'جای خالی را با teal پر کن.',
-          sortOrder: 0,
-          challengeType: 'exact',
-          points: 10,
-          hints: ['نام رنگ را انگلیسی و بدون نقطه‌ویرگول بنویس.'],
-          challengeConfig: { ui: 'blanks', template: 'h1 { color: ___; }', blankIds: ['b0'] },
-          gradingConfig: { strategy: 'exact', blanks: { b0: ['teal'] } },
-        },
-      ],
-    },
-    {
       slug: 'css-bug-color',
       title: 'غلط املایی ویژگی',
       description: 'قاعده‌ای که اثر نمی‌کند را اصلاح کن.',
@@ -416,7 +418,7 @@ function cssGames(): GameInput[] {
   ];
 }
 
-function javascriptGames(): GameInput[] {
+function javascriptShowcaseGames(): GameInput[] {
   return [
     {
       slug: 'js-predict-sum',
@@ -436,34 +438,6 @@ function javascriptGames(): GameInput[] {
           hints: ['جمع دو عدد صحیح است.'],
           challengeConfig: { ui: 'output', language: 'javascript', code: 'console.log(2 + 3)' },
           gradingConfig: { strategy: 'output', expected: ['5'] },
-        },
-      ],
-    },
-    {
-      slug: 'js-build-const',
-      title: 'بلوک‌ها را به ترتیب بچین',
-      description: 'قطعه‌ها را طوری مرتب کن که یک ثابت ساخته شود.',
-      learningGoal: 'ترتیب const، نام و مقدار',
-      type: 'CODE_BUILDER',
-      points: 25,
-      publishStatus: 'PUBLISHED',
-      stages: [
-        {
-          title: 'ساخت ثابت',
-          mission: 'بلوک‌ها را به ترتیب یک اعلان const بچین.',
-          sortOrder: 0,
-          challengeType: 'exact',
-          points: 12,
-          hints: ['اول کلیدواژه، بعد نام، بعد مقدار.'],
-          challengeConfig: {
-            ui: 'blocks',
-            blocks: [
-              { id: 'value', code: "'کیا'" },
-              { id: 'const', code: 'const' },
-              { id: 'name', code: 'name =' },
-            ],
-          },
-          gradingConfig: { strategy: 'exact', order: ['const', 'name', 'value'] },
         },
       ],
     },
@@ -495,39 +469,6 @@ function javascriptGames(): GameInput[] {
             language: 'javascript',
             mustDeclareFunctions: ['greet'],
             mustMatch: ['return'],
-          },
-        },
-      ],
-    },
-    {
-      slug: 'py-function-shape',
-      title: 'همان ایده با پایتون',
-      description: 'ساختار یک تابع پایتون را بدون اجرای کد روی سرور تمرین کن.',
-      learningGoal: 'نوشتن def در پایتون',
-      type: 'CODE_EDITOR',
-      difficulty: 'INTERMEDIATE',
-      points: 30,
-      publishStatus: 'PUBLISHED',
-      stages: [
-        {
-          title: 'def greet',
-          mission: 'تابعی به نام greet با def بنویس که return داشته باشد.',
-          sortOrder: 0,
-          challengeType: 'test_cases',
-          points: 15,
-          hints: ['در پایتون تعریف تابع با def شروع می‌شود.'],
-          challengeConfig: {
-            ui: 'code',
-            language: 'python',
-            prompt: 'def greet را کامل کن.',
-            starter: 'def greet():\n    ',
-          },
-          gradingConfig: {
-            strategy: 'test_cases',
-            language: 'python',
-            mustDeclareFunctions: ['greet'],
-            mustMatch: ['return'],
-            mustNotMatch: ['import\\s+os', 'eval\\s*\\('],
           },
         },
       ],
@@ -578,7 +519,7 @@ function javascriptGames(): GameInput[] {
   ];
 }
 
-function brandingGames(): GameInput[] {
+function brandingShowcaseGames(): GameInput[] {
   return [
     {
       slug: 'interview-intro-sim',
