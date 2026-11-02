@@ -26,6 +26,6 @@ overrides:
   mysql2: '>=3.22.0'
   multer: '>=2.5.0'
   nodemailer: '>=10.1.4'
-  qs: '>=6.15.4'
+  qs: '>=6.16.1'
   proxy-addr: '>=2.0.8'
   source-map-js: '>=1.2.2'
