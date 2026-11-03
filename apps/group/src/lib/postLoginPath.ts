@@ -12,6 +12,10 @@ export const HOME_PATH = '/home';
  */
 export function resolveInternalNext(next: string | null | undefined): string {
   const raw = (next ?? '').trim();
+  const hasControls = [...raw].some((ch) => {
+    const code = ch.charCodeAt(0);
+    return code <= 0x1f || code === 0x7f;
+  });
   if (
     !raw.startsWith('/') ||
     raw === '/' ||
@@ -19,7 +23,7 @@ export function resolveInternalNext(next: string | null | undefined): string {
     raw.startsWith('/login') ||
     raw.includes('\\') ||
     raw.includes('://') ||
-    /[\u0000-\u001f\u007f]/.test(raw)
+    hasControls
   ) {
     return HOME_PATH;
   }

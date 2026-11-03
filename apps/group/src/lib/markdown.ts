@@ -126,7 +126,11 @@ function inlineFormat(text: string): string {
     /\[([^\]]+)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\)/g,
     (_m, label: string, href: string) => {
       // Protocol-relative `//host` and backslash tricks must not become hrefs.
-      if (href.startsWith('//') || href.includes('\\') || /[\u0000-\u001f\u007f]/.test(href)) {
+      const hasControls = [...href].some((ch) => {
+        const code = ch.charCodeAt(0);
+        return code <= 0x1f || code === 0x7f;
+      });
+      if (href.startsWith('//') || href.includes('\\') || hasControls) {
         return label;
       }
       return href.startsWith('http')
