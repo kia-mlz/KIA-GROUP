@@ -15,16 +15,16 @@
     "@kia./platform": "workspace:*",
     "@kia./shared": "workspace:*",
     "@nestjs/common": "^11.0.12",
-    "@nestjs/throttler": "^6.5.0",
-    "acorn": "^8.15.0",
+    "@nestjs/throttler": "^6.7.1",
+    "acorn": "^8.19.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "@types/node": "^26.4.0",
-    "jest": "^30.5.0",
-    "ts-jest": "^29.4.12",
+    "@types/node": "^26.6.6",
+    "jest": "^30.5.2",
+    "ts-jest": "^29.4.15",
     "typescript": "^5.8.3"
   }
 }
