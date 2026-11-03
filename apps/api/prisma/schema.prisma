@@ -809,6 +809,9 @@ model ContactMessage {
   message   String
   readAt    DateTime?
   createdAt DateTime  @default(now())
+
+  @@index([createdAt])
+  @@index([readAt])
 }
 
 enum TicketStatus {
