@@ -40,7 +40,7 @@ export class SiteSettingsController {
   @UseGuards(JwtAuthGuard, RolesGuard, AdminAccessGuard)
   @Roles('ADMIN')
   @AdminAccess('settings', 'manage')
-  updateAdmin(
+  async updateAdmin(
     @CurrentUser() user: AuthUser,
     @Body() dto: UpdateSiteSettingsBodyDto,
   ): Promise<SiteSettings> {
@@ -56,6 +56,11 @@ export class SiteSettingsController {
     if (dto.enamad && user.role !== 'SUPER_ADMIN') {
       throw new ForbiddenException('Only super admins can change Enamad settings');
     }
-    return this.siteSettings.update(dto as UpdateSiteSettingsDto);
+    // Same redaction as GET — moderators must never receive payment/SMS secrets
+    // in the PUT response even when they may update non-secret sections.
+    const updated = await this.siteSettings.update(dto as UpdateSiteSettingsDto);
+    return toAdminSiteSettings(updated, {
+      revealSecrets: user.role === 'SUPER_ADMIN',
+    });
   }
 }

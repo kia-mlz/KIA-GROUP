@@ -24,6 +24,9 @@ describe('resolveInternalNext', () => {
     expect(resolveInternalNext('//evil.example')).toBe(HOME_PATH);
     expect(resolveInternalNext('https://evil.example')).toBe(HOME_PATH);
     expect(resolveInternalNext('javascript:alert(1)')).toBe(HOME_PATH);
+    expect(resolveInternalNext('/\\evil.example')).toBe(HOME_PATH);
+    expect(resolveInternalNext('/education://evil.example')).toBe(HOME_PATH);
+    expect(resolveInternalNext('/roadmap\u0000evil')).toBe(HOME_PATH);
   });
 });
 

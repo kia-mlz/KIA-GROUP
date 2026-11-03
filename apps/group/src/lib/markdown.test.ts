@@ -103,6 +103,18 @@ describe('markdownToHtml', () => {
       expect(html).not.toMatch(/href=/i);
     });
 
+    it('drops protocol-relative and backslash href tricks', () => {
+      const html = markdownToHtml(
+        '[a](//evil.example) [b](/\\evil.example) [ok](/courses) [ext](https://safe.example)',
+      );
+      expect(html).not.toContain('href="//evil.example"');
+      expect(html).not.toContain('href="/\\evil.example"');
+      expect(html).toContain('<a href="/courses">ok</a>');
+      expect(html).toContain(
+        '<a href="https://safe.example" target="_blank" rel="noopener noreferrer">ext</a>',
+      );
+    });
+
     it('cannot smuggle a link href through escaped angle brackets', () => {
       const html = markdownToHtml('[a](https://ok.example/><script>alert(1)</script>)');
       expect(html).not.toContain('<script');
