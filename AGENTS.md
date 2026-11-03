@@ -90,7 +90,7 @@ Site `TopBar` / `Footer` render only after `profileComplete` (successful registr
 
 ### Commands
 
-Typical: `pnpm install`, `pnpm --filter @kia./shared build`, `pnpm db:migrate:deploy`, `pnpm db:seed`, `pnpm dev`.
+Typical: `pnpm install`, `pnpm --filter @kia./shared build`, `pnpm db:migrate:deploy`, `pnpm db:seed`, `pnpm dev:local`.
 
 Lint / typecheck / test / build: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`.
 
@@ -100,7 +100,9 @@ Default currency is **IRR**. Catalog prices live in `@kia./shared` `PRODUCT_PRIC
 
 ### Non-obvious Cloud VM caveats
 
-- PostgreSQL is **not** started by the update script or `pnpm dev`. Docker is typically unavailable in Cloud Agent VMs — use a local Postgres 16 cluster: `sudo pg_ctlcluster 16 main start` (ignore `pnpm docker:db`). Role/DB `kia_academy`/`kia_academy` match `apps/api/.env.example`.
+- PostgreSQL is **not** started by the update script or `pnpm dev:local`. Docker is typically unavailable in Cloud Agent VMs — use a local Postgres 16 cluster: `sudo pg_ctlcluster 16 main start` (ignore `pnpm docker:db`). Role/DB `kia_academy`/`kia_academy` match `apps/api/.env.example`. The Cloud Agent `start` script creates that role (with `CREATEDB`) and database, then runs `pnpm db:migrate:deploy` and `pnpm db:seed`.
+- `pnpm dev` shells out to the Infisical CLI (`infisical run --env=dev`). Cloud VMs have no Infisical login. Use `pnpm dev:local`, which starts the same web and API processes against the gitignored env files.
+- Open the web app at `http://localhost:3000`. Next.js dev rejects the HMR websocket when the page Origin is `http://127.0.0.1:3000` (raw `Unauthorized`, no HTTP status line). The document stays on the server shell and never hydrates, so forms look visible but do not accept input. `localhost` matches `CORS_ORIGIN` and `APP_URL`.
 - The `kia_academy` DB role needs `CREATEDB` because `pnpm db:migrate` (`prisma migrate dev`) creates a shadow database; without it you get Prisma `P3014`. Prefer `pnpm db:migrate:deploy` in non-interactive environments.
 - Build order: `packages/permissions` and `packages/brand` must be built before `packages/shared`, which must be built before `pnpm db:seed` / api build, or seed fails with `MODULE_NOT_FOUND` for `@kia./shared/dist`. `pnpm build` / `pnpm build:libs` handle this order.
 - Env files are git-ignored — create from examples: `cp apps/api/.env.example apps/api/.env` and `cp apps/group/.env.example apps/group/.env.local`.
