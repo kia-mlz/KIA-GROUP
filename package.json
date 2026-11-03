@@ -7,11 +7,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kia-mlz/KIA-GROUP.git"
+    "url": "https://github.com/kia-mlz/KiaDot.git"
   },
-  "homepage": "https://github.com/kia-mlz/KIA-GROUP#readme",
+  "homepage": "https://github.com/kia-mlz/KiaDot#readme",
   "bugs": {
-    "url": "https://github.com/kia-mlz/KIA-GROUP/issues"
+    "url": "https://github.com/kia-mlz/KiaDot/issues"
   },
   "scripts": {
     "dev": "infisical run --env=dev -- concurrently -n web,api -c blue,green \"pnpm --filter @kia./group dev\" \"pnpm --filter @kia./api dev\"",

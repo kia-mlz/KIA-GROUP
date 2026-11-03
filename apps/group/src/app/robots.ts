@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { absoluteUrl, PUBLIC_SITEMAP_PATHS } from '@/lib/seo';
+import { absoluteUrl, getSiteHost, PUBLIC_SITEMAP_PATHS } from '@/lib/seo';
 
 export const dynamic = 'force-static';
 
@@ -41,6 +41,6 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: absoluteUrl('/sitemap.xml'),
-    host: absoluteUrl('/').replace(/\/$/, ''),
+    host: getSiteHost(),
   };
 }

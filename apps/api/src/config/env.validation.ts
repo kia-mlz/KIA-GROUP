@@ -70,4 +70,17 @@ export const envValidationSchema = Joi.object({
   SMTP_PASS: Joi.string().optional(),
   SMTP_FROM: Joi.string().optional(),
   APP_URL: Joi.string().optional(),
+}).custom((value, helpers) => {
+  // Access and refresh tokens must not share a signing key in production —
+  // a stolen refresh JWT would otherwise verify as an access token.
+  if (
+    value.NODE_ENV === 'production' &&
+    typeof value.JWT_SECRET === 'string' &&
+    value.JWT_SECRET === value.JWT_REFRESH_SECRET
+  ) {
+    return helpers.message({
+      custom: 'JWT_SECRET and JWT_REFRESH_SECRET must be different in production',
+    });
+  }
+  return value;
 });

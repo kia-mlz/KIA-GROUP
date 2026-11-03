@@ -9,6 +9,15 @@ export function getSiteUrl(): string {
   return (process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000').replace(/\/$/, '');
 }
 
+/** Hostname (no scheme) for robots.txt `Host:` — never an origin URL. */
+export function getSiteHost(): string {
+  try {
+    return new URL(getSiteUrl()).host;
+  } catch {
+    return 'localhost:3000';
+  }
+}
+
 export const SITE_NAME = fa.common.brand;
 export const SITE_TITLE = fa.meta.title;
 export const SITE_DESCRIPTION = fa.meta.description;

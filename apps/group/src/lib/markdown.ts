@@ -124,10 +124,19 @@ function inlineFormat(text: string): string {
   const withItalic = withBold.replace(/\*(\S(?:[^*\n]*\S)?)\*/g, '<em>$1</em>');
   const withLinks = withItalic.replace(
     /\[([^\]]+)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\)/g,
-    (_m, label: string, href: string) =>
-      href.startsWith('http')
+    (_m, label: string, href: string) => {
+      // Protocol-relative `//host` and backslash tricks must not become hrefs.
+      const hasControls = [...href].some((ch) => {
+        const code = ch.charCodeAt(0);
+        return code <= 0x1f || code === 0x7f;
+      });
+      if (href.startsWith('//') || href.includes('\\') || hasControls) {
+        return label;
+      }
+      return href.startsWith('http')
         ? `<a href="${href}" target="_blank" rel="noopener noreferrer">${label}</a>`
-        : `<a href="${href}">${label}</a>`,
+        : `<a href="${href}">${label}</a>`;
+    },
   );
 
   return withLinks.replace(

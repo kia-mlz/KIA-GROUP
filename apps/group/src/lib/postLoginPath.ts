@@ -7,13 +7,27 @@ export const HOME_PATH = '/home';
  * Turn a `?next=` value into a destination we are willing to navigate to.
  * Only single-slash internal paths are honoured, `/` folds into HOME_PATH (a
  * signed-in learner must not bounce off the landing page) and everything else —
- * protocol-relative `//host`, absolute URLs, `/login` — falls back to HOME_PATH.
+ * protocol-relative `//host`, backslash tricks, absolute URLs, `/login` — falls
+ * back to HOME_PATH.
  */
 export function resolveInternalNext(next: string | null | undefined): string {
   const raw = (next ?? '').trim();
-  return raw.startsWith('/') && raw !== '/' && !raw.startsWith('//') && !raw.startsWith('/login')
-    ? raw
-    : HOME_PATH;
+  const hasControls = [...raw].some((ch) => {
+    const code = ch.charCodeAt(0);
+    return code <= 0x1f || code === 0x7f;
+  });
+  if (
+    !raw.startsWith('/') ||
+    raw === '/' ||
+    raw.startsWith('//') ||
+    raw.startsWith('/login') ||
+    raw.includes('\\') ||
+    raw.includes('://') ||
+    hasControls
+  ) {
+    return HOME_PATH;
+  }
+  return raw;
 }
 
 /**
